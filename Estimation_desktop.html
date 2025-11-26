@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html class="h-full" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Récoltons les informations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3b82f6",
+                        "background-light": "#f0f8ff",
+                        "background-dark": "#1e293b",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#334155",
+                        "text-light": "#1f2937",
+                        "text-dark": "#e2e8f0",
+                        "text-secondary-light": "#6b7280",
+                        "text-secondary-dark": "#94a3b8",
+                        "accent-light": "#fb923c",
+                        "accent-dark": "#f97316",
+                        "button-primary": "#4f46e5",
+                        "button-hover": "#4338ca",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .chat-bubble {
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-bubble-container {
+            border-width: 2px;
+            border-color: #d1d5db;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body
+    class="bg-gradient-to-b from-orange-50 to-blue-300 dark:from-slate-800 dark:to-slate-900 font-display text-text-light dark:text-text-dark min-h-screen">
+    <header
+        class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
+        <div class="flex items-center gap-4">
+            <a href="Home_desktop.html"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                <span>Accueil</span>
+            </a>
+            <a href="Estimation_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Estimez
+            </a>
+        </div>
+        <a href="About-us_desktop.html"
+            class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+            Qui sommes-nous ?
+        </a>
+    </header>
+    <div
+        class="p-4 sm:p-6 flex-grow flex flex-col bg-gradient-to-b from-orange-50 to-blue-300 dark:from-slate-800 dark:to-slate-900">
+        <main class="py-8 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
+            <h1 class="text-xl sm:text-2xl font-bold text-primary text-center mb-8">
+                Récoltons les informations nécessaires à l'estimation pour améliorer votre DPE !
+            </h1>
+            <div
+                class="w-full mx-auto relative chat-bubble-container rounded-2xl bg-surface-light dark:bg-surface-dark shadow-lg p-6">
+                <div
+                    class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-surface-light dark:bg-surface-dark rounded-full flex items-center justify-center border-2 border-gray-300 dark:border-gray-600">
+                    <img alt="Watty the robot mascot" class="w-12 h-12" src="Images/Image_6.png" />
+                </div>
+                <div class="mt-8">
+                    <div
+                        class="relative inline-block bg-gray-100 dark:bg-slate-600 p-4 rounded-xl chat-bubble max-w-[90%]">
+                        <p class="text-sm">
+                            Salut, moi je m'appelle <span
+                                class="font-bold text-accent-light dark:text-accent-dark">Watty</span> ! Ce sera moi
+                            qui
+                            t'accompagne pour récolter toutes les informations nécessaires pour que tu puisses
+                            faires
+                            <span class="font-bold text-primary">Des P'tites Économies</span>.
+                        </p>
+                        <div class="absolute -bottom-2 left-0 w-4 h-4 bg-gray-100 dark:bg-slate-600"
+                            style="clip-path: polygon(0 0, 100% 100%, 100% 0);"></div>
+                    </div>
+                    <div class="mt-4 flex items-center space-x-2">
+                        <p class="text-sm">On se lance direct ?</p>
+                        <div class="relative inline-block">
+                            <select
+                                class="appearance-none bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option> </option>
+                                <option>Oui!!!</option>
+                                <option>Non...</option>
+                            </select>
+                            <span
+                                class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-primary pointer-events-none">expand_more</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center space-x-2 flex-wrap">
+                        <p class="text-sm flex-shrink-0">Commençons par voir où est ce que tu habites. Tu habites
+                            dans
+                            le</p>
+                        <div class="relative inline-block">
+                            <select
+                                class="appearance-none bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option>92</option>
+                                <option>75</option>
+                                <option>94</option>
+                            </select>
+                            <span
+                                class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-primary pointer-events-none">expand_more</span>
+                        </div>
+                        <p class="text-sm">c'est ça ?</p>
+                    </div>
+                    <div class="mt-4 flex items-center space-x-2 flex-wrap">
+                        <p class="text-sm">Super maintenant peux tu me dire combien est ce que vous êtes dans ton
+                            logement en général ? Vous êtes </p>
+                        <div class="relative inline-block">
+                            <select
+                                class="appearance-none bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option>2</option>
+                                <option>1</option>
+                                <option>3</option>
+                                <option>4+</option>
+                            </select>
+                            <span
+                                class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-primary pointer-events-none">expand_more</span>
+                        </div>
+                        <p class="text-sm">, très bien c'est noté.</p>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button
+                        class="px-6 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors">
+                        Suivant
+                    </button>
+                </div>
+            </div>
+        </main>
+        <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden">
+            <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+            <div class="logo-slider">
+                <div class="logo-track">
+                    <!-- Original Logos -->
+                    <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                    <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                    <!-- Duplicated Logos -->
+                    <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                    <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                    <!-- Triplicated Logos for wide screens -->
+                    <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                    <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

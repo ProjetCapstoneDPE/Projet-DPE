@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Récapitulatif DPE</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3b82f6", // A rich blue color from the home icon
+                        "background-light": "#f0f7ff",
+                        "background-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem", // 12px
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .gradient-bg {
+            background-image: linear-gradient(to bottom, #FFF8E1, #bfdbfe);
+        }
+
+        .dark .dark-gradient-bg {
+            background-image: linear-gradient(to bottom, #1e293b, #0f172a);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen">
+
+    <div style="background: linear-gradient(to bottom, #FFF8E1, #81D4FA);" class="min-h-screen">
+        <header
+            class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
+            <div class="flex items-center gap-4">
+                <a href="Home_desktop.html"
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                    <span>Accueil</span>
+                </a>
+                <a href="Estimation_desktop.html"
+                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    Estimez
+                </a>
+            </div>
+            <a href="About-us_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Qui sommes-nous ?
+            </a>
+        </header>
+        <div class="p-4 flex flex-col flex-grow">
+            <main class="flex-grow flex flex-col justify-center text-center px-2">
+                <h1 class="text-2xl font-bold text-primary mb-8">
+                    Récapitulons : voici les informations que tu nous as données pour l'estimation !
+                </h1>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-12">
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 1</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 2</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 3</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 4</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 5</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 6</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 7</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 8</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 9</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-amber-600 dark:text-amber-400">Critère 10</p>
+                        <div class="bg-blue-500 h-20 rounded-lg shadow-md"></div>
+                    </div>
+                </div>
+                <button
+                    class="w-full max-w-sm mx-auto bg-violet-600 text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:bg-violet-700 transition-transform transform hover:scale-105">
+                    Lancer l'estimation
+                </button>
+            </main>
+            <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden bg-transparent">
+                <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+                <div class="logo-slider">
+                    <div class="logo-track">
+                        <!-- Original Logos -->
+                        <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University" class="h-16 mx-8 object-contain"
+                            src="Images/Image_4.png" />
+                        <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain"
+                            src="Images/Image_5.png" />
+                        <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                        <!-- Duplicated Logos -->
+                        <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University" class="h-16 mx-8 object-contain"
+                            src="Images/Image_4.png" />
+                        <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain"
+                            src="Images/Image_5.png" />
+                        <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                        <!-- Triplicated Logos for wide screens -->
+                        <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University" class="h-16 mx-8 object-contain"
+                            src="Images/Image_4.png" />
+                        <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain"
+                            src="Images/Image_5.png" />
+                        <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+</body>
+
+</html>
