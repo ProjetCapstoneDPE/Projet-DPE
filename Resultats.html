@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Résultats DPE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: max(884px, 100dvh);
+        }
+
+        /* Modal backdrop */
+        #modalBackdrop {
+            display: none;
+        }
+
+        #modalBackdrop.active {
+            display: flex;
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body
+    class="bg-gradient-to-b from-orange-50 to-blue-200 dark:from-gray-900 dark:to-blue-900 min-h-screen text-gray-800 dark:text-gray-200">
+    <header
+        class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
+        <div class="flex items-center gap-4">
+            <a href="Home_desktop.html"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                <span>Accueil</span>
+            </a>
+            <a href="Estimation_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Estimez
+            </a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="Bons_gestes.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Les bons gestes !
+            </a>
+            <a href="About-us_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Qui sommes-nous ?
+            </a>
+        </div>
+    </header>
+
+    <!-- Modal popup pour l'effet rebond -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-200 dark:bg-gray-700 rounded-3xl p-8 max-w-2xl w-full relative shadow-2xl">
+            <!-- Bouton fermer -->
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                <span class="material-icons" style="font-size: 28px;">close</span>
+            </button>
+
+            <!-- Avatar Watty -->
+            <div class="flex items-center gap-4 mb-6">
+                <img alt="Watty" class="w-16 h-16" src="Images/Image_6.png" />
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Qu'est-ce que l'effet rebond ?</h2>
+            </div>
+
+            <!-- Contenu -->
+            <div class="space-y-4 text-gray-800 dark:text-gray-200">
+                <p class="text-justify">
+                    Quand on améliore l'efficacité énergétique d'un logement (par exemple en isolant mieux ou en
+                    changeant pour un chauffage plus performant), on s'attend à ce que la consommation baisse.
+                </p>
+                <p class="text-justify">
+                    Mais parfois, l'utilisateur modifie son comportement parce que le logement devient moins coûteux à
+                    chauffer ou plus confortable.
+                </p>
+                <p class="text-justify">
+                    <b>Résultat :</b> la consommation réelle ne baisse pas autant que prévu, voire peut augmenter.
+                </p>
+                <p class="text-justify">
+                    C'est ce qu'on appelle l'effet rebond.
+                </p>
+            </div>
+
+            <!-- Bouton -->
+            <div class="mt-8 text-center">
+                <button onclick="window.location.href='Bons_gestes.html'"
+                    class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-8 py-3 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg">
+                    En savoir plus sur les bons gestes à adopter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto p-4 max-w-7xl">
+        <main class="py-8">
+            <!-- Page Title -->
+            <h1 class="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2 text-center">
+                Résultats de votre estimation DPE
+            </h1>
+            <p class="text-center text-gray-600 dark:text-gray-400 mb-8">
+                Voici l'analyse de la performance énergétique de votre logement
+            </p>
+
+            <!-- Layout principal avec colonne Watty -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Colonne principale (2/3) -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- DPE actuel -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 text-center">
+                            Votre DPE actuel
+                        </h2>
+                        <div class="flex items-center justify-between gap-4">
+                            <!-- DPE Scale -->
+                            <div class="space-y-1 flex-1">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="bg-green-600 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
+                                        A</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">≤ 50</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="bg-green-400 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
+                                        B</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">51-90</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="bg-yellow-400 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
+                                        C</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">91-150</div>
+                                </div>
+                                <div class="flex items-center gap-2 pl-24 relative">
+                                    <span
+                                        class="absolute left-0 bg-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
+                                        Vous êtes ici
+                                    </span>
+                                    <div
+                                        class="bg-orange-400 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm ring-4 ring-orange-300">
+                                        D</div>
+                                    <div class="text-xs font-bold text-orange-600 dark:text-orange-400">151-230</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="bg-orange-600 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
+                                        E</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">231-330</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="bg-red-500 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
+                                        F</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">331-450</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="bg-red-700 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
+                                        G</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">> 450</div>
+                                </div>
+                            </div>
+
+                            <!-- Current Score Details -->
+                            <div class="text-center border-l-2 border-gray-200 dark:border-gray-700 pl-6">
+                                <div class="text-5xl font-bold text-orange-500 mb-2">D</div>
+                                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">185 kWh/m²/an</div>
+                                <div class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                    Émissions : 38 kg CO₂/m²/an
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Potentiel d'amélioration -->
+                    <div
+                        class="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900 dark:to-blue-900 rounded-2xl shadow-lg p-6 border-2 border-green-300 dark:border-green-700">
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 text-center">
+                            Potentiel d'amélioration
+                        </h2>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 text-center">
+                            En suivant nos recommandations, vous pourriez atteindre :
+                        </p>
+                        <div class="flex items-center justify-center gap-6">
+                            <div class="text-center">
+                                <div class="text-5xl font-bold text-green-500 mb-2">B</div>
+                                <div class="text-lg font-bold text-gray-800 dark:text-gray-200">75 kWh/m²/an</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="bg-white dark:bg-gray-800 px-4 py-3 rounded-xl">
+                                    <div class="text-3xl font-bold text-green-600">~60%</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">d'économie</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommandations -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+                            📋 Recommandations prioritaires
+                        </h2>
+                        <div class="space-y-4">
+                            <!-- Recommendation 1 -->
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 border-l-4 border-red-500">
+                                <div class="flex items-start gap-3">
+                                    <div class="bg-red-100 dark:bg-red-900 rounded-full p-2">
+                                        <span class="material-icons text-red-600 dark:text-red-400"
+                                            style="font-size: 24px;">thermostat</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h3 class="font-bold text-gray-800 dark:text-gray-200">Isolation thermique
+                                            </h3>
+                                            <span
+                                                class="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-400 px-2 py-1 rounded-full text-xs font-semibold">
+                                                Priorité haute
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                            Votre logement présente des déperditions thermiques importantes. L'isolation
+                                            des combles et des murs permettrait de réduire jusqu'à 30% de votre
+                                            consommation.
+                                        </p>
+                                        <div class="flex items-center gap-2 text-xs flex-wrap">
+                                            <span
+                                                class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400 px-2 py-1 rounded-full font-semibold">
+                                                💰 Économie potentielle : 450€/an
+                                            </span>
+                                            <span
+                                                class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full font-semibold">
+                                                ⏱️ Amortissement : 8-10 ans
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recommendation 2 -->
+                            <div
+                                class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 border-l-4 border-orange-500">
+                                <div class="flex items-start gap-3">
+                                    <div class="bg-orange-100 dark:bg-orange-900 rounded-full p-2">
+                                        <span class="material-icons text-orange-600 dark:text-orange-400"
+                                            style="font-size: 24px;">window</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h3 class="font-bold text-gray-800 dark:text-gray-200">Remplacement des
+                                                fenêtres</h3>
+                                            <span
+                                                class="bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-400 px-2 py-1 rounded-full text-xs font-semibold">
+                                                Priorité moyenne
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                            Vos fenêtres simple vitrage causent des pertes de chaleur importantes.
+                                            Installer du double ou triple vitrage améliorerait grandement votre confort.
+                                        </p>
+                                        <div class="flex items-center gap-2 text-xs flex-wrap">
+                                            <span
+                                                class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400 px-2 py-1 rounded-full font-semibold">
+                                                💰 Économie potentielle : 280€/an
+                                            </span>
+                                            <span
+                                                class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full font-semibold">
+                                                ⏱️ Amortissement : 12-15 ans
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colonne Watty (1/3) -->
+                <div class="lg:col-span-1">
+                    <div class="sticky top-24">
+                        <!-- Bulle Watty -->
+                        <div
+                            class="bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-3xl border-2 border-blue-200 dark:border-blue-900 shadow-2xl p-6">
+                            <!-- Avatar -->
+                            <div class="flex justify-center mb-4">
+                                <div
+                                    class="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-lg">
+                                    <img alt="Watty" class="w-14 h-14" src="Images/Image_6.png" />
+                                </div>
+                            </div>
+
+                            <!-- Message de Watty -->
+                            <div class="bg-gray-100 dark:bg-slate-600 p-4 rounded-xl mb-4">
+                                <p class="text-sm text-gray-800 dark:text-gray-200">
+                                    Ce n'est pas parce que ton DPE est meilleur que ta facture va réellement diminuer !
+                                </p>
+                            </div>
+
+                            <!-- Bouton Pourquoi -->
+                            <div class="text-center">
+                                <button onclick="openModal()"
+                                    class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-6 py-2 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg">
+                                    Pourquoi ?
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résumé final -->
+            <div class="mt-8 bg-blue-600 text-white rounded-2xl shadow-lg p-6 text-center">
+                <h3 class="text-2xl font-bold mb-3">En résumé</h3>
+                <p class="text-base mb-4">
+                    En réalisant l'ensemble de ces travaux, vous pourriez économiser jusqu'à <span
+                        class="font-bold text-yellow-300">1 400€ par an</span>
+                    sur vos factures d'énergie et améliorer considérablement votre confort de vie.
+                </p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button
+                        class="bg-white text-blue-600 font-bold px-6 py-2 rounded-full hover:bg-gray-100 transition-colors">
+                        Télécharger le rapport complet
+                    </button>
+                    <button
+                        class="bg-yellow-400 text-gray-900 font-bold px-6 py-2 rounded-full hover:bg-yellow-300 transition-colors"
+                        onclick="window.location.href='Home_desktop.html'">
+                        Retour à l'accueil
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden">
+        <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+        <div class="logo-slider">
+            <div class="logo-track">
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function openModal() {
+            document.getElementById('modalBackdrop').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalBackdrop').classList.remove('active');
+        }
+
+        // Fermer avec Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Fermer en cliquant sur le backdrop
+        document.getElementById('modalBackdrop').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

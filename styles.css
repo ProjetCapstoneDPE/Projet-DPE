@@ -69,13 +69,11 @@ img.reference-mockup {
 .logo-track {
     display: inline-flex;
     align-items: center;
-    animation: scroll 30s linear infinite;
+    animation: scroll 40s linear infinite;
+    will-change: transform;
 }
 
-.logo-track:hover {
-    animation-play-state: paused;
-}
-
+/* Animation continue sans pause */
 @keyframes scroll {
     0% {
         transform: translateX(0);

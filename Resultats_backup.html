@@ -41,134 +41,6 @@
         .dark .dark-gradient-bg {
             background-image: linear-gradient(to bottom, #1e293b, #0f172a);
         }
-
-        /* Loading Screen Styles */
-        .loading-screen {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .loading-screen.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .loading-content {
-            text-align: center;
-            max-width: 500px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .loading-avatar {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        .loading-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 12px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .loading-subtitle {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 32px;
-            font-weight: 500;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 16px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
-            background-size: 200% 100%;
-            border-radius: 20px;
-            width: 0%;
-            transition: width 0.3s ease;
-            animation: shimmer 2s infinite;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
-        }
-
-        .progress-shine {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: shine 1.5s infinite;
-        }
-
-        .percentage {
-            font-size: 36px;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
-        }
-
-        @keyframes shine {
-            0% {
-                left: -100%;
-            }
-
-            100% {
-                left: 100%;
-            }
-        }
-
-        @keyframes bounce-slow {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .animate-bounce-slow {
-            animation: bounce-slow 2s ease-in-out infinite;
-        }
     </style>
     <style>
         body {
@@ -194,16 +66,10 @@
                     Estimez
                 </a>
             </div>
-            <div class="flex items-center gap-4">
-                <a href="Bons_gestes.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                    Les bons gestes !
-                </a>
-                <a href="About-us_desktop.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                    Qui sommes-nous ?
-                </a>
-            </div>
+            <a href="About-us_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Qui sommes-nous ?
+            </a>
         </header>
         <div class="p-4 flex flex-col flex-grow">
             <main class="flex-grow flex flex-col justify-center px-2 py-8">
@@ -252,37 +118,11 @@
 
                 <!-- Bouton d'action -->
                 <div class="text-center">
-                    <button id="launchButton"
+                    <button
                         class="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold text-lg px-12 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
-                        onclick="startAnalysis()">
+                        onclick="window.location.href='Resultats.html'">
                         Lancer l'estimation DPE
                     </button>
-                </div>
-
-                <!-- Loading Screen -->
-                <div id="loadingScreen" class="loading-screen">
-                    <div class="loading-content">
-                        <!-- Avatar Watty -->
-                        <div class="loading-avatar">
-                            <div
-                                class="w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-2xl animate-bounce-slow">
-                                <img alt="Watty" class="w-16 h-16" src="Images/Image_6.png" />
-                            </div>
-                        </div>
-
-                        <!-- Loading Text -->
-                        <h2 class="loading-title">Analyse en cours...</h2>
-                        <p class="loading-subtitle" id="loadingText">Calcul de votre DPE</p>
-
-                        <!-- Progress Bar Container -->
-                        <div class="progress-container">
-                            <div class="progress-bar" id="progressBar"></div>
-                            <div class="progress-shine"></div>
-                        </div>
-
-                        <!-- Percentage -->
-                        <div class="percentage" id="percentage">0%</div>
-                    </div>
                 </div>
             </main>
             <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden bg-transparent">
@@ -316,62 +156,6 @@
         </div>
 
         <script>
-            // Function to start analysis and show loading screen
-            function startAnalysis() {
-                const loadingScreen = document.getElementById('loadingScreen');
-                const progressBar = document.getElementById('progressBar');
-                const percentage = document.getElementById('percentage');
-                const loadingText = document.getElementById('loadingText');
-
-                // Show loading screen
-                loadingScreen.classList.add('active');
-
-                // Messages to display during loading
-                const messages = [
-                    'Calcul de votre DPE',
-                    'Analyse des données',
-                    'Génération des recommandations',
-                    'Finalisation...'
-                ];
-
-                let currentProgress = 0;
-                const duration = 2500; // 2.5 seconds
-                const interval = 30; // Update every 30ms
-                const steps = duration / interval;
-                const increment = 100 / steps;
-
-                let messageIndex = 0;
-                const messageInterval = duration / messages.length;
-
-                // Update progress bar and percentage
-                const progressInterval = setInterval(() => {
-                    currentProgress += increment;
-
-                    if (currentProgress >= 100) {
-                        currentProgress = 100;
-                        clearInterval(progressInterval);
-
-                        // Redirect after reaching 100%
-                        setTimeout(() => {
-                            window.location.href = 'Resultats.html';
-                        }, 200);
-                    }
-
-                    progressBar.style.width = currentProgress + '%';
-                    percentage.textContent = Math.round(currentProgress) + '%';
-                }, interval);
-
-                // Change loading text during animation
-                const textInterval = setInterval(() => {
-                    messageIndex++;
-                    if (messageIndex < messages.length) {
-                        loadingText.textContent = messages[messageIndex];
-                    } else {
-                        clearInterval(textInterval);
-                    }
-                }, messageInterval);
-            }
-
             // Icônes pour chaque type de critère
             const criteriaIcons = {
                 'Département': '📍',
