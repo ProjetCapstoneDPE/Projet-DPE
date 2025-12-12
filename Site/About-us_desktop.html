@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html class="h-full" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Notre Projet - Des P'tites Economies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#007AFF", // A bright, clean blue
+                        "background-light": "#F0F5FF", // A very light blue
+                        "background-dark": "#0A192F", // A deep navy blue
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body
+    class="bg-gradient-to-b from-orange-50 to-blue-400 dark:from-background-dark dark:to-slate-900 font-display text-gray-800 dark:text-gray-200 min-h-screen flex flex-col bg-fixed">
+
+    <div class="flex-grow">
+        <header
+            class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
+            <div class="flex items-center gap-4">
+                <a href="Home_desktop.html"
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                    <span>Accueil</span>
+                </a>
+                <a href="Estimation_desktop.html"
+                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    Estimez
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="Bons_gestes.html"
+                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    Les bons gestes !
+                </a>
+                <a href="About-us_desktop.html"
+                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    Qui sommes-nous ?
+                </a>
+            </div>
+        </header>
+        <main class="px-6 py-4">
+            <h1 class="text-3xl font-bold text-primary mb-8 text-center">Quel est notre projet ?</h1>
+            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-primary mb-4">Introduction</h3>
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="flex-shrink-0">
+                        <img src="Images/Image_4.png" alt="Logo Open Data University"
+                            class="h-24 w-auto object-contain">
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        Notre projet se base dans le programme Open Data University. Il vise à créer un estimateur de
+                        performance de DPE afin d'informer des utilisateurs lambda sur leur DPE et comment l'améliorer.
+                    </p>
+                </div>
+            </section>
+            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-primary mb-2">L'origine du Projet</h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-6">
+                    Ce projet a été créé par 4 étudiants du Cycle Pluridisciplinaire d'Études Supérieures
+                    en Science des données, société et santé. Dans le cadre de nos études nous menons un
+                    Capstone Project visant à répondre à une problématique de l'association Lattitudes
+                    se basant sur un programme plus global celui de l'Open Data University.
+                </p>
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div
+                        class="bg-white/80 dark:bg-slate-800/80 p-3 rounded-lg flex items-center justify-center aspect-square shadow-sm">
+                        <img alt="Logo Enedis" class="w-full h-full object-contain" src="Images/Image_1.png" />
+                    </div>
+                    <div
+                        class="bg-white/80 dark:bg-slate-800/80 p-3 rounded-lg flex items-center justify-center aspect-square shadow-sm">
+                        <img alt="Logo HEC Paris" class="w-full h-full object-contain" src="Images/Image_2.png" />
+                    </div>
+                    <div
+                        class="bg-white/80 dark:bg-slate-800/80 p-3 rounded-lg flex items-center justify-center aspect-square shadow-sm">
+                        <img alt="Logo Latitudes" class="w-full h-full object-contain" src="Images/Image_3.png" />
+                    </div>
+                </div>
+            </section>
+            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-primary mb-2">Comment fonctionne l'estimateur ?</h3>
+                <p class="text-gray-700 dark:text-gray-300">
+                    L'estimateur se base sur différentes bases de données libre de droit sur le site de
+                    open-data.gouv. À partir de ces bases de données nous avons créé un prédicteur via différents
+                    algorithmes afin d'estimer à partir de caractéristiques significatives les deux étiquettes
+                    correspondant à votre DPE afin d'estimer votre classe. Par la suite on va estimer quels points
+                    affectent le plus négativement votre DPE et nous allons simuler toujours via notre prédicteur
+                    votre DPE avec ces caractéristiques changées afin de voir quelles caractéristiques sont les plus
+                    importantes à changer afin de vous orienter pour vos possibles travaux.
+                </p>
+            </section>
+            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-primary mb-2">Quelle est la finalité ?</h3>
+                <p class="text-gray-700 dark:text-gray-300">
+                    Notre but est de créer un outil compréhensible et simple d'utilisation qui permet aux particuliers
+                    et aux professionnels de se donner une idée d'un DPE à propos d'un logement. Pour cela nous
+                    voulons simplifier une estimation normale qui s'effectue par un diagnostiqueur et la méthode 3CL par
+                    une estimation basée sur des données réelles de terrain. Ainsi il n'y aura pas besoin de
+                    connaissances ni de documentation technique non forcément nécessaire afin de se donner une idée du
+                    DPE. Notre but est de pouvoir affirmer avec un pourcentage de chance élevé la fiabilité de notre
+                    estimation. Il faut malgré tout ne pas oublier que notre estimation n'est pas un DPE mais seulement
+                    une estimation de celui-ci, il ne remplace donc pas celui-ci en tant que document.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden">
+        <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+        <div class="logo-slider">
+            <div class="logo-track">
+                <!-- Original Logos -->
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                <!-- Duplicated Logos -->
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                <!-- Triplicated Logos for wide screens -->
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

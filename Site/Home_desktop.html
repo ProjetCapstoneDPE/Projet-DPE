@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Des P'tites Economies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body
+    class="bg-gradient-to-b from-orange-50 to-blue-200 dark:from-gray-900 dark:to-blue-900 min-h-screen text-gray-800 dark:text-gray-200">
+    <header
+        class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
+        <div class="flex items-center gap-4">
+            <a href="Home_desktop.html"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                <span>Accueil</span>
+            </a>
+            <a href="Estimation_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Estimez
+            </a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="Bons_gestes.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Les bons gestes !
+            </a>
+            <a href="About-us_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                Qui sommes-nous ?
+            </a>
+        </div>
+    </header>
+    <div class="container mx-auto p-4">
+        <main class="py-8 text-center">
+            <section class="mb-12">
+                <h1 class="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-4">
+                    Bienvenue sur Des P'tites Economies
+                </h1>
+                <p class="text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Estimez votre DPE et découvrez comment améliorer la performance énergétique de votre logement.
+                </p>
+                <button
+                    class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 text-lg"
+                    onclick="window.location.href='Estimation_desktop.html'">
+                    Estimez !
+                </button>
+            </section>
+            <section>
+                <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">
+                    Qu'est-ce qu'un DPE ?
+                </h2>
+                <p class="text-gray-800 dark:text-gray-200 leading-relaxed mb-6 mx-auto">
+                    Le diagnostic de performance énergétique (DPE) renseigne sur la performance énergétique et
+                    climatique d'un logement ou d'un bâtiment, au moyen d'une échelle de notation de A à G. Il évalue à
+                    la fois la consommation d'énergie et les émissions de gaz à effet de serre, dans le cadre de la
+                    politique européenne visant à réduire les consommations énergétiques et à limiter l'impact
+                    environnemental du parc immobilier.
+                </p>
+                <div
+                    class="bg-white/70 dark:bg-gray-800/70 p-4 rounded-xl shadow-md backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+                    <img alt="Infographic showing the Energy Performance Diagnostic (DPE) scale from A (most efficient, green) to G (least efficient, red)."
+                        class="rounded-lg w-full h-auto" src="Images/Image_7.jpg" />
+                </div>
+                <p class="text-gray-800 dark:text-gray-200 leading-relaxed mt-6 mx-auto">
+                    Le DPE ne doit pas être confondu avec l'audit énergétique réglementaire, qui permet d'orienter le
+                    propriétaire dans ses travaux de rénovation énergétique.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden">
+        <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+        <div class="logo-slider">
+            <div class="logo-track">
+                <!-- Original Logos -->
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                <!-- Duplicated Logos -->
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                <!-- Triplicated Logos for wide screens -->
+                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
+                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
