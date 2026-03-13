@@ -16,8 +16,22 @@
 // =============================================
 
 const DEPT_TO_REGION = {
+    // Auvergne-Rhône-Alpes
+    '01': 'Auvergne-Rhône-Alpes', '03': 'Auvergne-Rhône-Alpes', '07': 'Auvergne-Rhône-Alpes',
+    '15': 'Auvergne-Rhône-Alpes', '26': 'Auvergne-Rhône-Alpes', '38': 'Auvergne-Rhône-Alpes',
+    '42': 'Auvergne-Rhône-Alpes', '43': 'Auvergne-Rhône-Alpes', '63': 'Auvergne-Rhône-Alpes',
+    '69': 'Auvergne-Rhône-Alpes', '73': 'Auvergne-Rhône-Alpes', '74': 'Auvergne-Rhône-Alpes',
+    // Bourgogne-Franche-Comté
+    '21': 'Bourgogne-Franche-Comté', '25': 'Bourgogne-Franche-Comté', '39': 'Bourgogne-Franche-Comté',
+    '58': 'Bourgogne-Franche-Comté', '70': 'Bourgogne-Franche-Comté', '71': 'Bourgogne-Franche-Comté',
+    '89': 'Bourgogne-Franche-Comté', '90': 'Bourgogne-Franche-Comté',
     // Bretagne
     '22': 'Bretagne', '29': 'Bretagne', '35': 'Bretagne', '56': 'Bretagne',
+    // Centre-Val de Loire
+    '18': 'Centre-Val de Loire', '28': 'Centre-Val de Loire', '36': 'Centre-Val de Loire',
+    '37': 'Centre-Val de Loire', '41': 'Centre-Val de Loire', '45': 'Centre-Val de Loire',
+    // Corse
+    '2A': 'Corse', '2B': 'Corse',
     // Grand Est
     '08': 'Grand_Est', '10': 'Grand_Est', '51': 'Grand_Est', '52': 'Grand_Est',
     '54': 'Grand_Est', '55': 'Grand_Est', '57': 'Grand_Est', '67': 'Grand_Est',
@@ -32,6 +46,11 @@ const DEPT_TO_REGION = {
     // Normandie
     '14': 'Normandie', '27': 'Normandie', '50': 'Normandie',
     '61': 'Normandie', '76': 'Normandie',
+    // Nouvelle-Aquitaine
+    '16': 'Nouvelle-Aquitaine', '17': 'Nouvelle-Aquitaine', '19': 'Nouvelle-Aquitaine',
+    '23': 'Nouvelle-Aquitaine', '24': 'Nouvelle-Aquitaine', '33': 'Nouvelle-Aquitaine',
+    '40': 'Nouvelle-Aquitaine', '47': 'Nouvelle-Aquitaine', '64': 'Nouvelle-Aquitaine',
+    '79': 'Nouvelle-Aquitaine', '86': 'Nouvelle-Aquitaine', '87': 'Nouvelle-Aquitaine',
     // Occitanie
     '09': 'Occitanie', '11': 'Occitanie', '12': 'Occitanie', '30': 'Occitanie',
     '31': 'Occitanie', '32': 'Occitanie', '34': 'Occitanie', '46': 'Occitanie',
@@ -39,22 +58,53 @@ const DEPT_TO_REGION = {
     '82': 'Occitanie',
     // Pays de la Loire
     '44': 'Pays_de_la_Loire', '49': 'Pays_de_la_Loire', '53': 'Pays_de_la_Loire',
-    '72': 'Pays_de_la_Loire', '85': 'Pays_de_la_Loire'
+    '72': 'Pays_de_la_Loire', '85': 'Pays_de_la_Loire',
+    // Provence-Alpes-Côte d'Azur
+    '04': "Provence-Alpes-Côte_d'Azur", '05': "Provence-Alpes-Côte_d'Azur",
+    '06': "Provence-Alpes-Côte_d'Azur", '13': "Provence-Alpes-Côte_d'Azur",
+    '83': "Provence-Alpes-Côte_d'Azur", '84': "Provence-Alpes-Côte_d'Azur",
+    // Outre-Mer
+    '971': 'Outre-Mer', '972': 'Outre-Mer', '973': 'Outre-Mer',
+    '974': 'Outre-Mer', '976': 'Outre-Mer'
 };
 
 const DEPT_TO_ZONE_CLIMATIQUE = {
+    // Hauts-de-France
     '02': 'H1a', '08': 'H1a', '59': 'H1a', '60': 'H1a', '62': 'H1a', '80': 'H1a',
+    // Grand Est
     '10': 'H1b', '51': 'H1b', '52': 'H1b', '54': 'H1b', '55': 'H1b',
     '57': 'H1b', '67': 'H1b', '68': 'H1b', '88': 'H1b',
+    // Normandie, Bretagne, Pays de la Loire
     '14': 'H2a', '22': 'H2a', '27': 'H2a', '29': 'H2a', '35': 'H2a',
     '44': 'H2a', '49': 'H2a', '50': 'H2a', '53': 'H2a', '56': 'H2a',
     '61': 'H2a', '72': 'H2a', '76': 'H2a', '85': 'H2a',
+    // Île-de-France
     '75': 'H1a', '77': 'H1a', '78': 'H1a', '91': 'H1a',
     '92': 'H1a', '93': 'H1a', '94': 'H1a', '95': 'H1a',
     // Occitanie
     '09': 'H3', '11': 'H2c', '12': 'H2c', '30': 'H2c',
     '31': 'H2c', '32': 'H2c', '34': 'H2c', '46': 'H2c',
     '48': 'H2', '65': 'H3', '66': 'H2c', '81': 'H2c', '82': 'H2c',
+    // Auvergne-Rhône-Alpes
+    '01': 'H1c', '03': 'H1c', '07': 'H2c', '15': 'H1c',
+    '26': 'H2b', '38': 'H1c', '42': 'H1c', '43': 'H1c',
+    '63': 'H1c', '69': 'H1c', '73': 'H1c', '74': 'H1c',
+    // Bourgogne-Franche-Comté
+    '21': 'H1c', '25': 'H1c', '39': 'H1c', '58': 'H1b',
+    '70': 'H1b', '71': 'H1c', '89': 'H1b', '90': 'H1b',
+    // Centre-Val de Loire
+    '18': 'H2b', '28': 'H2b', '36': 'H2b', '37': 'H2b', '41': 'H2b', '45': 'H1b',
+    // Corse
+    '2A': 'H3', '2B': 'H3',
+    // Nouvelle-Aquitaine
+    '16': 'H2b', '17': 'H2b', '19': 'H1c', '23': 'H1c',
+    '24': 'H2c', '33': 'H2c', '40': 'H2c', '47': 'H2c',
+    '64': 'H2c', '79': 'H2b', '86': 'H2b', '87': 'H1c',
+    // Provence-Alpes-Côte d'Azur
+    '04': 'H2c', '05': 'H1c', '06': 'H3', '13': 'H3',
+    '83': 'H3', '84': 'H2c',
+    // Outre-Mer (tropical climate, using H3 as closest equivalent)
+    '971': 'H3', '972': 'H3', '973': 'H3', '974': 'H3', '976': 'H3',
 };
 
 const SURFACE_TO_KEY = {
@@ -496,8 +546,8 @@ async function predictClientSide(responsesArray) {
     const deptValue = responses['Département'] || '';
     const surfaceValue = responses['Surface habitable'] || '';
 
-    const match = deptValue.match(/^(\d+)/);
-    const deptCode = match ? match[1].padStart(2, '0') : '75';
+    const match = deptValue.match(/^(\d{2,3}[A-B]?)\s*-/);
+    const deptCode = match ? match[1] : '75';
 
     const region = DEPT_TO_REGION[deptCode];
     const surfaceKey = SURFACE_TO_KEY[surfaceValue];
