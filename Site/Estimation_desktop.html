@@ -583,6 +583,39 @@
                 text: "Quelle est la hauteur approximative de tes plafonds ?",
                 options: ['Moins de 2,2m', '2,2-2,4m', '2,4-2,6m', '2,6-3m', 'Plus de 3m', 'Je ne sais pas'],
                 help: "Mesure de la distance entre le sol et le plafond. La norme actuelle est 2,5m. Les anciens logements ont souvent 2,8m ou plus."
+            },
+            {
+                id: 'temperature_chauffe',
+                label: 'Température de chauffe',
+                text: "À quelle température chauffes-tu ton logement en hiver (en °C) ?",
+                type: 'number',
+                min: 10,
+                max: 30,
+                step: 0.5,
+                placeholder: 'ex: 19',
+                help: "La température recommandée est de 19°C. Chaque degré supplémentaire augmente la consommation de 7% environ."
+            },
+            {
+                id: 'nb_occupants',
+                label: 'Nombre d\'occupants',
+                text: "Combien de personnes vivent dans ton logement ?",
+                type: 'number',
+                min: 1,
+                max: 15,
+                step: 0.1,
+                placeholder: 'ex: 2.5',
+                help: "Tu peux mettre des décimales pour les personnes à temps partiel (ex: 2.5 pour un couple avec un enfant le week-end)."
+            },
+            {
+                id: 'heures_presence',
+                label: 'Présence par jour',
+                text: "Combien d'heures par jour es-tu présent dans le logement en moyenne ?",
+                type: 'number',
+                min: 0,
+                max: 24,
+                step: 0.5,
+                placeholder: 'ex: 14',
+                help: "Pense au temps passé à dormir + le temps la journée ou le soir. Si tu travailles à l'extérieur toute la journée, c'est souvent entre 10h et 14h."
             }
         ];
 
@@ -598,7 +631,23 @@
             let html = `<p class="text-sm mb-4">${question.text}`;
 
             // Ajouter le champ de saisie (input avec autocomplétion pour département, select classique pour les autres)
-            if (index === 0) {
+            if (question.type === 'number') {
+                const escapedValue = (responses[question.id] || '');
+                html += `
+                <span class="relative inline-flex items-center ml-2">
+                    <input 
+                        type="number" 
+                        id="questionSelect" 
+                        placeholder="${question.placeholder || ''}"
+                        min="${question.min}"
+                        max="${question.max}"
+                        step="${question.step}"
+                        class="bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-3 focus:outline-none focus:ring-2 focus:ring-primary w-32 align-middle"
+                        value="${escapedValue}"
+                    />
+                </span>
+            `;
+            } else if (index === 0) {
                 // Pour le département, utiliser un input avec datalist pour l'autocomplétion
                 const escapedValue = (responses[question.id] || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
                 html += `

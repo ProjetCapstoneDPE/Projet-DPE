@@ -573,15 +573,35 @@ async function predictClientSide(responsesArray) {
         await predictor.loadModel(fallbackUrl);
     }
 
-    // 5) Prédiction
-    const prediction = predictor.predict(features);
-    console.log(`[XGBoost] Prédiction: ${prediction.toFixed(1)} kWh/an`);
+    // 5) Prédiction Théorique (C_base)
+    const predictionTheoretical = predictor.predict(features);
+    console.log(`[XGBoost] Prédiction Théorique (C_base): ${predictionTheoretical.toFixed(1)} kWh/an`);
 
-    // 6) Score de confiance (même calcul que app.py)
-    const confidenceScore = Math.min(85, Math.max(40, Math.floor(60 + (prediction / 500) * 20)));
+    // 6) Consommation Réelle
+    // Récupération des valeurs du questionnaire (avec des valeurs par défaut si non renseigné)
+    const tempValue = parseFloat(responses['Température de chauffe']) || 19;
+    const occValue = parseFloat(responses['Nombre d\'occupants']) || 2;
+    const presValue = parseFloat(responses['Présence par jour']) || 14;
+
+    const delta_temp = tempValue - 19;
+    const presence = presValue / 24.0; // Taux entre 0 et 1
+
+    // Formule :
+    // (0.6 * C_base * (1 + 0.02 * delta_temp) + 0.2 * C_base + 250 * nb_occ) * presence**0.95
+    const predictionReal = (
+        (0.6 * predictionTheoretical * (1 + 0.02 * delta_temp))
+        + (0.2 * predictionTheoretical)
+        + (250 * occValue)
+    ) * Math.pow(presence, 0.95);
+
+    console.log(`[XGBoost] Prédiction Réelle: ${predictionReal.toFixed(1)} kWh/an (Temp: ${tempValue}°, Occ: ${occValue}, Pres: ${presValue}h)`);
+
+    // 7) Score de confiance (même calcul que app.py, basé sur la théorie)
+    const confidenceScore = Math.min(85, Math.max(40, Math.floor(60 + (predictionTheoretical / 500) * 20)));
 
     return {
-        prediction: prediction,
+        prediction: predictionReal, // On renvoie la réelle en temps que prédiction principale
+        predictionTheoretical: predictionTheoretical, // Optionnel, pour debug ou affichage alternatif
         confidence_score: confidenceScore,
         features_used: features,
         model_used: `${region}/${surfaceKey}`,
