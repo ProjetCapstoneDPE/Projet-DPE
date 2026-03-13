@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Conseils énergie et bons gestes | Des P'tites Économies</title>
+    <meta name="description" content="Posez vos questions à Watty, notre assistant énergie. Obtenez des conseils pratiques pour réduire votre consommation et améliorer votre DPE au quotidien." />
+    <link rel="icon" type="image/png" href="Images/Image_2.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fade-up .7s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
+        }
+
+        .delay-300 {
+            animation-delay: .3s;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.60);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #7C3AED;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none !important;
+        }
+
+        select::-ms-expand {
+            display: none;
+        }
+
+        .card-lift {
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .card-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(79, 70, 229, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 min-h-screen text-gray-800">
+
+    <!-- ===== HEADER ===== -->
+    <header
+        class="flex justify-between items-center py-3 px-4 sm:px-6 sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm">
+        <div class="flex items-center gap-3">
+            <a href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                <span class="material-icons text-primary" style="font-size:18px">home</span>
+                <span>Accueil</span>
+            </a>
+            <a href="Estimation_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Estimez
+            </a>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="Bons_gestes.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Les bons gestes !
+            </a>
+            <a href="About-us_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Qui sommes-nous ?
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto p-4 max-w-4xl">
+        <main class="py-8">
+            <!-- Page Title -->
+            <h1 class="text-4xl font-extrabold mb-2 text-center animate-fade-up">
+                <span class="gradient-text">Discutez avec Watty !</span>
+            </h1>
+            <p class="text-center text-gray-500 mb-8 animate-fade-up delay-100">
+                Posez vos questions à Watty, votre assistant énergie personnel
+            </p>
+
+            <!-- Chatbot Container -->
+            <div class="glass-card rounded-3xl shadow-2xl overflow-hidden animate-fade-up delay-200">
+                <!-- Chatbot Header -->
+                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/30">
+                            <img src="Images/Image_6.png" alt="Watty" class="w-14 h-14 object-contain" />
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Watty</h2>
+                            <p class="text-sm text-white/80">Votre assistant énergie</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Area -->
+                <div class="p-6 min-h-[400px] max-h-[500px] overflow-y-auto space-y-4" id="chatMessages">
+                    <!-- Welcome Message -->
+                    <div class="flex items-start gap-3 animate-fade-in">
+                        <div
+                            class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <img src="Images/Image_6.png" alt="Watty" class="w-8 h-8 object-contain" />
+                        </div>
+                        <div
+                            class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+                            <p class="text-gray-700">
+                                Bonjour ! Je suis Watty, votre assistant personnel pour économiser l'énergie.
+                                Sélectionnez une question dans le menu ci-dessous et je vous donnerai des conseils
+                                pratiques !
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Selection -->
+                <div class="p-6 bg-gray-50/80 border-t border-gray-100">
+                    <label for="questionSelect" class="block text-sm font-semibold mb-3 text-gray-600">
+                        Choisissez une question :
+                    </label>
+                    <span class="relative block">
+                        <select id="questionSelect"
+                            class="w-full bg-indigo-50 border-2 border-primary/30 text-primary font-semibold text-sm rounded-xl py-3 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary cursor-pointer transition-all"
+                            onchange="handleQuestion()">
+                            <option value="">-- Sélectionnez une question --</option>
+                            <option value="q1">Quels gestes simples pour réduire ma facture électrique ?</option>
+                            <option value="q2">Comment bien contrôler la température de mon logement ?</option>
+                            <option value="q3">Comment limiter les pertes de chaleur chez moi ?</option>
+                            <option value="q4">Pourquoi un bon DPE est-il important ?</option>
+                            <option value="q5">Quels sont les appareils qui consomment le plus d'électricité en veille ?
+                            </option>
+                            <option value="q6">L'énergie nucléaire est-elle vraiment une énergie verte et bonne pour le
+                                climat ?</option>
+                            <option value="q7">Comment calculer son empreinte carbone personnelle gratuitement ?
+                            </option>
+                            <option value="q8">Quelle est la température idéale pour un frigo et un congélateur pour
+                                moins consommer ?</option>
+                            <option value="q9">Quel est l'impact écologique réel du streaming (Netflix, YouTube) et des
+                                e-mails ?</option>
+                            <option value="q10">Combien de gaz à effet de serre produit un kWh d'électricité en France
+                                comparé à l'Allemagne ?</option>
+                            <option value="q11">Les ampoules LED font-elles une vraie différence sur la facture de fin
+                                d'année ?</option>
+                            <option value="q12">C'est quoi exactement la différence entre l'empreinte carbone et les gaz
+                                à effet de serre ?</option>
+                            <option value="q13">Pourquoi le réchauffement climatique provoque-t-il des événements météo
+                                extrêmes ?</option>
+                        </select>
+                        <span
+                            class="material-icons absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none">expand_more</span>
+                    </span>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="p-6 bg-gradient-to-r from-indigo-600 to-purple-600">
+                    <button
+                        class="w-full bg-white text-indigo-700 font-bold px-6 py-4 rounded-xl hover:bg-gray-50 transition-all transform hover:scale-[1.02] shadow-lg"
+                        onclick="window.location.href='Estimation_desktop.html'">
+                        Faire mon estimation DPE
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section Ressources officielles -->
+            <div class="mt-12 animate-fade-up delay-300">
+                <h2 class="text-2xl font-bold mb-6 text-center">
+                    <span class="gradient-text">Ressources officielles</span>
+                </h2>
+                <div class="glass-card rounded-2xl shadow-lg p-6">
+                    <p class="text-gray-500 mb-4 text-center">
+                        Pour aller plus loin, consultez les guides officiels du gouvernement :
+                    </p>
+                    <div class="space-y-3">
+                        <a href="https://www.service-public.gouv.fr/particuliers/vosdroits/F16096" target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center gap-3 p-4 bg-indigo-50/80 rounded-xl hover:shadow-md transition-all group card-lift">
+                            <span
+                                class="material-icons text-indigo-600 text-3xl group-hover:scale-110 transition-transform">description</span>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">
+                                    Guide de la performance énergétique
+                                </h3>
+                                <p class="text-sm text-gray-500">Service-Public.fr - Informations sur le DPE</p>
+                            </div>
+                            <span
+                                class="material-icons text-gray-400 group-hover:text-indigo-600 transition-colors">arrow_forward</span>
+                        </a>
+
+                        <a href="https://www.ecologie.gouv.fr/politiques-publiques/diagnostic-performance-energetique-dpe"
+                            target="_blank" rel="noopener noreferrer"
+                            class="flex items-center gap-3 p-4 bg-emerald-50/80 rounded-xl hover:shadow-md transition-all group card-lift">
+                            <span
+                                class="material-icons text-emerald-600 text-3xl group-hover:scale-110 transition-transform">eco</span>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors">
+                                    Politiques publiques sur le DPE
+                                </h3>
+                                <p class="text-sm text-gray-500">Ministère de la Transition Écologique</p>
+                            </div>
+                            <span
+                                class="material-icons text-gray-400 group-hover:text-emerald-600 transition-colors">arrow_forward</span>
+                        </a>
+
+                        <a href="https://www.service-public.gouv.fr/particuliers/actualites/A17975" target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center gap-3 p-4 bg-purple-50/80 rounded-xl hover:shadow-md transition-all group card-lift">
+                            <span
+                                class="material-icons text-purple-600 text-3xl group-hover:scale-110 transition-transform">lightbulb</span>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">
+                                    Actualités et conseils pratiques
+                                </h3>
+                                <p class="text-sm text-gray-500">Service-Public.fr - Les bons gestes au quotidien</p>
+                            </div>
+                            <span
+                                class="material-icons text-gray-400 group-hover:text-purple-600 transition-colors">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
+        <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+        <div class="logo-slider">
+            <div class="logo-track">
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const questions = {
+            q1: {
+                question: "Quels gestes simples pour réduire ma facture électrique ?",
+                answer: `Ah, excellente question ! Ces gestes réduisent votre <span class=\"font-semibold\">consommation d'électricité</span> et améliorent votre DPE énergétique.
+
+<strong>📝 Notre focus :</strong> Watty estime la consommation électrique (partie consommation du DPE), pas les émissions CO₂.
+
+Voici quelques astuces qui font vraiment la différence sur votre facture 
+
+<strong>🌡️ Baisser légèrement le chauffage</strong>
+Saviez-vous qu'en réduisant la température de seulement 1°C, vous économisez environ 7% d'énergie ? Et franchement, vous ne sentirez presque aucune différence de confort !
+
+<strong>🔌 Éteindre les appareils en veille</strong>
+Vos télévisions, box internet, consoles et ordinateurs consomment même quand vous ne les utilisez pas. Mon conseil : utilisez des multiprises avec interrupteur. Un geste simple le soir et hop, économies garanties !
+
+<strong>💡 Optimiser l'éclairage</strong>
+Remplacez vos vieilles ampoules halogènes par des LED. Vous pouvez réduire votre consommation d'éclairage jusqu'à 80% ! C'est énorme, non ?
+
+<strong>✨ Adopter des comportements sobres</strong>
+Les petits gestes comptent : éteindre les lumières en quittant une pièce, fermer les fenêtres quand le chauffage ou la clim fonctionne... Ces habitudes deviennent vite automatiques !`
+            },
+            q2: {
+                question: "Comment bien contrôler la température de mon logement ?",
+                answer: `Super question ! La température, c'est LA clé pour allier confort et économies 
+
+<strong>🏠 Adapter chaque pièce</strong>
+Toutes les pièces n'ont pas besoin de la même température :
+• Pièces de vie : 19°C (c'est confortable, promis !)
+• Chambres : 17°C (parfait pour bien dormir)
+• Salle de bain : 22°C en usage ponctuel seulement
+
+Éviter les surchauffes, c'est le bon compromis entre confort et économies !
+
+<strong>⏰ Programmation et entretien</strong>
+Programmez votre chauffage selon vos plages d'occupation. En absence ou la nuit, baissez la température. Votre porte-monnaie vous remerciera !
+
+N'oubliez pas d'entretenir régulièrement votre chaudière et de purger vos radiateurs. Un système bien entretenu = un rendement optimal.
+
+<strong>🤖 Installer des thermostats intelligents</strong>
+Ces petits bijoux de technologie apprennent vos habitudes, régulent précisément la température et évitent les gaspillages. Un investissement qui se rentabilise vite !`
+            },
+            q3: {
+                question: "Comment limiter les pertes de chaleur chez moi ?",
+                answer: `Ah, les pertes de chaleur... le cauchemar de toute facture ! Voici mes meilleurs conseils 
+
+<strong>🌙 Fermer les volets et stores</strong>
+La nuit ou en cas d'absence, fermez vos volets ! C'est simple mais ça conserve vraiment la chaleur à l'intérieur.
+
+<strong>🪟 Utiliser des rideaux thermiques</strong>
+Ils créent une barrière isolante devant les fenêtres. C'est stylé ET efficace !
+
+<strong>🔧 Colmater les infiltrations d'air</strong>
+Vérifiez :
+• Les joints usés autour des fenêtres
+• Les passages sous les portes
+• Les fissures
+
+Un simple joint adhésif ou un boudin de porte peut faire des merveilles !
+
+<strong>🚫 Déplacer les obstacles devant les radiateurs</strong>
+Meubles ou rideaux devant les radiateurs ? Mauvaise idée ! Ils bloquent la diffusion de la chaleur.
+
+<strong>✨ L'effet global</strong>
+Ces réflexes améliorent votre confort thermique, réduisent les courants d'air froid et diminuent vos besoins en chauffage. Que du positif !`
+            },
+            q4: {
+                question: "Pourquoi un bon DPE est-il important ?",
+                answer: `Oh là là, LE sujet essentiel ! Un bon DPE (consommation énergétique), c'est vraiment important, et je vais vous dire pourquoi 
+
+<strong>💰 Réduire vos factures d'énergie</strong>
+Un logement bien classé consomme beaucoup moins d'énergie pour le chauffage et l'eau chaude. Résultat ? Des factures allégées. C'est bon pour votre porte-monnaie ! 
+
+<strong>📝 Note importante :</strong> Watty estime la <span class="font-semibold">consommation électrique (partie consommation du DPE)</span>, pas les émissions CO₂.
+
+<strong>😌 Améliorer le confort et la qualité de vie</strong>
+Un logement performant énergétiquement, c'est :
+• Une meilleure isolation
+• Des températures homogènes dans toutes les pièces
+• Moins d'humidité
+• Un logement plus confortable et plus sain
+
+Qui n'en rêve pas ?
+
+<strong>🏆 Valoriser votre bien et respecter la loi</strong>
+Un bon DPE augmente l'attractivité de votre logement à la vente ou à la location. Et attention, c'est aussi une obligation légale : les logements classés F et G sont progressivement interdits à la location !
+
+Alors, convaincu de l'importance d'un bon DPE ? `
+            },
+            q5: {
+                question: "Quels sont les appareils qui consomment le plus d'électricité en veille ?",
+                answer: `Excellente question ! La consommation en veille, c'est souvent un point noir oublié 
+
+<strong>🥇 Les gros consommateurs</strong>
+Selon l'ADEME, les appareils qui consomment le plus en veille sont :
+• Box internet
+• Décodeurs TV
+• Consoles de jeux vidéo
+• Équipements informatiques (ordinateurs de bureau, écrans, imprimantes)
+• Petit électroménager avec cadrans lumineux (machines à café expresso, micro-ondes)
+
+<strong>💡 Le chiffre qui fait peur</strong>
+L'accumulation de ces appareils en veille représente en moyenne 10% de votre facture annuelle d'électricité. C'est environ 80 euros par an ! Juste en veille, vous m'imaginez ?
+
+<strong>🔌 Le solution</strong>
+Utilisez des multiprises avec interrupteur pour couper complètement l'alimentation la nuit ou en absence. Un geste simple qui vous économise des dizaines d'euros chaque année !`
+            },
+            q6: {
+                question: "L'énergie nucléaire est-elle vraiment une énergie verte et bonne pour le climat ?",
+                answer: `Une question clivante, mais je vais vous donner les faits selon le GIEC 
+
+<strong>✅ L'atout climatique</strong>
+Selon le GIEC, l'énergie nucléaire est un atout MAJEUR pour lutter contre le réchauffement climatique car elle est "bas carbone". Elle n'émet en moyenne que 12 grammes de CO2 par kilowattheure, c'est comparable à l'éolien !
+
+<strong>❌ Mais "verte" ?</strong>
+Le qualificatif d'énergie "verte" est fortement contesté par les associations environnementales pour des raisons bonnes :
+• Production de déchets radioactifs à très longue durée de vie
+• Risques liés à la sûreté des installations
+
+<strong>🤝 Le compromis européen</strong>
+L'Union européenne a choisi de l'inclure dans sa "taxonomie verte" comme énergie de TRANSITION. Pourquoi ? Parce qu'elle reconnaît :
+• Son indispensabilité climatique
+• Mais impose des règles strictes sur la gestion de son impact écologique global
+
+En résumé : bon pour le climat court-terme, questions sur le long-terme. C'est nuancé !`
+            },
+            q7: {
+                question: "Comment calculer son empreinte carbone personnelle gratuitement ?",
+                answer: `Bonne nouvelle ! Il existe un outil de référence français gratuit 
+
+<strong>🎯 L'outil à utiliser</strong>
+Le simulateur "Nos Gestes Climat" développé par l'ADEME et l'Association Bilan Carbone est LE meilleur outil gratuit en France.
+
+<strong>⏱️ Comment ça marche</strong>
+Vous répondez à un questionnaire interactif d'une dizaine de minutes sur :
+• Vos habitudes de transport
+• Votre alimentation
+• Votre logement
+• Votre consommation générale
+
+<strong>📊 Ce que vous obtenez</strong>
+La plateforme estime précisément vos émissions annuelles de gaz à effet de serre, puis :
+• Vous compare à la moyenne nationale
+• Compare aussi à l'objectif climatique mondial (2 tonnes de CO2 par personne)
+• Vous propose des ACTIONS CONCRÈTES pour réduire votre impact
+
+C'est scientifique, gratuit et super utile pour savoir où agir en priorité !`
+            },
+            q8: {
+                question: "Quelle est la température idéale pour un frigo et un congélateur pour moins consommer ?",
+                answer: `Vous vous le demandez peut-être ? Voici les recommandations de l'ADEME 
+
+<strong>🌡️ Les vraies bonnes températures</strong>
+Pour allier conservation optimale ET économies d'énergie :
+• Réfrigérateur : +4°C
+• Congélateur : -18°C
+
+C'est précis ! N'allez pas plus froid.
+
+<strong>⚠️ Attention à la surconsommation</strong>
+Chaque degré de refroidissement supplémentaire augmente la consommation d'environ 5%. C'est juste contre-productif !
+
+Exemple : si vous réglez votre frigo à +2°C au lieu de +4°C, vous consommez 10% d'électricité EN PLUS pour rien. Autant dire que ce n'est pas intéressant.
+
+<strong>🧊 L'astuce du dégivrage</strong>
+Une fine couche de givre de seulement 3mm peut engendrer une surconsommation de 30% ! C'est énorme ! Régulièrement, pensez à :
+• Vider le congélateur complètement une fois par an
+• Laisser dégeler lentement
+• Nettoyer
+
+Ce petit effort vous économise vraiment des dizaines d'euros par an.`
+            },
+            q9: {
+                question: "Quel est l'impact écologique réel du streaming (Netflix, YouTube) et des e-mails ?",
+                answer: `L'impact du numérique, c'est une vraie question ! Voici les chiffres selon l'AIE et l'ADEME 
+
+<strong>📹 Le streaming vidéo</strong>
+Un film sur Netflix ? Environ 50 grammes de CO2 par heure de visionnage. C'est beaucoup plus que ce qu'on croyait avant, mais moins que les peurs exagérées d'hier. C'est lourd surtout à cause du volume massif de données au niveau mondial.
+
+<strong>📧 Les e-mails</strong>
+Un email classique : ≈ 4 grammes de CO2
+Un email avec grosse pièce jointe : ≈ 50 grammes de CO2
+
+Individuellement, c'est dérisoire. Mais à l'échelle des milliards d'emails envoyés chaque jour ? C'est significatif.
+
+<strong>🎯 Le point clé à retenir</strong>
+Cependant - et c'est important - les experts soulignent que la transmission de ces données (réseaux et data centers) pollue BEAUCOUP MOINS que la fabrication initiale de nos équipements.
+
+La fabrication de votre téléphone, TV, ou ordinateur représente SEULE près de 80% de l'empreinte carbone totale du secteur numérique ! Donc : garder votre appareil longtemps, c'est mieux que de le remplacer par un nouveau "écolo".`
+            },
+            q10: {
+                question: "Combien de gaz à effet de serre produit un kWh d'électricité en France comparé à l'Allemagne ?",
+                answer: `Les chiffres sont impressionnants ! Basé sur les données du RTE et de l'Agence européenne pour l'environnement 
+
+<strong>🇫🇷 La France</strong>
+Un kilowattheure (kWh) d'électricité produit en France génère environ 50 grammes de CO2 en moyenne. Pourquoi ? Grâce à un mix énergétique dominé par :
+• Le nucléaire (très bas carbone)
+• L'hydraulique (renouvelable)
+
+<strong>🇩🇪 L'Allemagne</strong>
+Elle affiche une empreinte bien plus lourde : 380-400 grammes de CO2 par kWh. Pourquoi ? À cause de :
+• Son utilisation persistante de centrales à charbon
+• Ses centrales à gaz (pour pallier l'intermittence renouvelable)
+
+<strong>📊 Le chiffre qui résume tout</strong>
+Dépit ses investissements massifs dans le solaire et l'éolien, l'électricité française est actuellement 6 à 8 FOIS MOINS émettrice de gaz à effet de serre que celle de l'Allemagne !
+
+C'est un potentiel énorme pour les enjeux climatiques. À méditer !`
+            },
+            q11: {
+                question: "Les ampoules LED font-elles une vraie différence sur la facture de fin d'année ?",
+                answer: `Oui, la réponse est claire : OUI ! Les chiffres de l'ADEME le prouvent 
+
+<strong>💡 L'efficacité énergétique des LED</strong>
+Les ampoules LED consomment jusqu'à 80% d'électricité EN MOINS que :
+• Les ampoules à incandescence
+• Les ampoules halogènes
+
+C'est spectaculaire comme différence !
+
+<strong>💰 Les vraies économies</strong>
+Un foyer moyen réalise une économie d'environ 50 euros par an sur SEULE sa facture d'éclairage grâce aux LED. C'est rapide comme retour sur investissement vu le coût d'une ampoule LED aujourd'hui.
+
+<strong>🔋 La durée de vie exceptionnelle</strong>
+Les LED durent jusqu'à 40 000 heures de fonctionnement ! Compare ça à une ampoule traditionnelle... C'est 10x plus long ! Résultat :
+• Moins de remplacement à faire
+• Des économies multiplier par 10 sur le long terme
+• C'est à la fois économique ET écologique
+
+Remplacez vos vieilles ampoules par des LED. C'est simple, ça rentre vite dans les frais, et c'est bon pour votre budget ET la planète.`
+            },
+            q12: {
+                question: "C'est quoi exactement la différence entre l'empreinte carbone et les gaz à effet de serre ?",
+                answer: `Une question conceptuelle importante ! Selon le Ministère de la Transition écologique 
+
+<strong>❌ Gaz à effet de serre (GES)</strong>
+Ce sont les substances physiques réelles :
+• Dioxyde de carbone (CO2)
+• Méthane (CH4)
+• Protoxyde d'azote (N2O)
+• Autres
+
+Els s'accumulent dans l'atmosphère, emprisonnent la chaleur, pourraient donc le réchauffement climatique.
+
+En un mot : ce sont les POLLUANTS eux-mêmes.
+
+<strong>📊 Empreinte carbone</strong>
+C'est un OUTIL DE MESURE comptable (exprimé en "équivalent CO2"). Elle permet d'évaluer la quantité TOTALE de gaz à effet de serre générée par :
+• Un individu (son mode de vie)
+• Un produit (sa fabrication et utilisation)
+• Un pays (toutes ses émissions)
+
+En un mot : c'est l'INDICATEUR qui quantifie notre part de responsabilité.
+
+<strong>🎯 Le résumé simple</strong>
+GES = la pollution réelle en elle-même
+Empreinte carbone = comment on mesure notre contribution à cette pollution
+
+C'est la différence entre le problème et la façon de le mesurer !`
+            },
+            q13: {
+                question: "Pourquoi le réchauffement climatique provoque-t-il des événements météo extrêmes ?",
+                answer: `Excellente question ! Le GIEC et l'Organisation Météorologique Mondiale (OMM) l'expliquent bien 
+
+<strong>🌡️ Mécanisme 1 : Plus d'humidité et d'énergie</strong>
+Une atmosphère plus chaude retient davantage d'humidité et d'énergie. Résultat ?
+• Précipitations plus intensives
+• Tempêtes beaucoup plus violentes
+
+C'est mécanique : plus de chaleur = plus de réactions météorologiques puissantes.
+
+<strong>💨 Mécanisme 2 : Perturbation des courants</strong>
+La hausse globale des températures :
+• Accélère l'évaporation de l'eau des sols
+• Perturbe la circulation des grands courants atmosphériques
+• Prolonge les périodes de sécheresse
+• Multiplie les canicules extrêmes
+
+<strong>⚡ Point clé à retenir</strong>
+Le réchauffement climatique ne crée pas toujours de NOUVEAUX phénomènes météorologiques. En revanche, il :
+• Duplique la fréquence des événements
+• Prolonge leur durée
+• Amplifie drastiquement leur intensité
+
+Donc tempêtes, sécheresses, canicules ? Elles existent naturellement. Mais avec le changement climatique, elles deviennent PLUS FRÉQUENTES, PLUS LONGUES, et PLUS GRAVES. C'est ça, le danger.`
+            }
+        };
+
+        let conversationHistory = [];
+
+        function handleQuestion() {
+            const select = document.getElementById('questionSelect');
+            const questionKey = select.value;
+
+            if (!questionKey) return;
+
+            const questionData = questions[questionKey];
+            const chatMessages = document.getElementById('chatMessages');
+
+            // Add user question
+            const userMessage = document.createElement('div');
+            userMessage.className = 'flex items-start gap-3 justify-end animate-fade-in';
+            userMessage.innerHTML = `
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl rounded-tr-none p-4 max-w-[80%]">
+                    <p>${questionData.question}</p>
+                </div>
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-white text-xl">👤</span>
+                </div>
+            `;
+            chatMessages.appendChild(userMessage);
+
+            // Add typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'flex items-start gap-3 animate-fade-in';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <img src="Images/Image_6.png" alt="Watty" class="w-8 h-8 object-contain" />
+                </div>
+                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl rounded-tl-none p-4">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Simulate thinking time
+            setTimeout(() => {
+                // Remove typing indicator
+                const indicator = document.getElementById('typingIndicator');
+                if (indicator) indicator.remove();
+
+                // Add Watty's response
+                const wattyMessage = document.createElement('div');
+                wattyMessage.className = 'flex items-start gap-3 animate-fade-in';
+                wattyMessage.innerHTML = `
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <img src="Images/Image_6.png" alt="Watty" class="w-8 h-8 object-contain" />
+                    </div>
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+                        <p class="text-gray-700 whitespace-pre-line">${questionData.answer}</p>
+                    </div>
+                `;
+                chatMessages.appendChild(wattyMessage);
+
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Reset select
+                select.value = '';
+            }, 1500);
+        }
+    </script>
+
+</body>
+
+</html>
