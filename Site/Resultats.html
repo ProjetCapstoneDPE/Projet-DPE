@@ -5,9 +5,11 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Résultats DPE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="xgboost-predict.js"></script>
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -28,378 +30,1126 @@
             },
         };
     </script>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
+        * {
             font-family: 'Poppins', sans-serif;
         }
 
-        body {
-            min-height: max(884px, 100dvh);
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Modal backdrop */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(79, 70, 229, 0.6);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeInUp .7s ease-out both;
+        }
+
+        .animate-fade-scale {
+            animation: fadeInScale .6s ease-out both;
+        }
+
+        .animate-slide-left {
+            animation: slideInLeft .7s ease-out both;
+        }
+
+        .animate-count {
+            animation: countUp .5s ease-out both;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
+        }
+
+        .delay-300 {
+            animation-delay: .3s;
+        }
+
+        .delay-400 {
+            animation-delay: .4s;
+        }
+
+        .delay-500 {
+            animation-delay: .5s;
+        }
+
+        .delay-600 {
+            animation-delay: .6s;
+        }
+
+        .delay-700 {
+            animation-delay: .7s;
+        }
+
+        /* ===== DPE SCALE ===== */
+        .dpe-bar {
+            transition: all .4s cubic-bezier(.34, 1.56, .64, 1);
+            cursor: default;
+        }
+
+        .dpe-bar:hover {
+            transform: scaleX(1.03);
+            filter: brightness(1.1);
+        }
+
+        .dpe-bar.active {
+            transform: scaleX(1.06);
+            filter: brightness(1.15);
+            z-index: 10;
+        }
+
+        .dpe-bar.active .dpe-indicator {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .dpe-indicator {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all .4s ease;
+        }
+
+        /* ===== GLASS CARD ===== */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* ===== HERO GRADIENT ===== */
+        .hero-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 30%, #6366f1 60%, #818cf8 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        /* ===== SHIMMER TEXT ===== */
+        .shimmer-text {
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0.8) 0%,
+                    rgba(255, 255, 255, 1) 40%,
+                    rgba(255, 255, 255, 0.8) 60%,
+                    rgba(255, 255, 255, 0.8) 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* ===== RECOMMENDATION CARD ===== */
+        .reco-card {
+            transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+        }
+
+        .reco-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== STAT PILL ===== */
+        .stat-pill {
+            transition: all .3s ease;
+        }
+
+        .stat-pill:hover {
+            transform: scale(1.05);
+        }
+
+        /* ===== MODAL ===== */
         #modalBackdrop {
             display: none;
         }
 
         #modalBackdrop.active {
             display: flex;
+            animation: fadeInScale .3s ease-out;
+        }
+
+        /* ===== PROGRESS RING ===== */
+        .progress-ring-circle {
+            transition: stroke-dashoffset 1.5s cubic-bezier(.34, 1.56, .64, 1);
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.3);
+            border-radius: 3px;
         }
     </style>
-    <link rel="stylesheet" href="styles.css">
 </head>
 
-<body
-    class="bg-gradient-to-b from-orange-50 to-blue-200 dark:from-gray-900 dark:to-blue-900 min-h-screen text-gray-800 dark:text-gray-200">
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 min-h-screen text-gray-800">
+
+    <!-- ===== HEADER ===== -->
     <header
-        class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
-        <div class="flex items-center gap-4">
+        class="flex justify-between items-center py-3 px-4 sm:px-6 sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm">
+        <div class="flex items-center gap-3">
             <a href="Home_desktop.html"
-                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                <span class="material-icons text-primary" style="font-size:18px">home</span>
                 <span>Accueil</span>
             </a>
             <a href="Estimation_desktop.html"
-                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                 Estimez
             </a>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
             <a href="Bons_gestes.html"
-                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                 Les bons gestes !
             </a>
             <a href="About-us_desktop.html"
-                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                 Qui sommes-nous ?
             </a>
         </div>
     </header>
 
-    <!-- Modal popup pour l'effet rebond -->
-    <div id="modalBackdrop" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-gray-200 dark:bg-gray-700 rounded-3xl p-8 max-w-2xl w-full relative shadow-2xl">
-            <!-- Bouton fermer -->
+    <!-- ===== MODAL EFFET REBOND ===== -->
+    <div id="modalBackdrop"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-2xl w-full relative shadow-2xl border border-gray-100">
             <button onclick="closeModal()"
-                class="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-                <span class="material-icons" style="font-size: 28px;">close</span>
+                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-800 transition-all">
+                <span class="material-icons" style="font-size:20px">close</span>
             </button>
-
-            <!-- Avatar Watty -->
             <div class="flex items-center gap-4 mb-6">
-                <img alt="Watty" class="w-16 h-16" src="Images/Image_6.png" />
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Qu'est-ce que l'effet rebond ?</h2>
+                <div
+                    class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <img alt="Watty" class="w-10 h-10" src="Images/Image_6.png" />
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Qu'est-ce que l'effet rebond ?</h2>
+                    <p class="text-sm text-gray-500">Explication par Watty</p>
+                </div>
             </div>
-
-            <!-- Contenu -->
-            <div class="space-y-4 text-gray-800 dark:text-gray-200">
-                <p class="text-justify">
-                    Quand on améliore l'efficacité énergétique d'un logement (par exemple en isolant mieux ou en
-                    changeant pour un chauffage plus performant), on s'attend à ce que la consommation baisse.
-                </p>
-                <p class="text-justify">
-                    Mais parfois, l'utilisateur modifie son comportement parce que le logement devient moins coûteux à
-                    chauffer ou plus confortable.
-                </p>
-                <p class="text-justify">
-                    <b>Résultat :</b> la consommation réelle ne baisse pas autant que prévu, voire peut augmenter.
-                </p>
-                <p class="text-justify">
-                    C'est ce qu'on appelle l'effet rebond.
-                </p>
+            <div class="space-y-3 text-gray-700 text-[15px] leading-relaxed">
+                <p>Quand on améliore l'efficacité énergétique d'un logement (isolation, chauffage performant), on
+                    s'attend à ce que la consommation baisse.</p>
+                <p>Mais parfois, l'utilisateur modifie son comportement parce que le logement devient <strong
+                        class="text-indigo-600">moins coûteux à chauffer</strong> ou plus confortable.</p>
+                <p><strong class="text-red-500">Résultat :</strong> la consommation réelle ne baisse pas autant que
+                    prévu, voire peut augmenter. C'est l'<em>effet rebond</em>.</p>
             </div>
-
-            <!-- Bouton -->
             <div class="mt-8 text-center">
                 <button onclick="window.location.href='Bons_gestes.html'"
-                    class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-8 py-3 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg">
-                    En savoir plus sur les bons gestes à adopter
+                    class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold px-8 py-3 rounded-full hover:shadow-xl hover:scale-[1.02] transition-all">
+                    Découvrir les bons gestes
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="container mx-auto p-4 max-w-7xl">
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="container mx-auto px-4 sm:px-6 max-w-7xl">
         <main class="py-8">
+
             <!-- Page Title -->
-            <h1 class="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2 text-center">
-                Résultats de votre estimation DPE
-            </h1>
-            <p class="text-center text-gray-600 dark:text-gray-400 mb-8">
-                Voici l'analyse de la performance énergétique de votre logement
-            </p>
+            <div class="text-center mb-10 animate-fade-up">
+                <div
+                    class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
+                    <span class="material-icons" style="font-size:16px">analytics</span>
+                    Analyse complète
+                </div>
+                <h1
+                    class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-700 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                    Résultats de votre estimation DPE
+                </h1>
+                <p class="text-gray-500 text-sm max-w-lg mx-auto">
+                    Voici l'analyse détaillée de la performance énergétique de votre logement
+                </p>
+            </div>
 
-            <!-- Layout principal avec colonne Watty -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Colonne principale (2/3) -->
-                <div class="lg:col-span-2 space-y-6">
-                    <!-- DPE actuel -->
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 text-center">
-                            Votre DPE actuel
-                        </h2>
-                        <div class="flex items-center justify-between gap-4">
-                            <!-- DPE Scale -->
-                            <div class="space-y-1 flex-1">
-                                <div class="flex items-center gap-2">
-                                    <div
-                                        class="bg-green-600 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
-                                        A</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">≤ 50</div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div
-                                        class="bg-green-400 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
-                                        B</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">51-90</div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div
-                                        class="bg-yellow-400 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
-                                        C</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">91-150</div>
-                                </div>
-                                <div class="flex items-center gap-2 pl-24 relative">
-                                    <span
-                                        class="absolute left-0 bg-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-                                        Vous êtes ici
-                                    </span>
-                                    <div
-                                        class="bg-orange-400 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm ring-4 ring-orange-300">
-                                        D</div>
-                                    <div class="text-xs font-bold text-orange-600 dark:text-orange-400">151-230</div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div
-                                        class="bg-orange-600 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
-                                        E</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">231-330</div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div
-                                        class="bg-red-500 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
-                                        F</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">331-450</div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div
-                                        class="bg-red-700 text-white font-bold px-3 py-1 rounded w-16 text-center text-sm">
-                                        G</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">> 450</div>
-                                </div>
-                            </div>
+            <!-- ===== GRID PRINCIPAL ===== -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                            <!-- Current Score Details -->
-                            <div class="text-center border-l-2 border-gray-200 dark:border-gray-700 pl-6">
-                                <div class="text-5xl font-bold text-orange-500 mb-2">D</div>
-                                <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">185 kWh/m²/an</div>
-                                <div class="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                                    Émissions : 38 kg CO₂/m²/an
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- ===== COLONNE PRINCIPALE (8/12) ===== -->
+                <div class="lg:col-span-8 space-y-6">
 
-                    <!-- Potentiel d'amélioration -->
+                    <!-- ===== HERO CARD — Consommation ===== -->
                     <div
-                        class="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900 dark:to-blue-900 rounded-2xl shadow-lg p-6 border-2 border-green-300 dark:border-green-700">
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 text-center">
-                            Potentiel d'amélioration
-                        </h2>
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 text-center">
-                            En suivant nos recommandations, vous pourriez atteindre :
-                        </p>
-                        <div class="flex items-center justify-center gap-6">
-                            <div class="text-center">
-                                <div class="text-5xl font-bold text-green-500 mb-2">B</div>
-                                <div class="text-lg font-bold text-gray-800 dark:text-gray-200">75 kWh/m²/an</div>
+                        class="hero-gradient rounded-3xl shadow-2xl p-6 sm:p-8 text-white relative overflow-hidden animate-fade-up delay-100">
+                        <!-- Decorative circles -->
+                        <div
+                            class="absolute top-0 right-0 w-60 h-60 bg-white/5 rounded-full -translate-y-1/3 translate-x-1/3">
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3">
+                        </div>
+                        <div class="absolute top-1/2 right-1/4 w-20 h-20 bg-white/5 rounded-full"></div>
+
+                        <div class="relative z-10">
+                            <!-- Model badge -->
+                            <div class="flex justify-center mb-6">
+                                <div
+                                    class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 border border-white/20 text-xs font-medium">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    Modèle : <span id="modelName" class="font-bold text-white">XGBoost</span>
+                                </div>
                             </div>
-                            <div class="text-center">
-                                <div class="bg-white dark:bg-gray-800 px-4 py-3 rounded-xl">
-                                    <div class="text-3xl font-bold text-green-600">~60%</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">d'économie</div>
+
+                            <!-- Hero number -->
+                            <div class="text-center mb-6">
+                                <div class="text-[11px] font-semibold text-white/60 uppercase tracking-[.2em] mb-3">
+                                    Consommation théorique annuelle
+                                </div>
+                                <div id="annualConsumption"
+                                    class="text-5xl sm:text-7xl font-extrabold shimmer-text tracking-tight leading-none mb-1"
+                                    style="text-shadow: 0 4px 30px rgba(0,0,0,0.2);">
+                                    — <span class="text-2xl sm:text-3xl font-bold">kWh/an</span>
+                                </div>
+                                <div class="text-xs text-white/40 mt-2">Énergie primaire prédite par le modèle</div>
+                            </div>
+
+                            <!-- Stat pills -->
+                            <div class="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+                                <div
+                                    class="stat-pill bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-3 text-center border border-white/15">
+                                    <div class="text-[10px] uppercase tracking-wider text-white/50 mb-1">Surface</div>
+                                    <div id="surfaceUsed" class="text-lg font-bold">— m²</div>
+                                </div>
+                                <div class="text-white/20">
+                                    <span class="material-icons" style="font-size:20px">arrow_forward</span>
+                                </div>
+                                <div
+                                    class="stat-pill bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-3 text-center border border-white/15">
+                                    <div class="text-[10px] uppercase tracking-wider text-white/50 mb-1">par m²</div>
+                                    <div id="consoPerM2" class="text-lg font-bold">— kWh/m²/an</div>
+                                </div>
+                                <div class="text-white/20">
+                                    <span class="material-icons" style="font-size:20px">arrow_forward</span>
+                                </div>
+                                <div
+                                    class="stat-pill bg-gradient-to-br from-amber-400/20 to-yellow-300/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center border-2 border-amber-300/30">
+                                    <div class="text-[10px] uppercase tracking-wider text-amber-200/70 mb-1">Classe DPE
+                                    </div>
+                                    <div id="heroDpeGrade" class="text-3xl font-extrabold text-amber-300">—</div>
+                                </div>
+                            </div>
+
+                            <!-- CO2 -->
+                            <div class="flex justify-center mt-5 gap-6 text-xs text-white/50">
+                                <span class="flex items-center gap-1">
+                                    <span class="material-icons" style="font-size:14px">eco</span>
+                                    CO₂ estimé : <span id="co2ValueHero" class="font-bold text-white/80 ml-1">—</span>
+                                    kg/m²/an
+                                </span>
+                            </div>
+
+                            <!-- Details toggle -->
+                            <details class="mt-6 relative">
+                                <summary
+                                    class="cursor-pointer flex items-center justify-center gap-2 text-sm font-medium text-white/60 hover:text-white transition-colors py-2 select-none">
+                                    <span class="material-icons text-sm" style="font-size:18px">tune</span>
+                                    Voir les 22 variables envoyées au modèle
+                                </summary>
+                                <div id="featuresGrid"
+                                    class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/15">
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- ===== DPE SCALE ===== -->
+                    <div class="glass-card rounded-3xl shadow-xl p-6 sm:p-8 animate-fade-up delay-200">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-md">
+                                <span class="material-icons text-white" style="font-size:20px">speed</span>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">Échelle DPE</h2>
+                                <p class="text-xs text-gray-500">Position de votre logement</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-stretch gap-6">
+                            <!-- Scale bars -->
+                            <div id="dpeScale" class="flex-1 space-y-1.5">
+                                <!-- Generated by JS -->
+                            </div>
+                            <!-- Current Score -->
+                            <div
+                                class="flex flex-col items-center justify-center border-l-2 border-gray-100 pl-6 min-w-[120px]">
+                                <div class="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2">Votre
+                                    classe</div>
+                                <div id="currentGrade"
+                                    class="text-6xl font-extrabold text-orange-500 mb-1 animate-pulse-glow rounded-2xl px-4 py-1">
+                                    —</div>
+                                <div id="currentValue" class="text-sm font-semibold text-gray-600">— kWh/m²/an</div>
+                                <div class="mt-3 text-xs text-gray-400 flex items-center gap-1">
+                                    <span class="material-icons" style="font-size:14px">co2</span>
+                                    <span id="co2Value">—</span> kg CO₂/m²/an
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Recommandations -->
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
-                            Recommandations prioritaires
-                        </h2>
-                        <div class="space-y-4">
-                            <!-- Recommendation 1 -->
-                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 border-l-4 border-red-500">
-                                <div class="flex items-start gap-3">
-                                    <div class="bg-red-100 dark:bg-red-900 rounded-full p-2">
-                                        <span class="material-icons text-red-600 dark:text-red-400"
-                                            style="font-size: 24px;">thermostat</span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <h3 class="font-bold text-gray-800 dark:text-gray-200">Isolation thermique
-                                            </h3>
-                                            <span
-                                                class="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-400 px-2 py-1 rounded-full text-xs font-semibold">
-                                                Priorité haute
-                                            </span>
-                                        </div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                            Votre logement présente des déperditions thermiques importantes. L'isolation
-                                            des combles et des murs permettrait de réduire jusqu'à 30% de votre
-                                            consommation.
-                                        </p>
-                                        <div class="flex items-center gap-2 text-xs flex-wrap">
-                                            <span
-                                                class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400 px-2 py-1 rounded-full font-semibold">
-                                                💰 Économie potentielle : 450€/an
-                                            </span>
-                                            <span
-                                                class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full font-semibold">
-                                                ⏱️ Amortissement : 8-10 ans
-                                            </span>
-                                        </div>
-                                    </div>
+                    <!-- ===== POINTS CRITIQUES ===== -->
+                    <div id="criticalPointsSection"
+                        class="glass-card rounded-3xl shadow-xl p-6 sm:p-8 border-2 border-amber-200/60 animate-fade-up delay-300"
+                        style="display:none;">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-amber-500 to-red-500 rounded-xl flex items-center justify-center shadow-md">
+                                <span class="material-icons text-white" style="font-size:20px">warning</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-lg font-bold text-gray-800">Points critiques identifiés</h2>
+                                <p class="text-xs text-gray-500">Variables en dessous de la moyenne de la classe <span
+                                        id="targetClassBadge"
+                                        class="inline-flex items-center bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full text-xs">—</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div id="criticalPointsList" class="space-y-2 mt-4">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- ===== POTENTIEL D'AMÉLIORATION ===== -->
+                    <div
+                        class="glass-card rounded-3xl shadow-xl p-6 sm:p-8 border-2 border-emerald-200/60 animate-fade-up delay-300">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-md">
+                                <span class="material-icons text-white" style="font-size:20px">trending_up</span>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">Potentiel d'amélioration</h2>
+                                <p class="text-xs text-gray-500">En corrigeant les points critiques ci-dessus</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-center gap-8 sm:gap-12">
+                            <!-- Current → Potential -->
+                            <div class="text-center">
+                                <div class="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2">Potentiel
                                 </div>
+                                <div id="potentialGrade" class="text-5xl font-extrabold text-emerald-500 mb-1">—</div>
+                                <div id="potentialValue" class="text-sm font-semibold text-gray-600">— kWh/m²/an</div>
                             </div>
 
-                            <!-- Recommendation 2 -->
-                            <div
-                                class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 border-l-4 border-orange-500">
-                                <div class="flex items-start gap-3">
-                                    <div class="bg-orange-100 dark:bg-orange-900 rounded-full p-2">
-                                        <span class="material-icons text-orange-600 dark:text-orange-400"
-                                            style="font-size: 24px;">window</span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <h3 class="font-bold text-gray-800 dark:text-gray-200">Remplacement des
-                                                fenêtres</h3>
-                                            <span
-                                                class="bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-400 px-2 py-1 rounded-full text-xs font-semibold">
-                                                Priorité moyenne
-                                            </span>
-                                        </div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                            Vos fenêtres simple vitrage causent des pertes de chaleur importantes.
-                                            Installer du double ou triple vitrage améliorerait grandement votre confort.
-                                        </p>
-                                        <div class="flex items-center gap-2 text-xs flex-wrap">
-                                            <span
-                                                class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-400 px-2 py-1 rounded-full font-semibold">
-                                                💰 Économie potentielle : 280€/an
-                                            </span>
-                                            <span
-                                                class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full font-semibold">
-                                                ⏱️ Amortissement : 12-15 ans
-                                            </span>
-                                        </div>
-                                    </div>
+                            <!-- Savings Ring -->
+                            <div class="relative">
+                                <svg class="w-28 h-28" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="52" fill="none" stroke="#e5e7eb" stroke-width="8" />
+                                    <circle id="savingsRing" class="progress-ring-circle" cx="60" cy="60" r="52"
+                                        fill="none" stroke="url(#greenGradient)" stroke-width="8" stroke-linecap="round"
+                                        stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+                                    <defs>
+                                        <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#10b981" />
+                                            <stop offset="100%" stop-color="#06b6d4" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <div id="economyPercent" class="text-2xl font-extrabold text-emerald-600">—</div>
+                                    <div class="text-[10px] text-gray-400 font-medium">d'économie</div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== RECOMMANDATIONS DYNAMIQUES ===== -->
+                    <div id="recoSection" class="animate-fade-up delay-400">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-md">
+                                <span class="material-icons text-white" style="font-size:20px">lightbulb</span>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">Recommandations prioritaires</h2>
+                                <p class="text-xs text-gray-500">Actions pour améliorer votre DPE</p>
+                            </div>
+                        </div>
+
+                        <div id="recoContainer" class="space-y-4">
+                            <!-- Generated dynamically by JS -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Colonne Watty (1/3) -->
-                <div class="lg:col-span-1">
-                    <div class="sticky top-24">
-                        <!-- Bulle Watty -->
+                <!-- ===== COLONNE LATÉRALE (4/12) ===== -->
+                <div class="lg:col-span-4">
+                    <div class="sticky top-20 space-y-6">
+
+                        <!-- Watty bubble -->
                         <div
-                            class="bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-3xl border-2 border-blue-200 dark:border-blue-900 shadow-2xl p-6">
-                            <!-- Avatar -->
-                            <div class="flex justify-center mb-4">
-                                <div
-                                    class="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-lg">
-                                    <img alt="Watty" class="w-14 h-14" src="Images/Image_6.png" />
+                            class="glass-card rounded-3xl shadow-xl p-6 border-2 border-indigo-200/40 animate-fade-up delay-500">
+                            <div class="flex justify-center mb-5">
+                                <div class="relative animate-float">
+                                    <div
+                                        class="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl rotate-3">
+                                        <img alt="Watty" class="w-14 h-14" src="Images/Image_6.png" />
+                                    </div>
+                                    <div
+                                        class="absolute -top-1 -right-1 w-6 h-6 bg-amber-400 rounded-full flex items-center justify-center shadow-md text-xs">
+                                        💡</div>
                                 </div>
                             </div>
 
-                            <!-- Message de Watty -->
-                            <div class="bg-gray-100 dark:bg-slate-600 p-4 rounded-xl mb-4">
-                                <p class="text-sm text-gray-800 dark:text-gray-200">
-                                    Ce n'est pas parce que ton DPE est meilleur que ta facture va réellement diminuer !
+                            <div
+                                class="bg-gradient-to-br from-gray-50 to-indigo-50/50 p-4 rounded-2xl mb-5 border border-gray-100 relative">
+                                <!-- Speech bubble tail -->
+                                <div
+                                    class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gray-50 rotate-45 border-l border-t border-gray-100">
+                                </div>
+                                <p class="text-sm text-gray-700 leading-relaxed relative z-10">
+                                    <strong class="text-indigo-600">Attention !</strong> Ce n'est pas parce que ton DPE
+                                    est meilleur que ta facture va réellement diminuer !
                                 </p>
                             </div>
 
-                            <!-- Bouton Pourquoi -->
                             <div class="text-center">
                                 <button onclick="openModal()"
-                                    class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-6 py-2 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg">
+                                    class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold px-6 py-2.5 rounded-full hover:shadow-xl hover:scale-[1.03] transition-all text-sm">
                                     Pourquoi ?
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Summary CTA -->
+                        <div
+                            class="hero-gradient rounded-3xl shadow-2xl p-6 text-white relative overflow-hidden animate-fade-up delay-600">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2">
+                            </div>
+                            <div class="relative z-10">
+                                <h3 class="text-lg font-bold mb-2">En résumé</h3>
+                                <p class="text-sm text-white/80 mb-4 leading-relaxed">
+                                    Vous pourriez économiser jusqu'à
+                                    <span id="savingsAmount" class="font-extrabold text-amber-300">— € par an</span>
+                                    sur vos factures d'énergie.
+                                </p>
+                                <div class="space-y-2">
+                                    <button onclick="window.location.href='Bons_gestes.html'"
+                                        class="w-full bg-white text-indigo-700 font-bold py-2.5 rounded-full hover:bg-gray-50 transition-colors text-sm shadow-md">
+                                        Voir les bons gestes
+                                    </button>
+                                    <button onclick="window.location.href='Estimation_desktop.html'"
+                                        class="w-full bg-white/15 border border-white/25 text-white font-semibold py-2.5 rounded-full hover:bg-white/25 transition-colors text-sm">
+                                        Refaire une estimation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
             </div>
 
-            <!-- Résumé final -->
-            <div class="mt-8 bg-blue-600 text-white rounded-2xl shadow-lg p-6 text-center">
-                <h3 class="text-2xl font-bold mb-3">En résumé</h3>
-                <p class="text-base mb-4">
-                    En réalisant l'ensemble de ces travaux, vous pourriez économiser jusqu'à <span
-                        class="font-bold text-yellow-300">1 400€ par an</span>
-                    sur vos factures d'énergie et améliorer considérablement votre confort de vie.
-                </p>
-                <div class="flex flex-wrap justify-center gap-3">
-                    <button
-                        class="bg-white text-blue-600 font-bold px-6 py-2 rounded-full hover:bg-gray-100 transition-colors">
-                        Télécharger le rapport complet
-                    </button>
-                    <button
-                        class="bg-yellow-400 text-gray-900 font-bold px-6 py-2 rounded-full hover:bg-yellow-300 transition-colors"
-                        onclick="window.location.href='Home_desktop.html'">
-                        Retour à l'accueil
-                    </button>
-                </div>
-            </div>
         </main>
     </div>
 
-    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden">
+    <!-- ===== FOOTER ===== -->
+    <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
         <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
         <div class="logo-slider">
             <div class="logo-track">
-                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
             </div>
         </div>
     </footer>
 
+    <!-- ===== SCRIPTS ===== -->
     <script>
+        // ==========================================
+        // MODAL
+        // ==========================================
         function openModal() {
             document.getElementById('modalBackdrop').classList.add('active');
         }
-
         function closeModal() {
             document.getElementById('modalBackdrop').classList.remove('active');
         }
-
-        // Fermer avec Escape
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-
-        // Fermer en cliquant sur le backdrop
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
         document.getElementById('modalBackdrop').addEventListener('click', function (e) {
-            if (e.target === this) {
-                closeModal();
-            }
+            if (e.target === this) closeModal();
         });
+
+        // ==========================================
+        // DPE SCALE
+        // ==========================================
+        const dpeScaleRef = [
+            { grade: 'A', max: 50, color: '#16a34a', colorLight: '#dcfce7' },
+            { grade: 'B', max: 90, color: '#4ade80', colorLight: '#dcfce7' },
+            { grade: 'C', max: 150, color: '#facc15', colorLight: '#fef9c3' },
+            { grade: 'D', max: 230, color: '#fb923c', colorLight: '#ffedd5' },
+            { grade: 'E', max: 330, color: '#f97316', colorLight: '#ffedd5' },
+            { grade: 'F', max: 450, color: '#ef4444', colorLight: '#fee2e2' },
+            { grade: 'G', max: 9999, color: '#b91c1c', colorLight: '#fee2e2' }
+        ];
+
+        const dpeGradeColors = {
+            'A': 'text-green-600', 'B': 'text-green-400', 'C': 'text-yellow-500',
+            'D': 'text-orange-400', 'E': 'text-orange-600', 'F': 'text-red-500', 'G': 'text-red-700'
+        };
+
+        function getDpeGrade(value) {
+            for (let level of dpeScaleRef) {
+                if (value <= level.max) return level;
+            }
+            return dpeScaleRef[dpeScaleRef.length - 1];
+        }
+
+        function renderScale(currentValue) {
+            const container = document.getElementById('dpeScale');
+            const currentGrade = getDpeGrade(currentValue);
+
+            // Width percentages for the staircase effect
+            const widths = [40, 48, 56, 64, 72, 80, 88];
+            let html = '';
+            let prevMax = 0;
+
+            dpeScaleRef.forEach((level, i) => {
+                const isCurrent = level.grade === currentGrade.grade;
+                const rangeText = level.grade === 'G' ? '> 450' :
+                    level.grade === 'A' ? '≤ 50' : `${prevMax + 1}–${level.max}`;
+
+                html += `
+                    <div class="dpe-bar flex items-center gap-3 ${isCurrent ? 'active' : ''}"
+                         style="animation: slideInLeft .5s ease-out ${i * 0.06}s both;">
+                        <div class="relative flex items-center rounded-lg overflow-hidden h-8"
+                             style="width:${widths[i]}%; background:${level.color}; ${isCurrent ? 'box-shadow: 0 4px 15px ' + level.color + '60;' : 'opacity:0.7;'}">
+                            <span class="text-white font-bold text-sm px-3">${level.grade}</span>
+                            ${isCurrent ? `
+                                <div class="dpe-indicator absolute right-0 top-1/2 -translate-y-1/2 flex items-center">
+                                    <span class="bg-white text-gray-800 font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-lg mr-2 whitespace-nowrap">
+                                        Vous êtes ici
+                                    </span>
+                                </div>` : ''}
+                        </div>
+                        <span class="text-xs font-medium ${isCurrent ? 'text-gray-800 font-bold' : 'text-gray-400'}">${rangeText}</span>
+                    </div>
+                `;
+                prevMax = level.max;
+            });
+
+            container.innerHTML = html;
+
+            // Update grade display
+            const gradeEl = document.getElementById('currentGrade');
+            gradeEl.textContent = currentGrade.grade;
+            gradeEl.className = `text-6xl font-extrabold mb-1 animate-pulse-glow rounded-2xl px-4 py-1 ${dpeGradeColors[currentGrade.grade] || 'text-gray-500'}`;
+        }
+
+        // ==========================================
+        // UPDATE RESULTS (avec points critiques et re-prédiction)
+        // ==========================================
+        async function updateResults() {
+            const resultStr = localStorage.getItem('dpe_result');
+            const responsesStr = localStorage.getItem('dpe_responses');
+
+            if (!resultStr) {
+                renderScale(185);
+                return;
+            }
+
+            try {
+                const result = JSON.parse(resultStr);
+                const responses = responsesStr ? JSON.parse(responsesStr) : [];
+
+                // Surface
+                let surface = 70;
+                const surfResp = responses.find(r => r.label === 'Surface habitable');
+                if (surfResp && surfResp.value) {
+                    const surfaceMap = {
+                        'Moins de 30m²': 20, '30-50m²': 40, '50-70m²': 60,
+                        '70-90m²': 80, '90-120m²': 105, 'Plus de 120m²': 140
+                    };
+                    surface = surfaceMap[surfResp.value] || 70;
+                }
+
+                const totalConsoEF = result.prediction;
+
+                let surfaceUsed = surface;
+                if (result.features_used && result.features_used.surface_habitable_logement) {
+                    surfaceUsed = result.features_used.surface_habitable_logement;
+                }
+
+                const kwhEP_m2 = totalConsoEF / surfaceUsed;
+
+                // DPE Scale
+                renderScale(kwhEP_m2);
+                document.getElementById('currentValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+                document.getElementById('co2Value').textContent = Math.round(kwhEP_m2 * 0.15);
+
+                // HERO Section
+                const consoFormatted = Math.round(totalConsoEF).toLocaleString('fr-FR');
+                document.getElementById('annualConsumption').innerHTML =
+                    `${consoFormatted} <span class="text-2xl sm:text-3xl font-bold">kWh/an</span>`;
+                document.getElementById('surfaceUsed').textContent = `${Math.round(surfaceUsed)} m²`;
+                document.getElementById('consoPerM2').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+
+                const heroGrade = getDpeGrade(kwhEP_m2);
+                document.getElementById('heroDpeGrade').textContent = heroGrade.grade;
+                document.getElementById('modelName').textContent = result.model_used || 'XGBoost';
+                document.getElementById('co2ValueHero').textContent = Math.round(kwhEP_m2 * 0.15);
+
+                // Features grid
+                if (result.features_used) {
+                    const featuresGrid = document.getElementById('featuresGrid');
+                    const featureLabels = {
+                        'surface_habitable_logement': '📐 Surface habitable (m²)',
+                        'annee_construction': '📅 Année de construction',
+                        'hauteur_sous_plafond': '📏 Hauteur sous plafond (m)',
+                        'ubat_w_par_m2_k': '🌡️ Ubat (W/m².K)',
+                        'besoin_chauffage': '🔥 Besoin chauffage (kWh)',
+                        'apport_solaire_saison_chauffe': '☀️ Apport solaire (kWh)',
+                        'nombre_niveau_logement': '🏢 Nombre de niveaux',
+                        'type_batiment': '🏠 Type de bâtiment',
+                        'periode_construction': '🏗️ Période de construction',
+                        'zone_climatique': '🗺️ Zone climatique',
+                        'classe_altitude': '⛰️ Classe altitude',
+                        'chauffage_simplifie': '🔥 Chauffage simplifié',
+                        'logement_traversant_clean': '🏠 Logement traversant',
+                        'isolation_toiture_clean': '🏚️ Isolation toiture',
+                        'qualite_isolation_enveloppe': '🧱 Isolation enveloppe',
+                        'qualite_isolation_murs': '🧱 Isolation des murs',
+                        'qualite_isolation_menuiseries': '🪟 Isolation menuiseries',
+                        'qualite_isolation_plancher_bas': '🧱 Isolation plancher bas',
+                        'type_emetteur_installation_chauffage_n1': '🌡️ Émetteur chauffage',
+                        'type_installation_ecs': '💧 Installation ECS',
+                        'type_generateur_n1_ecs_n1': '💧 Générateur ECS',
+                        'presence_brasseur_air': '💨 Ventilateur plafond',
+                        'protection_solaire_exterieure': '☀️ Protection solaire',
+                    };
+
+                    let featHtml = '';
+                    for (const [key, val] of Object.entries(result.features_used)) {
+                        const label = featureLabels[key] || key;
+                        const displayVal = (typeof val === 'number') ? Math.round(val * 100) / 100 : val;
+                        featHtml += `
+                            <div class="flex items-center gap-2 p-2.5 bg-white/10 rounded-xl text-sm border border-white/10">
+                                <span class="font-medium text-white/80 flex-1 text-xs">${label}</span>
+                                <span class="text-amber-300 font-bold text-xs bg-white/10 px-2 py-0.5 rounded-lg">${displayVal}</span>
+                            </div>
+                        `;
+                    }
+                    featuresGrid.innerHTML = featHtml;
+                }
+
+                // ==========================================
+                // POINTS CRITIQUES & RE-PRÉDICTION
+                // ==========================================
+                const currentGrade = heroGrade.grade;
+
+                if (result.features_used && currentGrade !== 'A') {
+                    // 1) Identifier les points critiques
+                    const { targetGrade, criticalPoints } = identifyCriticalPoints(result.features_used, currentGrade);
+                    console.log(`[Points Critiques] Classe actuelle: ${currentGrade} → Cible: ${targetGrade}`);
+                    console.log('[Points Critiques] Trouvés:', criticalPoints);
+
+                    // 2) Afficher les points critiques
+                    if (criticalPoints.length > 0) {
+                        const cpSection = document.getElementById('criticalPointsSection');
+                        cpSection.style.display = 'block';
+                        document.getElementById('targetClassBadge').textContent = targetGrade;
+
+                        const cpList = document.getElementById('criticalPointsList');
+                        let cpHtml = '';
+                        criticalPoints.forEach((cp, i) => {
+                            const currentDisplay = typeof cp.currentValue === 'number'
+                                ? Math.round(cp.currentValue * 100) / 100 + (cp.unit ? ` ${cp.unit}` : '')
+                                : cp.currentValue;
+                            const targetDisplay = typeof cp.targetValue === 'number'
+                                ? Math.round(cp.targetValue * 100) / 100 + (cp.unit ? ` ${cp.unit}` : '')
+                                : cp.targetValue;
+
+                            cpHtml += `
+                                <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-red-50/80 to-amber-50/80 rounded-xl border border-red-200/50"
+                                     style="animation: fadeInUp .5s ease-out ${i * 0.08}s both;">
+                                    <div class="text-xl flex-shrink-0">${cp.icon}</div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs font-bold text-gray-700">${cp.label}</p>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">${currentDisplay}</span>
+                                            <span class="material-icons text-gray-400" style="font-size:14px">arrow_forward</span>
+                                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">${targetDisplay}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        cpList.innerHTML = cpHtml;
+
+                        // 3) Construire les features améliorées
+                        const improvedFeatures = buildImprovedFeatures(result.features_used, criticalPoints, targetGrade);
+                        console.log('[Re-prédiction] Features améliorées:', improvedFeatures);
+
+                        // 4) Re-prédire avec le modèle XGBoost
+                        let newPrediction = totalConsoEF * 0.7; // fallback
+                        try {
+                            const modelUrl = `models_json/${result.model_used}.json`;
+                            const predictor = new XGBoostPredictor();
+                            await predictor.loadModel(modelUrl);
+                            newPrediction = predictor.predict(improvedFeatures);
+                            console.log(`[Re-prédiction] Nouvelle conso: ${newPrediction.toFixed(1)} kWh/an`);
+                        } catch (e) {
+                            console.warn('[Re-prédiction] Erreur chargement modèle, utilisation fallback:', e.message);
+                        }
+
+                        const newKwhM2 = newPrediction / surfaceUsed;
+                        const potentialGradeObj = getDpeGrade(newKwhM2);
+                        const economyPct = Math.round(((kwhEP_m2 - newKwhM2) / kwhEP_m2) * 100);
+
+                        // 5) Mettre à jour la section Potentiel
+                        document.getElementById('potentialGrade').textContent = potentialGradeObj.grade;
+                        document.getElementById('potentialGrade').className =
+                            `text-5xl font-extrabold mb-1 ${dpeGradeColors[potentialGradeObj.grade] || 'text-emerald-500'}`;
+                        document.getElementById('potentialValue').textContent = `${Math.round(newKwhM2)} kWh/m²/an`;
+                        document.getElementById('economyPercent').textContent = `~${Math.max(0, economyPct)}%`;
+
+                        // Animer le ring avec le vrai pourcentage
+                        const ringFraction = Math.max(0, Math.min(1, economyPct / 100));
+                        setTimeout(() => {
+                            const ring = document.getElementById('savingsRing');
+                            if (ring) ring.style.strokeDashoffset = 326.73 * (1 - ringFraction);
+                        }, 500);
+
+                        // Savings amount (basé sur la vraie différence)
+                        const savedEF = totalConsoEF - newPrediction;
+                        const savedEuros = Math.max(0, savedEF) * 0.22;
+                        document.getElementById('savingsAmount').textContent = `${Math.round(savedEuros)} € par an`;
+
+                        // 6) Recommandations dynamiques basées sur les points critiques
+                        renderRecommendations(criticalPoints, totalConsoEF, newPrediction);
+
+                    } else {
+                        // Pas de points critiques trouvés (rare)
+                        document.getElementById('potentialGrade').textContent = currentGrade;
+                        document.getElementById('potentialGrade').className =
+                            `text-5xl font-extrabold mb-1 ${dpeGradeColors[currentGrade] || 'text-emerald-500'}`;
+                        document.getElementById('potentialValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+                        document.getElementById('economyPercent').textContent = '0%';
+                        document.getElementById('savingsAmount').textContent = '0 € par an';
+                    }
+                } else if (currentGrade === 'A') {
+                    // Déjà en classe A
+                    document.getElementById('potentialGrade').textContent = 'A';
+                    document.getElementById('potentialGrade').className =
+                        `text-5xl font-extrabold mb-1 text-green-600`;
+                    document.getElementById('potentialValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+                    document.getElementById('economyPercent').textContent = '✓';
+                    document.getElementById('savingsAmount').textContent = 'Déjà optimal !';
+
+                    document.getElementById('recoContainer').innerHTML = `
+                        <div class="reco-card glass-card rounded-2xl shadow-lg p-5 border-l-4 border-green-500">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+                                    <span class="material-icons text-white" style="font-size:24px">emoji_events</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-gray-800 text-[15px]">Excellent ! Classe A</h3>
+                                    <p class="text-sm text-gray-500 mt-1 leading-relaxed">
+                                        Votre logement est déjà dans la meilleure classe énergétique. Continuez à adopter les bons gestes pour maintenir cette performance.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+            } catch (e) {
+                console.error("Error displaying results", e);
+                renderScale(185);
+            }
+        }
+
+        // ==========================================
+        // RECOMMANDATIONS DYNAMIQUES
+        // ==========================================
+        const RECO_TEMPLATES = {
+            qualite_isolation_enveloppe: {
+                title: 'Isolation de l\'enveloppe',
+                icon: 'thermostat',
+                desc: 'L\'isolation de l\'enveloppe globale est un levier majeur. Refaire l\'isolation des murs, combles et plancher réduirait significativement vos déperditions.',
+                colors: { bg: 'from-red-500 to-rose-500', border: 'border-red-500' },
+                priority: 'Priorité haute',
+                priorityColor: 'bg-red-50 text-red-600 border-red-200',
+            },
+            qualite_isolation_murs: {
+                title: 'Isolation des murs',
+                icon: 'apartment',
+                desc: 'Les murs sont responsables d\'une part importante des pertes thermiques. Une isolation par l\'intérieur ou l\'extérieur améliorerait votre DPE.',
+                colors: { bg: 'from-red-500 to-rose-500', border: 'border-red-500' },
+                priority: 'Priorité haute',
+                priorityColor: 'bg-red-50 text-red-600 border-red-200',
+            },
+            qualite_isolation_menuiseries: {
+                title: 'Remplacement des fenêtres',
+                icon: 'window',
+                desc: 'Installer du double ou triple vitrage réduirait les pertes par les fenêtres et améliorerait le confort thermique.',
+                colors: { bg: 'from-amber-500 to-orange-500', border: 'border-amber-500' },
+                priority: 'Priorité moyenne',
+                priorityColor: 'bg-amber-50 text-amber-700 border-amber-200',
+            },
+            qualite_isolation_plancher_bas: {
+                title: 'Isolation du plancher bas',
+                icon: 'layers',
+                desc: 'Isoler le plancher bas (cave, vide sanitaire) peut réduire les pertes par le sol de 7 à 10%.',
+                colors: { bg: 'from-amber-500 to-orange-500', border: 'border-amber-500' },
+                priority: 'Priorité moyenne',
+                priorityColor: 'bg-amber-50 text-amber-700 border-amber-200',
+            },
+            isolation_toiture_clean: {
+                title: 'Isolation de la toiture',
+                icon: 'roofing',
+                desc: 'La toiture est la première source de déperdition thermique (jusqu\'à 30%). L\'isoler est souvent le meilleur investissement.',
+                colors: { bg: 'from-red-500 to-rose-500', border: 'border-red-500' },
+                priority: 'Priorité haute',
+                priorityColor: 'bg-red-50 text-red-600 border-red-200',
+            },
+            ubat_w_par_m2_k: {
+                title: 'Performance thermique globale',
+                icon: 'thermostat',
+                desc: 'Le coefficient Ubat est trop élevé. Combiné aux améliorations d\'isolation, un meilleur Ubat réduirait significativement la consommation.',
+                colors: { bg: 'from-orange-500 to-red-500', border: 'border-orange-500' },
+                priority: 'Priorité haute',
+                priorityColor: 'bg-red-50 text-red-600 border-red-200',
+            },
+            type_emetteur_installation_chauffage_n1: {
+                title: 'Système de chauffage',
+                icon: 'local_fire_department',
+                desc: 'Moderniser votre système de chauffage (PAC, condensation) améliorerait votre rendement énergétique.',
+                colors: { bg: 'from-blue-500 to-indigo-500', border: 'border-blue-500' },
+                priority: 'Priorité moyenne',
+                priorityColor: 'bg-blue-50 text-blue-600 border-blue-200',
+            },
+            type_generateur_n1_ecs_n1: {
+                title: 'Production d\'eau chaude',
+                icon: 'water_drop',
+                desc: 'Un chauffe-eau thermodynamique ou solaire serait plus efficace que votre système actuel.',
+                colors: { bg: 'from-cyan-500 to-blue-500', border: 'border-cyan-500' },
+                priority: 'Priorité basse',
+                priorityColor: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+            },
+            protection_solaire_exterieure: {
+                title: 'Protection solaire',
+                icon: 'wb_sunny',
+                desc: 'L\'ajout de volets, stores ou brise-soleil réduirait les surchauffes estivales et le besoin de climatisation.',
+                colors: { bg: 'from-yellow-500 to-amber-500', border: 'border-yellow-500' },
+                priority: 'Priorité basse',
+                priorityColor: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+            },
+        };
+
+        function renderRecommendations(criticalPoints, currentConso, newConso) {
+            const container = document.getElementById('recoContainer');
+            let html = '';
+
+            // Filtrer pour ne garder que les points qui ont un template de recommandation
+            // et limiter à 4 recommandations max
+            const relevantCPs = criticalPoints
+                .filter(cp => RECO_TEMPLATES[cp.key])
+                .slice(0, 4);
+
+            if (relevantCPs.length === 0) {
+                // Fallback si aucun template ne correspond
+                html = `
+                    <div class="reco-card glass-card rounded-2xl shadow-lg p-5 border-l-4 border-indigo-500">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+                                <span class="material-icons text-white" style="font-size:24px">tips_and_updates</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 text-[15px]">Améliorations identifiées</h3>
+                                <p class="text-sm text-gray-500 mt-1">En corrigeant les ${criticalPoints.length} points critiques identifiés, vous pourriez atteindre la classe supérieure.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                relevantCPs.forEach((cp, i) => {
+                    const tpl = RECO_TEMPLATES[cp.key];
+                    html += `
+                        <div class="reco-card glass-card rounded-2xl shadow-lg p-5 border-l-4 ${tpl.colors.border}"
+                             style="animation: fadeInUp .5s ease-out ${i * 0.1}s both;">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-gradient-to-br ${tpl.colors.bg} rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+                                    <span class="material-icons text-white" style="font-size:24px">${tpl.icon}</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h3 class="font-bold text-gray-800 text-[15px]">${tpl.title}</h3>
+                                        <span class="${tpl.priorityColor} px-3 py-1 rounded-full text-xs font-bold border">
+                                            ${tpl.priority}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mb-3 leading-relaxed">${tpl.desc}</p>
+                                    <div class="flex items-center gap-2 text-xs flex-wrap">
+                                        <span class="bg-red-50 text-red-600 px-3 py-1.5 rounded-full font-semibold border border-red-200 flex items-center gap-1">
+                                            Actuel : ${typeof cp.currentValue === 'number' ? Math.round(cp.currentValue * 100) / 100 : cp.currentValue}${cp.unit ? ' ' + cp.unit : ''}
+                                        </span>
+                                        <span class="material-icons text-gray-400" style="font-size:14px">arrow_forward</span>
+                                        <span class="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full font-semibold border border-emerald-200 flex items-center gap-1">
+                                            Cible : ${typeof cp.targetValue === 'number' ? Math.round(cp.targetValue * 100) / 100 : cp.targetValue}${cp.unit ? ' ' + cp.unit : ''}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            container.innerHTML = html;
+        }
+
+        window.addEventListener('DOMContentLoaded', updateResults);
     </script>
 
 </body>

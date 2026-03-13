@@ -1,11 +1,12 @@
 ﻿<!DOCTYPE html>
-<html class="h-full" lang="fr">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Notre Projet - Des P'tites Economies</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script>
@@ -14,9 +15,9 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#007AFF", // A bright, clean blue
-                        "background-light": "#F0F5FF", // A very light blue
-                        "background-dark": "#0A192F", // A deep navy blue
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
                     },
                     fontFamily: {
                         display: ["Poppins", "sans-serif"],
@@ -28,136 +29,520 @@
             },
         };
     </script>
-    <style>
-        body {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-    </style>
-    <style>
-        body {
-            min-height: max(884px, 100dvh);
-        }
-    </style>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fade-up .7s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
+        }
+
+        .delay-300 {
+            animation-delay: .3s;
+        }
+
+        .delay-400 {
+            animation-delay: .4s;
+        }
+
+        .delay-500 {
+            animation-delay: .5s;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.60);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-lift {
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .card-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -12px rgba(79, 70, 229, 0.15);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
 </head>
 
-<body
-    class="bg-gradient-to-b from-orange-50 to-blue-400 dark:from-background-dark dark:to-slate-900 font-display text-gray-800 dark:text-gray-200 min-h-screen flex flex-col bg-fixed">
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 min-h-screen text-gray-800 flex flex-col">
+
+    <!-- ===== HEADER ===== -->
+    <header
+        class="flex justify-between items-center py-3 px-4 sm:px-6 sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm">
+        <div class="flex items-center gap-3">
+            <a href="Home_desktop.html"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                <span class="material-icons text-primary" style="font-size:18px">home</span>
+                <span>Accueil</span>
+            </a>
+            <a href="Estimation_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Estimez
+            </a>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="Bons_gestes.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Les bons gestes !
+            </a>
+            <a href="About-us_desktop.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Qui sommes-nous ?
+            </a>
+        </div>
+    </header>
 
     <div class="flex-grow">
-        <header
-            class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
-            <div class="flex items-center gap-4">
-                <a href="Home_desktop.html"
-                    class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                    <span class="material-icons text-primary" style="font-size: 20px;">home</span>
-                    <span>Accueil</span>
-                </a>
-                <a href="Estimation_desktop.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                    Estimez
-                </a>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="Bons_gestes.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                    Les bons gestes !
-                </a>
-                <a href="About-us_desktop.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                    Qui sommes-nous ?
-                </a>
-            </div>
-        </header>
-        <main class="px-6 py-4">
-            <h1 class="text-3xl font-bold text-primary mb-8 text-center">Quel est notre projet ?</h1>
-            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-primary mb-4">Introduction</h3>
-                <div class="flex flex-col md:flex-row items-center gap-6">
-                    <div class="flex-shrink-0">
-                        <img src="Images/Image_4.png" alt="Logo Open Data University"
-                            class="h-24 w-auto object-contain">
+        <!-- ===== HERO SECTION ===== -->
+        <section class="min-h-[80vh] flex items-center justify-center pt-12 pb-20 relative overflow-hidden">
+            <!-- Decorative blobs -->
+            <div class="absolute top-20 left-10 w-72 h-72 bg-indigo-200/30 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl"></div>
+
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left">
+                        <h1 class="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight animate-fade-up">
+                            <span class="gradient-text">Bienvenue chez</span><br>
+                            <span class="text-gray-800">Des P'tites Économies</span>
+                        </h1>
+                        <p class="text-lg text-gray-500 mb-8 leading-relaxed animate-fade-up delay-200">
+                            Parce que l'énergie c'est compliqué, mais les économies doivent être simples.
+                        </p>
+                        <div class="flex gap-4 justify-center md:justify-start animate-fade-up delay-300">
+                            <a href="Estimation_desktop.html"
+                                class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3.5 rounded-full font-bold hover:shadow-2xl hover:shadow-indigo-500/25 hover:scale-105 transition-all duration-300">
+                                Essayer maintenant
+                                <span class="material-icons">arrow_forward</span>
+                            </a>
+                        </div>
                     </div>
-                    <p class="text-gray-700 dark:text-gray-300">
-                        Notre projet se base dans le programme Open Data University. Il vise à créer un estimateur de
-                        performance de DPE afin d'informer des utilisateurs lambda sur leur DPE et comment l'améliorer.
+                    <div class="flex justify-center animate-fade-up delay-300">
+                        <div class="glass-card rounded-3xl p-10 shadow-2xl card-lift">
+                            <img src="Images/Image_6.png" alt="Watty"
+                                class="w-40 h-40 mx-auto object-contain animate-float">
+                            <p class="text-center font-bold text-primary mt-6 text-lg">Watty, ton assistant énergie</p>
+                            <p class="text-center text-gray-400 text-sm mt-1">Il t'aide à comprendre et améliorer ton
+                                DPE</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== MISSION SECTION ===== -->
+        <section class="py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 md:order-1 animate-fade-up">
+                        <div class="glass-card rounded-3xl p-8 card-lift">
+                            <div class="text-center mb-6">
+                                <p class="text-5xl font-extrabold gradient-text">47%</p>
+                                <p class="text-gray-600 font-medium mt-2">Des Français ne connaissent pas leur classe
+                                    DPE</p>
+                            </div>
+                            <div class="space-y-4 text-sm text-gray-500">
+                                <p>🏠 Le DPE c'est technique, cher et réservé aux professionnels</p>
+                                <p>💰 Les estimations officielles coûtent entre 200 et 400€</p>
+                                <p>📊 Sans accès à l'info, pas de travaux = pas d'économies</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-1 md:order-2 animate-fade-up delay-200">
+                        <div class="space-y-6">
+                            <h2 class="text-4xl font-bold"><span class="gradient-text">L'Accessibilité avant tout</span>
+                            </h2>
+                            <p class="text-lg text-gray-500 leading-relaxed">
+                                Le DPE (Diagnostic de Performance Énergétique) est crucial pour comprendre comment
+                                améliorer votre logement. Mais il y a un problème : <span
+                                    class="font-semibold text-indigo-600">personne n'y a accès facilement</span>.
+                            </p>
+                            <p class="text-lg text-gray-500 leading-relaxed">
+                                <span class="font-semibold text-gray-700">Des P'tites Économies</span> change ça. Avec
+                                Watty, tu peux estimer ton DPE gratuitement, simplement, sans passer par un pro. Et
+                                surtout : des recommendations concrètes pour les P'tites Économies qui font la
+                                différence.
+                            </p>
+                            <div class="space-y-3 mt-6">
+                                <div class="flex items-start gap-3">
+                                    <span class="material-icons text-indigo-500 mt-0.5">check_circle</span>
+                                    <span class="text-gray-600"><span class="font-semibold text-gray-700">Gratuit</span>
+                                        - Pas de frais cachés</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="material-icons text-purple-500 mt-0.5">check_circle</span>
+                                    <span class="text-gray-600"><span class="font-semibold text-gray-700">Simple</span>
+                                        - 5 minutes, des questions claires</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="material-icons text-pink-500 mt-0.5">check_circle</span>
+                                    <span class="text-gray-600"><span class="font-semibold text-gray-700">Utile</span> -
+                                        Recommandations personnalisées</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== STORY SECTION ===== -->
+        <section class="py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 animate-fade-up">
+                        <span class="gradient-text">Comment tout a commencé</span>
+                    </h2>
+                    <p class="text-lg text-gray-500 max-w-2xl mx-auto animate-fade-up delay-100">
+                        Un projet capstone né d'une simple question : "Comment rendre l'énergie accessible ?"
                     </p>
                 </div>
-            </section>
-            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-primary mb-2">L'origine du Projet</h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-6">
-                    Ce projet a été créé par 4 étudiants du Cycle Pluridisciplinaire d'Études Supérieures
-                    en Science des données, société et santé. Dans le cadre de nos études nous menons un
-                    Capstone Project visant à répondre à une problématique de l'association Lattitudes
-                    se basant sur un programme plus global celui de l'Open Data University.
-                </p>
-                <div class="grid grid-cols-3 gap-4 items-center">
-                    <div
-                        class="bg-white/80 dark:bg-slate-800/80 p-3 rounded-lg flex items-center justify-center aspect-square shadow-sm">
-                        <img alt="Logo Enedis" class="w-full h-full object-contain" src="Images/Image_1.png" />
+
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="glass-card rounded-2xl p-8 card-lift animate-fade-up delay-100">
+                        <div class="text-4xl mb-4">🔥</div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">L'Urgence</h3>
+                        <p class="text-sm text-gray-500">27% des émissions CO₂ viennent du logement. C'est maintenant
+                            qu'il faut agir.</p>
                     </div>
-                    <div
-                        class="bg-white/80 dark:bg-slate-800/80 p-3 rounded-lg flex items-center justify-center aspect-square shadow-sm">
-                        <img alt="Logo HEC Paris" class="w-full h-full object-contain" src="Images/Image_2.png" />
+                    <div class="glass-card rounded-2xl p-8 card-lift animate-fade-up delay-200">
+                        <div class="text-4xl mb-4">🤔</div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Le Problème</h3>
+                        <p class="text-sm text-gray-500">Les citoyens ignorent comment améliorer leur logement. Il y a
+                            un manque d'accès ce qui provoque des excès de consommation énergétique.</p>
                     </div>
-                    <div
-                        class="bg-white/80 dark:bg-slate-800/80 p-3 rounded-lg flex items-center justify-center aspect-square shadow-sm">
-                        <img alt="Logo Latitudes" class="w-full h-full object-contain" src="Images/Image_3.png" />
+                    <div class="glass-card rounded-2xl p-8 card-lift animate-fade-up delay-300">
+                        <div class="text-4xl mb-4">💡</div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">La Solution</h3>
+                        <p class="text-sm text-gray-500">Watty + Données Ouvertes + ML = Accès enfin démocratisé au DPE.
+                        </p>
                     </div>
                 </div>
-            </section>
-            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-primary mb-2">Comment fonctionne l'estimateur ?</h3>
-                <p class="text-gray-700 dark:text-gray-300">
-                    L'estimateur se base sur différentes bases de données libre de droit sur le site de
-                    open-data.gouv. À partir de ces bases de données nous avons créé un prédicteur via différents
-                    algorithmes afin d'estimer à partir de caractéristiques significatives les deux étiquettes
-                    correspondant à votre DPE afin d'estimer votre classe. Par la suite on va estimer quels points
-                    affectent le plus négativement votre DPE et nous allons simuler toujours via notre prédicteur
-                    votre DPE avec ces caractéristiques changées afin de voir quelles caractéristiques sont les plus
-                    importantes à changer afin de vous orienter pour vos possibles travaux.
+
+                <!-- Stats Banner -->
+                <div class="glass-card rounded-3xl shadow-xl p-8 animate-fade-up delay-400">
+                    <div class="grid md:grid-cols-3 gap-8 text-center">
+                        <div>
+                            <p class="text-4xl font-extrabold gradient-text">5</p>
+                            <p class="text-gray-500 mt-2">Étudiants passionnés</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-extrabold text-purple-600">France entière</p>
+                            <p class="text-gray-500 mt-2">couverte</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-extrabold text-pink-500">∞</p>
+                            <p class="text-gray-500 mt-2">Économies possibles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partner Logos -->
+                <div class="mt-12 grid md:grid-cols-4 gap-4">
+                    <div class="flex justify-center items-center animate-fade-up delay-100">
+                        <img alt="Logo Enedis"
+                            class="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity"
+                            src="Images/Image_1.png" />
+                    </div>
+                    <div class="flex justify-center items-center animate-fade-up delay-200">
+                        <img alt="Logo HEC Paris"
+                            class="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity"
+                            src="Images/Image_2.png" />
+                    </div>
+                    <div class="flex justify-center items-center animate-fade-up delay-300">
+                        <img alt="Logo Latitudes"
+                            class="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity"
+                            src="Images/Image_3.png" />
+                    </div>
+                    <div class="flex justify-center items-center animate-fade-up delay-400">
+                        <img alt="Logo Open Data University"
+                            class="h-12 object-contain opacity-50 hover:opacity-100 transition-opacity"
+                            src="Images/Image_4.png" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== HOW WATTY WORKS ===== -->
+        <section class="py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 text-center animate-fade-up">
+                    <span class="gradient-text">Comment Watty fonctionne</span>
+                </h2>
+                <p class="text-center text-gray-500 max-w-2xl mx-auto mb-16 animate-fade-up delay-100">
+                    5 minutes, 3 étapes, des conseils personnalisés
                 </p>
-            </section>
-            <section class="mb-10 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-primary mb-2">Quelle est la finalité ?</h3>
-                <p class="text-gray-700 dark:text-gray-300">
-                    Notre but est de créer un outil compréhensible et simple d'utilisation qui permet aux particuliers
-                    et aux professionnels de se donner une idée d'un DPE à propos d'un logement. Pour cela nous
-                    voulons simplifier une estimation normale qui s'effectue par un diagnostiqueur et la méthode 3CL par
-                    une estimation basée sur des données réelles de terrain. Ainsi il n'y aura pas besoin de
-                    connaissances ni de documentation technique non forcément nécessaire afin de se donner une idée du
-                    DPE. Notre but est de pouvoir affirmer avec un pourcentage de chance élevé la fiabilité de notre
-                    estimation. Il faut malgré tout ne pas oublier que notre estimation n'est pas un DPE mais seulement
-                    une estimation de celui-ci, il ne remplace donc pas celui-ci en tant que document.
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="group relative animate-fade-up delay-100">
+                        <div
+                            class="absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-bold flex items-center justify-center rounded-full shadow-lg z-10">
+                            1
+                        </div>
+                        <div class="glass-card rounded-2xl p-8 pt-10 card-lift h-full">
+                            <div class="text-4xl mb-4 text-center">📍</div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3 text-center">Localise-toi</h3>
+                            <p class="text-gray-500 text-center">Tu dis ta région et Watty adapte ses questions à ton
+                                climat</p>
+                        </div>
+                    </div>
+
+                    <div class="group relative animate-fade-up delay-200">
+                        <div
+                            class="absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold flex items-center justify-center rounded-full shadow-lg z-10">
+                            2
+                        </div>
+                        <div class="glass-card rounded-2xl p-8 pt-10 card-lift h-full">
+                            <div class="text-4xl mb-4 text-center">🏠</div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3 text-center">Décris ton logement</h3>
+                            <p class="text-gray-500 text-center">Superficie, année de construction, chauffage... des
+                                infos simples</p>
+                        </div>
+                    </div>
+
+                    <div class="group relative animate-fade-up delay-300">
+                        <div
+                            class="absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-bold flex items-center justify-center rounded-full shadow-lg z-10">
+                            3
+                        </div>
+                        <div class="glass-card rounded-2xl p-8 pt-10 card-lift h-full">
+                            <div class="text-4xl mb-4 text-center">⚡</div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3 text-center">Découvre ton DPE électrique
+                            </h3>
+                            <p class="text-gray-500 text-center">Ta classe énergétique (consommation) + recommandations
+                                d'économies concrètes</p>
+                            <p class="text-xs text-gray-400 mt-2 text-center"><span class="font-semibold">Note :</span>
+                                Nous estimons la consommation d'énergie, pas les émissions CO₂</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tech Info Card -->
+                <div class="glass-card rounded-3xl shadow-xl p-8 animate-fade-up delay-400">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                                <span class="gradient-text">Estimation de consommation énergétique</span>
+                            </h3>
+                            <p class="text-gray-500 mb-4">Watty estime spécifiquement votre <span
+                                    class="font-semibold text-gray-700">consommation électrique (partie consommation du
+                                    DPE)</span>, basée sur des algorithmes ML entraînés sur des milliers de DPE réels.
+                            </p>
+                            <p class="text-gray-500 mb-3"><span class="font-semibold text-indigo-600">⚠️ À noter
+                                    :</span> Nous n'estimons pas les émissions de CO₂. Pour une estimation complète
+                                incluant CO₂ et diagnostiqueur certifié, contacte un professionnel.</p>
+                            <p class="text-gray-500">Mais pour comprendre ta consommation énergétique et commencer ?
+                                Watty fait le job !</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="glass-card rounded-xl p-4 text-center card-lift">
+                                <p class="text-3xl font-extrabold text-indigo-600">80%</p>
+                                <p class="text-xs text-gray-500">Fiabilité estimée</p>
+                            </div>
+                            <div class="glass-card rounded-xl p-4 text-center card-lift">
+                                <p class="text-3xl font-extrabold text-purple-600">0€</p>
+                                <p class="text-xs text-gray-500">Coût pour toi</p>
+                            </div>
+                            <div class="glass-card rounded-xl p-4 text-center card-lift">
+                                <p class="text-3xl font-extrabold text-pink-500">5 min</p>
+                                <p class="text-xs text-gray-500">Import qui fait la différence</p>
+                            </div>
+                            <div class="glass-card rounded-xl p-4 text-center card-lift">
+                                <p class="text-3xl font-extrabold text-indigo-600">100%</p>
+                                <p class="text-xs text-gray-500">Données ouvertes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== IMPACT SECTION ===== -->
+        <section class="py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 text-center animate-fade-up">
+                    <span class="gradient-text">Des P'tites Économies, des vrais impacts</span>
+                </h2>
+                <p class="text-center text-gray-500 max-w-2xl mx-auto mb-16 animate-fade-up delay-100">
+                    Ce ne sont pas les gros travaux qui changent tout. C'est chaque petit geste qui compte.
                 </p>
-            </section>
-        </main>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-4 animate-fade-up">
+                        <div class="glass-card rounded-xl p-6 border-l-4 border-indigo-500 card-lift">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">🏠 Pour ton logement</h3>
+                            <ul class="space-y-2 text-gray-500 text-sm">
+                                <li>✓ Savoir ce qui consomme vraiment</li>
+                                <li>✓ Prioriser tes dépenses d'énergie</li>
+                                <li>✓ Économiser 300-500€/an en moyenne</li>
+                            </ul>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 border-l-4 border-purple-500 card-lift">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">🌍 Pour la planète</h3>
+                            <ul class="space-y-2 text-gray-500 text-sm">
+                                <li>✓ Réduire les émissions CO₂ du logement</li>
+                                <li>✓ Contribuer à la transition énergétique</li>
+                                <li>✓ Agir sans culpabilité</li>
+                            </ul>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 border-l-4 border-pink-500 card-lift">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">👥 Pour tous</h3>
+                            <ul class="space-y-2 text-gray-500 text-sm">
+                                <li>✓ Comprendre son logement</li>
+                                <li>✓ Accès libre à l'information</li>
+                                <li>✓ Devenir acteur du changement</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="animate-fade-up delay-200">
+                        <div class="space-y-4">
+                            <div class="glass-card rounded-3xl p-8 card-lift">
+                                <p class="text-5xl font-extrabold gradient-text">12M</p>
+                                <p class="text-gray-600 mt-2">Logements inefficaces en France</p>
+                                <p class="text-xs text-gray-400 mt-2">C'est là qu'on peut faire la différence</p>
+                            </div>
+
+                            <div class="glass-card rounded-xl p-6 card-lift">
+                                <h4 class="font-bold text-gray-800 mb-3">L'équation des P'tites Économies</h4>
+                                <div class="space-y-2 text-sm text-gray-500">
+                                    <p><span class="font-semibold text-gray-700">100€ d'économies</span> × <span
+                                            class="font-semibold text-gray-700">12M logements</span> = <span
+                                            class="font-semibold text-emerald-500">1.2 milliards€</span> économisés</p>
+                                    <p class="text-xs text-gray-400 mt-3">Et ça c'est juste le début 🚀</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HEC Banner -->
+                <div class="mt-16 glass-card rounded-3xl p-8 text-center shadow-xl animate-fade-up delay-300">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                        <span class="gradient-text">Un projet créé par des Etudiants du CPES de Paris-Saclay</span>
+                    </h3>
+                    <p class="text-gray-500 mb-4">
+                        Dans le cadre du <span class="font-semibold text-gray-700">Cycle Pluridisciplinaire d'Études
+                            Supérieures (CPES)</span>, en collaboration avec <span
+                            class="font-semibold text-gray-700">Latitudes</span>, <span
+                            class="font-semibold text-gray-700">Enedis</span>, et l'<span
+                            class="font-semibold text-gray-700">Open Data University</span>.
+                    </p>
+                    <p class="text-sm text-gray-400">
+                        Watty et Des P'tites Économies : un projet ambitieux pour l'accessibilité énergétique 🌱
+                    </p>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden">
-        <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
-        <div class="logo-slider">
-            <div class="logo-track">
-                <!-- Original Logos -->
-                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                <!-- Duplicated Logos -->
-                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                <!-- Triplicated Logos for wide screens -->
-                <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+    <!-- ===== FOOTER ===== -->
+    <footer class="mt-8 pb-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8">
+                <p class="text-center text-gray-400 font-medium mb-6">Créé par l'équipe Des P'tites Economies</p>
+                <div class="logo-slider">
+                    <div class="logo-track">
+                        <img alt="Logo HEC Paris"
+                            class="h-12 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University"
+                            class="h-12 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_4.png" />
+                        <img alt="Logo Des P'tites Economies"
+                            class="h-14 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_5.png" />
+                        <img alt="Logo Enedis"
+                            class="h-12 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_1.png" />
+                        <img alt="Logo HEC Paris"
+                            class="h-12 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University"
+                            class="h-12 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_4.png" />
+                        <img alt="Logo Des P'tites Economies"
+                            class="h-14 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_5.png" />
+                        <img alt="Logo Enedis"
+                            class="h-12 mx-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_1.png" />
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-fade-up').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+    </script>
 
 </body>
 

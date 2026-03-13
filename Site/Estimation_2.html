@@ -6,7 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Récapitulatif DPE</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap"
+    <script src="xgboost-predict.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script>
@@ -15,31 +16,71 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#3b82f6", // A rich blue color from the home icon
-                        "background-light": "#f0f7ff",
-                        "background-dark": "#1e293b",
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
                     },
                     fontFamily: {
                         display: ["Poppins", "sans-serif"],
                     },
                     borderRadius: {
-                        DEFAULT: "0.75rem", // 12px
+                        DEFAULT: "0.75rem",
                     },
                 },
             },
         };
     </script>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
+        * {
             font-family: 'Poppins', sans-serif;
         }
 
-        .gradient-bg {
-            background-image: linear-gradient(to bottom, #FFF8E1, #bfdbfe);
+        body {
+            min-height: max(884px, 100dvh);
         }
 
-        .dark .dark-gradient-bg {
-            background-image: linear-gradient(to bottom, #1e293b, #0f172a);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.60);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fade-up .7s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
+        }
+
+        .delay-300 {
+            animation-delay: .3s;
         }
 
         /* Loading Screen Styles */
@@ -50,7 +91,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6366F1 100%);
             z-index: 9999;
             align-items: center;
             justify-content: center;
@@ -108,13 +149,13 @@
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+            background: linear-gradient(90deg, #10b981, #818cf8, #c084fc);
             background-size: 200% 100%;
             border-radius: 20px;
             width: 0%;
             transition: width 0.3s ease;
             animation: shimmer 2s infinite;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.6);
         }
 
         .progress-shine {
@@ -170,54 +211,47 @@
             animation: bounce-slow 2s ease-in-out infinite;
         }
     </style>
-    <style>
-        body {
-            min-height: max(884px, 100dvh);
-        }
-    </style>
-    <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen">
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 text-gray-800 min-h-screen">
 
-    <div style="background: linear-gradient(to bottom, #FFF8E1, #81D4FA);" class="min-h-screen">
+    <div class="min-h-screen">
         <header
-            class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
-            <div class="flex items-center gap-4">
+            class="flex justify-between items-center py-3 px-4 sm:px-6 sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm">
+            <div class="flex items-center gap-3">
                 <a href="Home_desktop.html"
-                    class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                    <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                    <span class="material-icons text-primary" style="font-size:18px">home</span>
                     <span>Accueil</span>
                 </a>
                 <a href="Estimation_desktop.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                     Estimez
                 </a>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
                 <a href="Bons_gestes.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                     Les bons gestes !
                 </a>
                 <a href="About-us_desktop.html"
-                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                    class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                     Qui sommes-nous ?
                 </a>
             </div>
         </header>
         <div class="p-4 flex flex-col flex-grow">
             <main class="flex-grow flex flex-col justify-center px-2 py-8">
-                <h1 class="text-2xl font-bold text-primary mb-12 text-center">
-                    Récapitulatif de tes informations
+                <h1 class="text-2xl font-extrabold mb-12 text-center animate-fade-up">
+                    <span class="gradient-text">Récapitulatif de tes informations</span>
                 </h1>
 
                 <!-- Section Watty avec critères intégrés -->
-                <div class="max-w-4xl mx-auto w-full mb-8">
-                    <div
-                        class="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-3xl border-2 border-blue-200 dark:border-blue-900 shadow-2xl p-8">
+                <div class="max-w-4xl mx-auto w-full mb-8 animate-fade-up delay-100">
+                    <div class="relative glass-card rounded-3xl shadow-2xl p-8">
                         <!-- Avatar Watty -->
                         <div
-                            class="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-lg">
+                            class="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
                             <img alt="Watty the robot mascot" class="w-14 h-14" src="Images/Image_6.png" />
                         </div>
 
@@ -225,10 +259,10 @@
                         <div class="mt-8">
                             <!-- Message d'introduction -->
                             <div class="text-center mb-6">
-                                <p class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                                <p class="text-lg font-semibold text-gray-800">
                                     Super ! J'ai bien enregistré toutes tes informations
                                 </p>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                                <p class="text-sm text-gray-500 mt-2">
                                     Voici un récapitulatif de ton logement :
                                 </p>
                             </div>
@@ -239,8 +273,8 @@
                             </div>
 
                             <!-- Message de conclusion -->
-                            <div class="text-center mt-6 pt-6 border-t-2 border-blue-200 dark:border-blue-900">
-                                <p class="text-sm text-gray-700 dark:text-gray-200">
+                            <div class="text-center mt-6 pt-6 border-t border-indigo-200/50">
+                                <p class="text-sm text-gray-600">
                                     Avec ces informations, je vais calculer ton estimation DPE et te proposer les
                                     meilleures recommandations pour faire
                                     <span class="font-bold text-primary">Des P'tites Économies</span> !
@@ -251,9 +285,9 @@
                 </div>
 
                 <!-- Bouton d'action -->
-                <div class="text-center">
+                <div class="text-center animate-fade-up delay-200">
                     <button id="launchButton"
-                        class="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold text-lg px-12 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                        class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:shadow-2xl hover:shadow-indigo-500/25 text-white font-bold text-lg px-12 py-4 rounded-full shadow-xl transition-all transform hover:scale-105"
                         onclick="startAnalysis()">
                         Lancer l'estimation DPE
                     </button>
@@ -265,7 +299,7 @@
                         <!-- Avatar Watty -->
                         <div class="loading-avatar">
                             <div
-                                class="w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-700 shadow-2xl animate-bounce-slow">
+                                class="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-2xl animate-bounce-slow">
                                 <img alt="Watty" class="w-16 h-16" src="Images/Image_6.png" />
                             </div>
                         </div>
@@ -285,31 +319,46 @@
                     </div>
                 </div>
             </main>
-            <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden bg-transparent">
+            <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
                 <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
                 <div class="logo-slider">
                     <div class="logo-track">
-                        <!-- Original Logos -->
-                        <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                        <img alt="Logo Open Data University" class="h-16 mx-8 object-contain"
+                        <img alt="Logo HEC Paris"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
                             src="Images/Image_4.png" />
-                        <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain"
+                        <img alt="Logo Des P'tites Economies"
+                            class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
                             src="Images/Image_5.png" />
-                        <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                        <!-- Duplicated Logos -->
-                        <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                        <img alt="Logo Open Data University" class="h-16 mx-8 object-contain"
+                        <img alt="Logo Enedis"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_1.png" />
+                        <img alt="Logo HEC Paris"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
                             src="Images/Image_4.png" />
-                        <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain"
+                        <img alt="Logo Des P'tites Economies"
+                            class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
                             src="Images/Image_5.png" />
-                        <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                        <!-- Triplicated Logos for wide screens -->
-                        <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                        <img alt="Logo Open Data University" class="h-16 mx-8 object-contain"
+                        <img alt="Logo Enedis"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_1.png" />
+                        <img alt="Logo HEC Paris"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_2.png" />
+                        <img alt="Logo Open Data University"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
                             src="Images/Image_4.png" />
-                        <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain"
+                        <img alt="Logo Des P'tites Economies"
+                            class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
                             src="Images/Image_5.png" />
-                        <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                        <img alt="Logo Enedis"
+                            class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                            src="Images/Image_1.png" />
                     </div>
                 </div>
             </footer>
@@ -317,7 +366,7 @@
 
         <script>
             // Function to start analysis and show loading screen
-            function startAnalysis() {
+            async function startAnalysis() {
                 const loadingScreen = document.getElementById('loadingScreen');
                 const progressBar = document.getElementById('progressBar');
                 const percentage = document.getElementById('percentage');
@@ -343,6 +392,23 @@
                 let messageIndex = 0;
                 const messageInterval = duration / messages.length;
 
+                // Start client-side XGBoost prediction (no server needed)
+                const savedData = localStorage.getItem('dpe_responses');
+                let apiPromise = null;
+
+                if (savedData) {
+                    const responsesArray = JSON.parse(savedData);
+                    apiPromise = predictClientSide(responsesArray)
+                        .then(data => {
+                            console.log("Prediction (client-side):", data);
+                            localStorage.setItem('dpe_result', JSON.stringify(data));
+                            return data;
+                        }).catch(error => {
+                            console.error('Erreur prediction client-side:', error);
+                            localStorage.removeItem('dpe_result');
+                        });
+                }
+
                 // Update progress bar and percentage
                 const progressInterval = setInterval(() => {
                     currentProgress += increment;
@@ -351,8 +417,12 @@
                         currentProgress = 100;
                         clearInterval(progressInterval);
 
-                        // Redirect after reaching 100%
-                        setTimeout(() => {
+                        // Wait for API if it's still pending (though we set timeout 200ms after 100%)
+                        // We'll proceed regardless after a short delay
+                        setTimeout(async () => {
+                            if (apiPromise) {
+                                try { await apiPromise; } catch (e) { }
+                            }
                             window.location.href = 'Resultats.html';
                         }, 200);
                     }
@@ -375,15 +445,21 @@
             // Icônes pour chaque type de critère
             const criteriaIcons = {
                 'Département': '📍',
-                'Nombre d\'occupants': '👥',
-                'Type de logement': '🏠',
+                'Région': '🗺️',
+                'Type de bâtiment': '🏢',
                 'Surface habitable': '📐',
-                'Année de construction': '🏗️',
-                'Type de chauffage': '🔥',
-                'Type d\'eau chaude': '💧',
+                'Période de construction': '🏗️',
+                'Logement traversant': '🏠',
+                'Isolation de la toiture': '🏚️',
+                'Qualité isolation globale': '🧱',
                 'Isolation des murs': '🧱',
-                'Type de fenêtres': '🪟',
-                'Système de ventilation': '💨'
+                'Qualité des fenêtres': '🪟',
+                'Isolation du plancher': '🧱',
+                'Émetteur de chauffage': '🔥',
+                'Production eau chaude': '💧',
+                'Type de chauffe-eau': '💧',
+                'Ventilateur de plafond': '💨',
+                'Protection solaire': '☀️'
             };
 
             // Charger les données depuis localStorage
@@ -403,11 +479,11 @@
                         card.style.animationDelay = `${index * 0.08}s`;
 
                         card.innerHTML = `
-                        <div class="flex items-start gap-3 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-700 dark:to-slate-600 rounded-xl border-2 border-blue-100 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-600 transition-all hover:shadow-md">
+                        <div class="flex items-start gap-3 p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-100 hover:border-indigo-300 transition-all hover:shadow-md">
                             <div class="text-2xl flex-shrink-0">${icon}</div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-xs font-semibold text-blue-600 dark:text-blue-300 uppercase tracking-wide mb-1">${item.label}</p>
-                                <p class="text-sm font-bold text-gray-800 dark:text-gray-100 truncate">${item.value}</p>
+                                <p class="text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-1">${item.label}</p>
+                                <p class="text-sm font-bold text-gray-800 truncate">${item.value}</p>
                             </div>
                         </div>
                     `;

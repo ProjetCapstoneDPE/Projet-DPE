@@ -1,11 +1,12 @@
-﻿<!DOCTYPE html>
-<html class="h-full" lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Récoltons les informations</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script>
@@ -14,18 +15,11 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#3b82f6",
-                        "background-light": "#f0f8ff",
-                        "background-dark": "#1e293b",
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
                         "surface-light": "#ffffff",
                         "surface-dark": "#334155",
-                        "text-light": "#1f2937",
-                        "text-dark": "#e2e8f0",
-                        "text-secondary-light": "#6b7280",
-                        "text-secondary-dark": "#94a3b8",
-                        "accent-light": "#fb923c",
-                        "accent-dark": "#f97316",
-                        "button-primary": "#4f46e5",
                         "button-hover": "#4338ca",
                     },
                     fontFamily: {
@@ -38,9 +32,14 @@
             },
         };
     </script>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
+        * {
             font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: max(884px, 100dvh);
         }
 
         .chat-bubble {
@@ -48,8 +47,10 @@
         }
 
         .chat-bubble-container {
-            border-width: 2px;
-            border-color: #d1d5db;
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.60);
         }
 
         .fade-in {
@@ -82,7 +83,6 @@
             }
         }
 
-        /* Limiter la hauteur du menu déroulant */
         select {
             max-height: 300px;
         }
@@ -100,22 +100,22 @@
             width: 24px;
             height: 24px;
             margin-left: 8px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
             color: white;
             border-radius: 50%;
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
             border: none;
             vertical-align: middle;
         }
 
         .help-button:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+            background: linear-gradient(135deg, #4338ca 0%, #6D28D9 100%);
         }
 
         /* Help Panel Styles */
@@ -134,26 +134,26 @@
         }
 
         .help-content {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border-left: 4px solid #3b82f6;
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            border-left: 4px solid #4F46E5;
             padding: 12px 16px;
             border-radius: 8px;
             display: flex;
             gap: 12px;
             align-items: start;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.15);
         }
 
         .dark .help-content {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-            border-left-color: #60a5fa;
+            background: linear-gradient(135deg, #312e81 0%, #3730a3 100%);
+            border-left-color: #818cf8;
         }
 
         .help-avatar {
             flex-shrink: 0;
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -171,52 +171,77 @@
             flex: 1;
             font-size: 13px;
             line-height: 1.5;
-            color: #1e40af;
+            color: #3730a3;
         }
 
         .dark .help-text {
-            color: #bfdbfe;
+            color: #c7d2fe;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fade-up .7s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
         }
     </style>
-    <style>
-        body {
-            min-height: max(884px, 100dvh);
-        }
-    </style>
-    <link rel="stylesheet" href="styles.css">
 </head>
 
-<body
-    class="bg-gradient-to-b from-orange-50 to-blue-300 dark:from-slate-800 dark:to-slate-900 font-display text-text-light dark:text-text-dark min-h-screen">
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 font-display text-gray-800 min-h-screen">
     <header
-        class="flex justify-between items-center py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
-        <div class="flex items-center gap-4">
+        class="flex justify-between items-center py-3 px-4 sm:px-6 sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm">
+        <div class="flex items-center gap-3">
             <a href="Home_desktop.html"
-                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
-                <span class="material-icons text-primary" style="font-size: 20px;">home</span>
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                <span class="material-icons text-primary" style="font-size:18px">home</span>
                 <span>Accueil</span>
             </a>
             <a href="Estimation_desktop.html"
-                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                 Estimez
             </a>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
             <a href="Bons_gestes.html"
-                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                 Les bons gestes !
             </a>
             <a href="About-us_desktop.html"
-                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary rounded-full hover:bg-primary/10 transition-colors bg-white/50 dark:bg-gray-800/50">
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
                 Qui sommes-nous ?
             </a>
         </div>
     </header>
-    <div
-        class="p-4 sm:p-6 flex-grow flex flex-col bg-gradient-to-b from-orange-50 to-blue-300 dark:from-slate-800 dark:to-slate-900">
+    <div class="p-4 sm:p-6 flex-grow flex flex-col">
         <main class="py-8 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
-            <h1 class="text-xl sm:text-2xl font-bold text-primary text-center mb-8">
-                Récoltons les informations nécessaires à l'estimation pour améliorer votre DPE !
+            <h1 class="text-xl sm:text-2xl font-extrabold text-center mb-8 animate-fade-up">
+                <span class="gradient-text">Récoltons les informations nécessaires</span>
+                <span class="block text-gray-600 text-base font-medium mt-1">pour améliorer votre DPE !</span>
             </h1>
 
             <!-- Indicateur de progression -->
@@ -225,125 +250,337 @@
                     <span id="progressText">Question 1/10</span>
                     <span id="progressPercent">10%</span>
                 </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                    <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-500"
+                <div class="w-full bg-gray-200/60 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2.5 rounded-full transition-all duration-500"
                         style="width: 10%"></div>
                 </div>
             </div>
 
             <div
-                class="w-full mx-auto relative chat-bubble-container rounded-2xl bg-surface-light dark:bg-surface-dark shadow-lg p-6">
+                class="w-full mx-auto relative chat-bubble-container rounded-3xl shadow-2xl p-6 animate-fade-up delay-200">
                 <div
-                    class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-surface-light dark:bg-surface-dark rounded-full flex items-center justify-center border-2 border-gray-300 dark:border-gray-600">
+                    class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-indigo-200 shadow-lg">
                     <img alt="Watty the robot mascot" class="w-12 h-12" src="Images/Image_6.png" />
                 </div>
                 <div class="mt-8">
-                    <div id="chatContent"
-                        class="relative bg-gray-100 dark:bg-slate-600 p-4 rounded-xl chat-bubble mx-auto max-w-2xl">
+                    <div id="chatContent" class="relative bg-indigo-50/50 p-4 rounded-xl chat-bubble mx-auto max-w-2xl">
                         <!-- Le contenu du chat sera inséré ici par JavaScript -->
                     </div>
                 </div>
-                <div class="flex justify-end mt-6">
+                <div class="flex justify-between items-center mt-6">
+                    <button id="prevButton"
+                        class="px-5 py-2.5 text-sm font-semibold text-indigo-600 bg-white border-2 border-indigo-300 rounded-full hover:bg-indigo-50 hover:border-indigo-500 hover:shadow-md transition-all hidden"
+                        onclick="previousQuestion()">
+                        <span class="flex items-center gap-1"><span class="material-icons"
+                                style="font-size:18px">arrow_back</span> Précédent</span>
+                    </button>
+                    <div></div>
                     <button id="nextButton"
-                        class="px-6 py-2 text-sm font-semibold text-white bg-primary border-2 border-primary rounded-full hover:bg-button-hover transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
                         disabled>
                         Suivant
                     </button>
                 </div>
             </div>
         </main>
-        <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm overflow-hidden">
+        <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
             <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
             <div class="logo-slider">
                 <div class="logo-track">
-                    <!-- Original Logos -->
-                    <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                    <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                    <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                    <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                    <!-- Duplicated Logos -->
-                    <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                    <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                    <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                    <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
-                    <!-- Triplicated Logos for wide screens -->
-                    <img alt="Logo HEC Paris" class="h-16 mx-8 object-contain" src="Images/Image_2.png" />
-                    <img alt="Logo Open Data University" class="h-16 mx-8 object-contain" src="Images/Image_4.png" />
-                    <img alt="Logo Des P'tites Economies" class="h-20 mx-8 object-contain" src="Images/Image_5.png" />
-                    <img alt="Logo Enedis" class="h-16 mx-8 object-contain" src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
                 </div>
             </div>
         </footer>
     </div>
 
     <script>
-        // Définition des questions
+        // =============================================
+        // MAPPING DÉPARTEMENT → RÉGION
+        // =============================================
+        const DEPT_TO_REGION = {
+            // Auvergne-Rhône-Alpes
+            '01': 'Auvergne-Rhône-Alpes', '03': 'Auvergne-Rhône-Alpes', '07': 'Auvergne-Rhône-Alpes',
+            '15': 'Auvergne-Rhône-Alpes', '26': 'Auvergne-Rhône-Alpes', '38': 'Auvergne-Rhône-Alpes',
+            '42': 'Auvergne-Rhône-Alpes', '43': 'Auvergne-Rhône-Alpes', '63': 'Auvergne-Rhône-Alpes',
+            '69': 'Auvergne-Rhône-Alpes', '73': 'Auvergne-Rhône-Alpes', '74': 'Auvergne-Rhône-Alpes',
+            // Bourgogne-Franche-Comté
+            '21': 'Bourgogne-Franche-Comté', '25': 'Bourgogne-Franche-Comté', '39': 'Bourgogne-Franche-Comté',
+            '58': 'Bourgogne-Franche-Comté', '70': 'Bourgogne-Franche-Comté', '71': 'Bourgogne-Franche-Comté',
+            '89': 'Bourgogne-Franche-Comté', '90': 'Bourgogne-Franche-Comté',
+            // Bretagne
+            '22': 'Bretagne', '29': 'Bretagne', '35': 'Bretagne', '56': 'Bretagne',
+            // Centre-Val de Loire
+            '18': 'Centre-Val de Loire', '28': 'Centre-Val de Loire', '36': 'Centre-Val de Loire',
+            '37': 'Centre-Val de Loire', '41': 'Centre-Val de Loire', '45': 'Centre-Val de Loire',
+            // Corse
+            '2A': 'Corse', '2B': 'Corse',
+            // Grand Est
+            '08': 'Grand_Est', '10': 'Grand_Est', '51': 'Grand_Est', '52': 'Grand_Est',
+            '54': 'Grand_Est', '55': 'Grand_Est', '57': 'Grand_Est', '67': 'Grand_Est',
+            '68': 'Grand_Est', '88': 'Grand_Est',
+            // Hauts-de-France
+            '02': 'Hauts_de_France', '59': 'Hauts_de_France', '60': 'Hauts_de_France',
+            '62': 'Hauts_de_France', '80': 'Hauts_de_France',
+            // Île-de-France
+            '75': 'Ile_de_France', '77': 'Ile_de_France', '78': 'Ile_de_France',
+            '91': 'Ile_de_France', '92': 'Ile_de_France', '93': 'Ile_de_France',
+            '94': 'Ile_de_France', '95': 'Ile_de_France',
+            // Normandie
+            '14': 'Normandie', '27': 'Normandie', '50': 'Normandie',
+            '61': 'Normandie', '76': 'Normandie',
+            // Nouvelle-Aquitaine
+            '16': 'Nouvelle-Aquitaine', '17': 'Nouvelle-Aquitaine', '19': 'Nouvelle-Aquitaine',
+            '23': 'Nouvelle-Aquitaine', '24': 'Nouvelle-Aquitaine', '33': 'Nouvelle-Aquitaine',
+            '40': 'Nouvelle-Aquitaine', '47': 'Nouvelle-Aquitaine', '64': 'Nouvelle-Aquitaine',
+            '79': 'Nouvelle-Aquitaine', '86': 'Nouvelle-Aquitaine', '87': 'Nouvelle-Aquitaine',
+            // Occitanie
+            '09': 'Occitanie', '11': 'Occitanie', '12': 'Occitanie', '30': 'Occitanie',
+            '31': 'Occitanie', '32': 'Occitanie', '34': 'Occitanie', '46': 'Occitanie',
+            '48': 'Occitanie', '65': 'Occitanie', '66': 'Occitanie', '81': 'Occitanie',
+            '82': 'Occitanie',
+            // Pays de la Loire
+            '44': 'Pays_de_la_Loire', '49': 'Pays_de_la_Loire', '53': 'Pays_de_la_Loire',
+            '72': 'Pays_de_la_Loire', '85': 'Pays_de_la_Loire',
+            // Provence-Alpes-Côte d'Azur
+            '04': "Provence-Alpes-Côte_d'Azur", '05': "Provence-Alpes-Côte_d'Azur",
+            '06': "Provence-Alpes-Côte_d'Azur", '13': "Provence-Alpes-Côte_d'Azur",
+            '83': "Provence-Alpes-Côte_d'Azur", '84': "Provence-Alpes-Côte_d'Azur",
+            // Outre-Mer
+            '971': 'Outre-Mer', '972': 'Outre-Mer', '973': 'Outre-Mer',
+            '974': 'Outre-Mer', '976': 'Outre-Mer'
+        };
+
+        // Noms affichables des régions
+        const REGION_LABELS = {
+            'Auvergne-Rhône-Alpes': 'Auvergne-Rhône-Alpes',
+            'Bourgogne-Franche-Comté': 'Bourgogne-Franche-Comté',
+            'Bretagne': 'Bretagne',
+            'Centre-Val de Loire': 'Centre-Val de Loire',
+            'Corse': 'Corse',
+            'Grand_Est': 'Grand Est',
+            'Hauts_de_France': 'Hauts-de-France',
+            'Ile_de_France': 'Île-de-France',
+            'Normandie': 'Normandie',
+            'Nouvelle-Aquitaine': 'Nouvelle-Aquitaine',
+            'Occitanie': 'Occitanie',
+            'Pays_de_la_Loire': 'Pays de la Loire',
+            "Provence-Alpes-Côte_d'Azur": "Provence-Alpes-Côte d'Azur",
+            'Outre-Mer': 'Outre-Mer'
+        };
+
+        // Mapping surface questionnaire → clé fichier pkl
+        const SURFACE_TO_KEY = {
+            'Moins de 30m²': 'inf30m2',
+            '30-50m²': '30-50m2',
+            '50-70m²': '50-70m2',
+            '70-90m²': '70-90m2',
+            '90-120m²': '90-120m2',
+            'Plus de 120m²': 'sup120m2'
+        };
+
+        // Liste de tous les départements français, filtrée aux régions couvertes
+        const ALL_DEPTS = [
+            '01 - Ain', '02 - Aisne', '03 - Allier', '04 - Alpes-de-Haute-Provence',
+            '05 - Hautes-Alpes', '06 - Alpes-Maritimes', '07 - Ardèche', '08 - Ardennes',
+            '09 - Ariège', '10 - Aube', '11 - Aude', '12 - Aveyron',
+            '13 - Bouches-du-Rhône', '14 - Calvados', '15 - Cantal', '16 - Charente',
+            '17 - Charente-Maritime', '18 - Cher', '19 - Corrèze',
+            '2A - Corse-du-Sud', '2B - Haute-Corse',
+            '21 - Côte-d\'Or', '22 - Côtes-d\'Armor', '23 - Creuse',
+            '24 - Dordogne', '25 - Doubs', '26 - Drôme',
+            '27 - Eure', '28 - Eure-et-Loir', '29 - Finistère',
+            '30 - Gard', '31 - Haute-Garonne', '32 - Gers', '33 - Gironde',
+            '34 - Hérault', '35 - Ille-et-Vilaine', '36 - Indre', '37 - Indre-et-Loire',
+            '38 - Isère', '39 - Jura', '40 - Landes',
+            '41 - Loir-et-Cher', '42 - Loire', '43 - Haute-Loire',
+            '44 - Loire-Atlantique', '45 - Loiret', '46 - Lot', '47 - Lot-et-Garonne',
+            '48 - Lozère', '49 - Maine-et-Loire', '50 - Manche',
+            '51 - Marne', '52 - Haute-Marne', '53 - Mayenne',
+            '54 - Meurthe-et-Moselle', '55 - Meuse', '56 - Morbihan', '57 - Moselle',
+            '58 - Nièvre', '59 - Nord', '60 - Oise', '61 - Orne',
+            '62 - Pas-de-Calais', '63 - Puy-de-Dôme', '64 - Pyrénées-Atlantiques',
+            '65 - Hautes-Pyrénées', '66 - Pyrénées-Orientales',
+            '67 - Bas-Rhin', '68 - Haut-Rhin', '69 - Rhône',
+            '70 - Haute-Saône', '71 - Saône-et-Loire', '72 - Sarthe', '73 - Savoie',
+            '74 - Haute-Savoie', '75 - Paris', '76 - Seine-Maritime',
+            '77 - Seine-et-Marne', '78 - Yvelines', '79 - Deux-Sèvres',
+            '80 - Somme', '81 - Tarn', '82 - Tarn-et-Garonne',
+            '83 - Var', '84 - Vaucluse', '85 - Vendée',
+            '86 - Vienne', '87 - Haute-Vienne', '88 - Vosges', '89 - Yonne',
+            '90 - Territoire de Belfort',
+            '91 - Essonne', '92 - Hauts-de-Seine',
+            '93 - Seine-Saint-Denis', '94 - Val-de-Marne', '95 - Val-d\'Oise',
+            '971 - Guadeloupe', '972 - Martinique', '973 - Guyane',
+            '974 - La Réunion', '976 - Mayotte'
+        ];
+
+        // Extraire le code département d'une option (ex: '75 - Paris' → '75')
+        function extractDeptCode(value) {
+            if (!value) return null;
+            const match = value.match(/^(\d{2,3}[A-B]?)\s*-/);
+            return match ? match[1] : null;
+        }
+
+        // Obtenir la région à partir d'une valeur de département
+        function getRegionFromDept(deptValue) {
+            const code = extractDeptCode(deptValue);
+            return code ? DEPT_TO_REGION[code] || null : null;
+        }
+
+        // =============================================
+        // DÉFINITION DES QUESTIONS (22 features du modèle)
+        // =============================================
         const questions = [
             {
                 id: 'departement',
                 label: 'Département',
                 text: "Salut, moi je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Ce sera moi qui t'accompagne pour récolter toutes les informations nécessaires pour que tu puisses faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir où est-ce que tu habites. Tu habites dans le",
-                options: ['01 - Ain', '02 - Aisne', '03 - Allier', '04 - Alpes-de-Haute-Provence', '05 - Hautes-Alpes', '06 - Alpes-Maritimes', '07 - Ardèche', '08 - Ardennes', '09 - Ariège', '10 - Aube', '11 - Aude', '12 - Aveyron', '13 - Bouches-du-Rhône', '14 - Calvados', '15 - Cantal', '16 - Charente', '17 - Charente-Maritime', '18 - Cher', '19 - Corrèze', '21 - Côte-d\'Or', '22 - Côtes-d\'Armor', '23 - Creuse', '24 - Dordogne', '25 - Doubs', '26 - Drôme', '27 - Eure', '28 - Eure-et-Loir', '29 - Finistère', '2A - Corse-du-Sud', '2B - Haute-Corse', '30 - Gard', '31 - Haute-Garonne', '32 - Gers', '33 - Gironde', '34 - Hérault', '35 - Ille-et-Vilaine', '36 - Indre', '37 - Indre-et-Loire', '38 - Isère', '39 - Jura', '40 - Landes', '41 - Loir-et-Cher', '42 - Loire', '43 - Haute-Loire', '44 - Loire-Atlantique', '45 - Loiret', '46 - Lot', '47 - Lot-et-Garonne', '48 - Lozère', '49 - Maine-et-Loire', '50 - Manche', '51 - Marne', '52 - Haute-Marne', '53 - Mayenne', '54 - Meurthe-et-Moselle', '55 - Meuse', '56 - Morbihan', '57 - Moselle', '58 - Nièvre', '59 - Nord', '60 - Oise', '61 - Orne', '62 - Pas-de-Calais', '63 - Puy-de-Dôme', '64 - Pyrénées-Atlantiques', '65 - Hautes-Pyrénées', '66 - Pyrénées-Orientales', '67 - Bas-Rhin', '68 - Haut-Rhin', '69 - Rhône', '70 - Haute-Saône', '71 - Saône-et-Loire', '72 - Sarthe', '73 - Savoie', '74 - Haute-Savoie', '75 - Paris', '76 - Seine-Maritime', '77 - Seine-et-Marne', '78 - Yvelines', '79 - Deux-Sèvres', '80 - Somme', '81 - Tarn', '82 - Tarn-et-Garonne', '83 - Var', '84 - Vaucluse', '85 - Vendée', '86 - Vienne', '87 - Haute-Vienne', '88 - Vosges', '89 - Yonne', '90 - Territoire de Belfort', '91 - Essonne', '92 - Hauts-de-Seine', '93 - Seine-Saint-Denis', '94 - Val-de-Marne', '95 - Val-d\'Oise', '971 - Guadeloupe', '972 - Martinique', '973 - Guyane', '974 - La Réunion', '976 - Mayotte', 'Je ne sais pas']
+                options: ALL_DEPTS
             },
             {
-                id: 'occupants',
-                label: 'Nombre d\'occupants',
-                text: "Parfait ! Maintenant dis-moi, combien êtes-vous dans le logement ? Vous êtes",
-                options: ['1', '2', '3', '4', '5+', 'Je ne sais pas']
-            },
-            {
-                id: 'type_logement',
-                label: 'Type de logement',
-                text: "Très bien ! Et tu habites dans quel type de logement ?",
-                options: ['Appartement', 'Maison individuelle', 'Studio', 'Je ne sais pas']
+                id: 'type_batiment',
+                label: 'Type de bâtiment',
+                text: "Super ! Et tu vis dans quel type de logement ?",
+                options: ['Appartement', 'Maison', 'Immeuble']
             },
             {
                 id: 'surface',
                 label: 'Surface habitable',
                 text: "D'accord ! Et quelle est la surface de ton logement ?",
-                options: ['Moins de 30m²', '30-50m²', '50-80m²', '80-120m²', 'Plus de 120m²', 'Je ne sais pas']
+                options: ['Moins de 30m²', '30-50m²', '50-70m²', '70-90m²', '90-120m²', 'Plus de 120m²']
             },
             {
-                id: 'annee_construction',
-                label: 'Année de construction',
-                text: "Maintenant, sais-tu en quelle année ton logement a été construit ?",
-                options: ['Avant 1975', '1975-1990', '1990-2005', '2005-2012', 'Après 2012', 'Je ne sais pas'],
+                id: 'periode_construction',
+                label: 'Période de construction',
+                text: "Sais-tu quand ton logement a été construit ?",
+                options: ['Avant 1948', '1948-1974', '1975-1977', '1978-1982', '1983-1988', '1989-2000', '2001-2005', '2006-2012', '2013-2021', 'Après 2021', 'Je ne sais pas'],
                 help: "Tu peux trouver l'année de construction sur ton acte de propriété, ton bail, ou en consultant le cadastre en ligne. Si tu habites dans un immeuble, vérifie la plaque à l'entrée ou demande au syndic !"
             },
             {
-                id: 'chauffage',
-                label: 'Type de chauffage',
-                text: "Super ! Parlons de ton système de chauffage. Quel type de chauffage as-tu ?",
-                options: ['Électrique', 'Gaz', 'Fioul', 'Pompe à chaleur', 'Bois', 'Je ne sais pas'],
-                help: "Regarde ta facture d'énergie ou ton compteur : électrique (compteur Linky), gaz (compteur de gaz), fioul (cuve visible). Une pompe à chaleur a une unité extérieure bruyante. Le chauffage au bois, c'est une chaudière ou un poêle visible !"
+                id: 'logement_traversant',
+                label: 'Logement traversant',
+                text: "Est-ce que ton logement est traversant ? (Des fenêtres sur deux façades opposées)",
+                options: ['Oui', 'Non', 'Je ne sais pas'],
+                help: "Un logement traversant permet de créer des courants d'air pour ventiler naturellement. Si tu as des fenêtres donnant sur la rue ET sur la cour (ou le jardin) en face, c'est traversant !"
             },
             {
-                id: 'eau_chaude',
-                label: 'Type d\'eau chaude',
-                text: "Et pour l'eau chaude sanitaire, comment est-elle produite ?",
-                options: ['Électrique', 'Gaz', 'Ballon thermodynamique', 'Solaire', 'Je ne sais pas'],
-                help: "C'est souvent le même système que le chauffage ! Regarde ton ballon d'eau chaude : s'il est petit et froid en haut, c'est un ballon thermodynamique. S'il a des panneaux sur le toit, c'est solaire. Sinon, c'est électrique ou gaz."
+                id: 'isolation_toiture',
+                label: 'Isolation de la toiture',
+                text: "Parlons de l'isolation. Ta toiture est-elle isolée ?",
+                options: ['Isolée', 'Non isolée', 'Je ne sais pas'],
+                help: "Si tu habites au dernier étage ou en maison, l'isolation du toit est cruciale. Si tes combles sont aménagés, ils sont sûrement isolés. Sinon, regarde s'il y a de la laine de verre sous le toit."
             },
             {
-                id: 'isolation',
+                id: 'qualite_isolation_enveloppe',
+                label: 'Qualité isolation globale',
+                text: "Comment qualifierais-tu l'isolation générale de ton logement ?",
+                options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
+                help: "Si tu as froid en hiver malgré le chauffage, l'isolation est probablement insuffisante. Un logement récent (après 2005) a généralement une bonne ou très bonne isolation."
+            },
+            {
+                id: 'qualite_isolation_murs',
                 label: 'Isolation des murs',
-                text: "Parlons maintenant de l'isolation. Tes murs sont-ils isolés ?",
-                options: ['Non isolé', 'Partiellement isolé', 'Totalement isolé', 'Je ne sais pas'],
-                help: "Touche tes murs en hiver : s'ils sont très froids, ils ne sont pas isolés. Regarde aussi de l'extérieur : si tu vois une épaisseur supplémentaire ou un crépi récent, c'est probablement isolé. En cas de doute, choisis 'Je ne sais pas' !"
+                text: "Et l'isolation de tes murs, elle est comment ?",
+                options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
+                help: "Si tes murs sont froids au toucher en hiver, l'isolation est probablement insuffisante. Un doublage intérieur (placo + isolant) ou une isolation par l'extérieur sont signes d'une bonne isolation."
             },
             {
-                id: 'fenetres',
-                label: 'Type de fenêtres',
-                text: "Et tes fenêtres, quel type de vitrage ont-elles ?",
-                options: ['Simple vitrage', 'Double vitrage ancien', 'Double vitrage récent', 'Triple vitrage', 'Je ne sais pas'],
-                help: "Approche une flamme (briquet) de la vitre : si tu vois 2 reflets, c'est du double vitrage. Si tu en vois 3, c'est du triple vitrage. Un seul reflet = simple vitrage. Le double vitrage récent a souvent une petite étiquette avec l'année."
+                id: 'qualite_isolation_menuiseries',
+                label: 'Qualité des fenêtres',
+                text: "Parlons de tes fenêtres. Comment est leur qualité d'isolation ?",
+                options: ['Très bonne (triple vitrage)', 'Bonne (double vitrage récent)', 'Moyenne (double vitrage ancien)', 'Insuffisante (simple vitrage)', 'Je ne sais pas'],
+                help: "Simple vitrage = une seule vitre, froid au toucher et condensation fréquente. Double vitrage = deux vitres avec un espace entre les deux. Triple vitrage = trois vitres, très isolant."
             },
             {
-                id: 'ventilation',
-                label: 'Système de ventilation',
-                text: "Dernière question ! Quel système de ventilation as-tu dans ton logement ?",
-                options: ['Naturelle', 'VMC simple flux', 'VMC double flux', 'Aucune', 'Je ne sais pas'],
-                help: "Regarde dans ta salle de bain ou WC : tu vois une grille d'aération au plafond ? Si elle est motorisée (bruit quand elle tourne), c'est une VMC. La VMC double flux a aussi des bouches d'air dans les pièces de vie. Sinon, c'est ventilation naturelle."
+                id: 'qualite_isolation_plancher_bas',
+                label: 'Isolation du plancher',
+                text: "Et le sol / plancher bas, il est isolé ?",
+                options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
+                help: "Si tu as un vide sanitaire ou une cave sous ton logement, et que le sol est froid, le plancher n'est probablement pas bien isolé."
+            },
+            {
+                id: 'type_emetteur_chauffage',
+                label: 'Émetteur de chauffage',
+                text: "Quel type d'émetteur de chauffage as-tu ?",
+                options: ['Radiateur électrique', 'Convecteur électrique', 'Radiateur à eau (chauffage central)', 'Plancher chauffant', 'Poêle (bois/fioul)', 'Soufflage air chaud / Climatisation', 'Je ne sais pas'],
+                help: "Radiateur électrique : fixé au mur, branché sur une prise ou fil. Radiateur à eau : relié à des tuyaux d'eau chaude. Plancher chauffant : le sol lui-même chauffe. Un poêle est un appareil visible dans la pièce."
+            },
+            {
+                id: 'type_installation_ecs',
+                label: 'Production eau chaude',
+                text: "Comment est produite ton eau chaude sanitaire ?",
+                options: ['Individuel (chauffe-eau personnel)', 'Collectif (chaufferie immeuble)', 'Mixte', 'Je ne sais pas'],
+                help: "Si tu as un ballon d'eau chaude ou un chauffe-eau dans ton appartement, c'est individuel. Si c'est l'immeuble qui fournit l'eau chaude via une chaufferie commune, c'est collectif."
+            },
+            {
+                id: 'type_generateur_ecs',
+                label: 'Type de chauffe-eau',
+                text: "Quel type de chauffe-eau ou de production d'eau chaude as-tu ?",
+                options: ['Ballon électrique', 'Chauffe-eau gaz', 'Chaudière gaz', 'Chaudière fioul', 'Chauffe-eau thermodynamique', 'Pompe à chaleur', 'Réseau de chaleur', 'Je ne sais pas'],
+                help: "Un ballon électrique est un gros cylindre souvent dans un placard. Un chauffe-eau gaz est connecté au gaz de ville. Un chauffe-eau thermodynamique ressemble à un ballon avec une unité extérieure."
+            },
+            {
+                id: 'presence_brasseur_air',
+                label: 'Ventilateur de plafond',
+                text: "As-tu des ventilateurs de plafond (brasseurs d'air) ?",
+                options: ['Oui', 'Non', 'Je ne sais pas']
+            },
+            {
+                id: 'protection_solaire',
+                label: 'Protection solaire',
+                text: "As-tu des protections solaires extérieures (volets, stores, pergola...) ?",
+                options: ['Oui', 'Non', 'Je ne sais pas'],
+                help: "Les volets, stores extérieurs, brise-soleil ou pergolas protègent du soleil en été et réduisent les besoins de climatisation."
+            },
+            {
+                id: 'classe_altitude',
+                label: 'Classe d\'altitude',
+                text: "À quelle altitude se situe ton logement ?",
+                options: ['Inférieur à 400m', '400-800m', '800-1200m', 'Supérieur à 1200m', 'Je ne sais pas'],
+                help: "Tu peux vérifier l'altitude sur Google Maps ou un site de météo local. La plupart des logements en France sont sous 400m."
+            },
+            {
+                id: 'hauteur_sous_plafond',
+                label: 'Hauteur sous plafond',
+                text: "Quelle est la hauteur approximative de tes plafonds ?",
+                options: ['Moins de 2,2m', '2,2-2,4m', '2,4-2,6m', '2,6-3m', 'Plus de 3m', 'Je ne sais pas'],
+                help: "Mesure de la distance entre le sol et le plafond. La norme actuelle est 2,5m. Les anciens logements ont souvent 2,8m ou plus."
             }
         ];
 
@@ -361,6 +598,7 @@
             // Ajouter le champ de saisie (input avec autocomplétion pour département, select classique pour les autres)
             if (index === 0) {
                 // Pour le département, utiliser un input avec datalist pour l'autocomplétion
+                const escapedValue = (responses[question.id] || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
                 html += `
                 <span class="relative inline-flex items-center ml-2">
                     <input 
@@ -369,12 +607,13 @@
                         list="departementList"
                         placeholder="Chercher..."
                         class="bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-3 focus:outline-none focus:ring-2 focus:ring-primary w-48 align-middle"
-                        value="${responses[question.id] || ''}"
+                        value="${escapedValue}"
                     />
                     <datalist id="departementList">
             `;
                 question.options.forEach(option => {
-                    html += `<option value="${option}">${option}</option>`;
+                    const escapedOption = option.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                    html += `<option value="${escapedOption}">${option}</option>`;
                 });
                 html += `
                     </datalist>
@@ -399,7 +638,8 @@
             `;
             }
 
-            if (index === 9) {
+            // Dernière question : message de conclusion
+            if (index === questions.length - 1) {
                 html += ` c'est ça ? Parfait, on a tout ce qu'il faut pour ton estimation !`;
             } else {
                 html += ` c'est ça ?`;
@@ -413,6 +653,15 @@
             }
 
             html += `</p>`;
+
+            // Afficher le badge de région détecté après la question département (sur la question surface)
+            if (index === 1 && responses['departement']) {
+                const region = getRegionFromDept(responses['departement']);
+                if (region) {
+                    const regionLabel = REGION_LABELS[region] || region;
+                    html += `<div class="mt-2 mb-2"><span class="inline-flex items-center gap-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs font-semibold px-3 py-1 rounded-full">📍 Région détectée : ${regionLabel}</span></div>`;
+                }
+            }
 
             // Ajouter le panneau d'aide extensible si la question a une propriété help
             if (question.help) {
@@ -452,6 +701,14 @@
 
             // Mettre à jour la progression
             updateProgress();
+
+            // Afficher/masquer le bouton Précédent
+            const prevButton = document.getElementById('prevButton');
+            if (index > 0) {
+                prevButton.classList.remove('hidden');
+            } else {
+                prevButton.classList.add('hidden');
+            }
         }
 
         // Fonction pour afficher/masquer le panneau d'aide
@@ -468,8 +725,20 @@
             const value = e.target.value;
 
             if (value) {
-                responses[question.id] = value;
-                document.getElementById('nextButton').disabled = false;
+                // Pour le département, vérifier que la valeur existe dans la liste
+                if (question.id === 'departement') {
+                    if (question.options.includes(value)) {
+                        responses[question.id] = value;
+                        document.getElementById('nextButton').disabled = false;
+                    } else {
+                        // Valeur partielle ou invalide, désactiver Suivant
+                        delete responses[question.id];
+                        document.getElementById('nextButton').disabled = true;
+                    }
+                } else {
+                    responses[question.id] = value;
+                    document.getElementById('nextButton').disabled = false;
+                }
             } else {
                 delete responses[question.id];
                 document.getElementById('nextButton').disabled = true;
@@ -482,6 +751,17 @@
             document.getElementById('progressBar').style.width = `${progress}%`;
             document.getElementById('progressText').textContent = `Question ${currentQuestion + 1}/${questions.length}`;
             document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+        }
+
+        // Revenir à la question précédente
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                // Réactiver le bouton suivant si une réponse existe déjà
+                const question = questions[currentQuestion];
+                document.getElementById('nextButton').disabled = !responses[question.id];
+                displayQuestion(currentQuestion);
+            }
         }
 
         // Passer à la question suivante
@@ -503,6 +783,23 @@
                 label: q.label,
                 value: responses[q.id] || 'Non renseigné'
             }));
+
+            // Ajouter la région détectée
+            const region = getRegionFromDept(responses['departement']);
+            if (region) {
+                dataToSave.push({
+                    label: 'Région',
+                    value: REGION_LABELS[region] || region
+                });
+                // Sauvegarder aussi la clé technique de la région
+                localStorage.setItem('dpe_region', region);
+            }
+
+            // Sauvegarder la catégorie de surface technique
+            const surfaceKey = SURFACE_TO_KEY[responses['surface']] || null;
+            if (surfaceKey) {
+                localStorage.setItem('dpe_surface_category', surfaceKey);
+            }
 
             localStorage.setItem('dpe_responses', JSON.stringify(dataToSave));
             window.location.href = 'Estimation_2.html';
