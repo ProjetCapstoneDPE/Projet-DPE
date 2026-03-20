@@ -574,7 +574,26 @@ async function predictClientSide(responsesArray) {
     }
 
     // 5) Prédiction Théorique (C_base)
-    const predictionTheoretical = predictor.predict(features);
+    let predictionTheoretical = predictor.predict(features);
+    
+    // --- SÉCURITÉ : BORNES SUR LA CONSOMMATION THÉORIQUE ---
+    // Les arbres XGBoost peuvent parfois prédire des valeurs négatives (ramenées à 0) 
+    // ou extrêmement élevées pour des combinaisons atypiques de réponses.
+    // On borne donc le résultat avec un min/max réaliste en Énergie Primaire.
+    const surfaceValForBounds = features.surface_habitable_logement || 70.0;
+    // Minimum : ~40 kWh EP/m²/an (Équivalent à un DPE A très performant)
+    const minConso = surfaceValForBounds * 40; 
+    // Maximum : ~1200 kWh EP/m²/an (Équivalent à une "passoire thermique" extrême)
+    const maxConso = surfaceValForBounds * 1200;
+    
+    if (predictionTheoretical < minConso) {
+        console.warn(`[XGBoost] Prédiction très basse (${predictionTheoretical}). Recadrage au min (${minConso}).`);
+        predictionTheoretical = minConso;
+    } else if (predictionTheoretical > maxConso) {
+        console.warn(`[XGBoost] Prédiction très élevée (${predictionTheoretical}). Recadrage au max (${maxConso}).`);
+        predictionTheoretical = maxConso;
+    }
+
     console.log(`[XGBoost] Prédiction Théorique (C_base): ${predictionTheoretical.toFixed(1)} kWh/an`);
 
     // 6) Consommation Réelle
