@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Estimation DPE gratuite | Des P'tites Économies</title>
+    <meta name="description"
+        content="Répondez à quelques questions simples sur votre logement et obtenez une estimation gratuite de votre classe énergétique DPE avec notre outil en ligne." />
+    <link rel="icon" type="image/png" href="Images/Image_2.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#334155",
+                        "button-hover": "#4338ca",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: max(884px, 100dvh);
+        }
+
+        .chat-bubble {
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-bubble-container {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.60);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-out;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        select {
+            max-height: 300px;
+        }
+
+        select[size] {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Help Button Styles */
+        .help-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-left: 8px;
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+            border: none;
+            vertical-align: middle;
+        }
+
+        .help-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+            background: linear-gradient(135deg, #4338ca 0%, #6D28D9 100%);
+        }
+
+        /* Help Panel Styles */
+        .help-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, margin-top 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .help-panel.expanded {
+            max-height: 500px;
+            margin-top: 12px;
+            opacity: 1;
+        }
+
+        .help-content {
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            border-left: 4px solid #4F46E5;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: start;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.15);
+        }
+
+        .dark .help-content {
+            background: linear-gradient(135deg, #312e81 0%, #3730a3 100%);
+            border-left-color: #818cf8;
+        }
+
+        .help-avatar {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .help-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .help-text {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #3730a3;
+        }
+
+        .dark .help-text {
+            color: #c7d2fe;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fade-up .7s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 font-display text-gray-800 min-h-screen">
+    <header
+        class="flex justify-between items-center py-3 px-4 sm:px-6 sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm">
+        <div class="flex items-center gap-3">
+            <a href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                <span class="material-icons text-primary" style="font-size:18px">home</span>
+                <span>Accueil</span>
+            </a>
+            <a href="estimation.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Estimez
+            </a>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="bons-gestes.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Les bons gestes !
+            </a>
+            <a href="a-propos.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Qui sommes-nous ?
+            </a>
+        </div>
+    </header>
+    <div class="p-4 sm:p-6 flex-grow flex flex-col">
+        <main class="py-8 flex flex-col items-center justify-center max-w-6xl mx-auto w-full">
+            <h1 class="text-xl sm:text-2xl font-extrabold text-center mb-8 animate-fade-up">
+                <span class="gradient-text">Récoltons les informations nécessaires</span>
+                <span class="block text-gray-600 text-base font-medium mt-1">pour améliorer votre DPE !</span>
+            </h1>
+
+            <!-- Indicateur de progression -->
+            <div class="w-full max-w-4xl mb-4">
+                <div class="flex items-center justify-between text-sm text-primary font-semibold mb-2">
+                    <span id="progressText">Question 1/10</span>
+                    <span id="progressPercent">10%</span>
+                </div>
+                <div class="w-full bg-gray-200/60 rounded-full h-2.5">
+                    <div id="progressBar"
+                        class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2.5 rounded-full transition-all duration-500"
+                        style="width: 10%"></div>
+                </div>
+            </div>
+
+            <div
+                class="w-full mx-auto relative chat-bubble-container rounded-3xl shadow-2xl p-6 sm:p-8 animate-fade-up delay-200">
+                <div
+                    class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-indigo-200 shadow-lg">
+                    <img alt="Watty the robot mascot" class="w-12 h-12" src="Images/Image_6.png" />
+                </div>
+                <div class="mt-8">
+                    <div id="chatContent" class="relative bg-indigo-50/50 p-6 rounded-xl chat-bubble mx-auto max-w-5xl">
+                        <!-- Le contenu du chat sera inséré ici par JavaScript -->
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mt-6">
+                    <button id="prevButton"
+                        class="px-5 py-2.5 text-sm font-semibold text-indigo-600 bg-white border-2 border-indigo-300 rounded-full hover:bg-indigo-50 hover:border-indigo-500 hover:shadow-md transition-all hidden"
+                        onclick="previousQuestion()">
+                        <span class="flex items-center gap-1"><span class="material-icons"
+                                style="font-size:18px">arrow_back</span> Précédent</span>
+                    </button>
+                    <div></div>
+                    <button id="nextButton"
+                        class="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+                        disabled>
+                        Suivant
+                    </button>
+                </div>
+            </div>
+        <!-- ===== BONS GESTES CTA SECTION ===== -->
+        <section class="py-16 w-full mt-4">
+            <div class="w-full animate-fade-up delay-300">
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl shadow-2xl p-8 sm:p-12 text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+                    <div class="relative z-10">
+                        <div class="inline-flex p-3 bg-white/20 rounded-2xl mb-6 backdrop-blur-sm">
+                            <span class="material-icons text-white text-3xl">eco</span>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-white mb-4">
+                            Envie de réduire vos factures dès aujourd'hui ?
+                        </h2>
+                        <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+                            Découvrez tous les éco-gestes du quotidien, simples à mettre en place et efficaces pour faire des économies d'énergie sans gros travaux.
+                        </p>
+                        <button onclick="window.location.href='bons-gestes.html'"
+                            class="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                            Découvrir les bons gestes
+                            <span class="material-icons">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
+        <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
+            <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+            <div class="logo-slider">
+                <div class="logo-track">
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // =============================================
+        // MAPPING DÉPARTEMENT → RÉGION
+        // =============================================
+        const DEPT_TO_REGION = {
+            // Auvergne-Rhône-Alpes
+            '01': 'Auvergne-Rhône-Alpes', '03': 'Auvergne-Rhône-Alpes', '07': 'Auvergne-Rhône-Alpes',
+            '15': 'Auvergne-Rhône-Alpes', '26': 'Auvergne-Rhône-Alpes', '38': 'Auvergne-Rhône-Alpes',
+            '42': 'Auvergne-Rhône-Alpes', '43': 'Auvergne-Rhône-Alpes', '63': 'Auvergne-Rhône-Alpes',
+            '69': 'Auvergne-Rhône-Alpes', '73': 'Auvergne-Rhône-Alpes', '74': 'Auvergne-Rhône-Alpes',
+            // Bourgogne-Franche-Comté
+            '21': 'Bourgogne-Franche-Comté', '25': 'Bourgogne-Franche-Comté', '39': 'Bourgogne-Franche-Comté',
+            '58': 'Bourgogne-Franche-Comté', '70': 'Bourgogne-Franche-Comté', '71': 'Bourgogne-Franche-Comté',
+            '89': 'Bourgogne-Franche-Comté', '90': 'Bourgogne-Franche-Comté',
+            // Bretagne
+            '22': 'Bretagne', '29': 'Bretagne', '35': 'Bretagne', '56': 'Bretagne',
+            // Centre-Val de Loire
+            '18': 'Centre-Val de Loire', '28': 'Centre-Val de Loire', '36': 'Centre-Val de Loire',
+            '37': 'Centre-Val de Loire', '41': 'Centre-Val de Loire', '45': 'Centre-Val de Loire',
+            // Corse
+            '2A': 'Corse', '2B': 'Corse',
+            // Grand Est
+            '08': 'Grand_Est', '10': 'Grand_Est', '51': 'Grand_Est', '52': 'Grand_Est',
+            '54': 'Grand_Est', '55': 'Grand_Est', '57': 'Grand_Est', '67': 'Grand_Est',
+            '68': 'Grand_Est', '88': 'Grand_Est',
+            // Hauts-de-France
+            '02': 'Hauts_de_France', '59': 'Hauts_de_France', '60': 'Hauts_de_France',
+            '62': 'Hauts_de_France', '80': 'Hauts_de_France',
+            // Île-de-France
+            '75': 'Ile_de_France', '77': 'Ile_de_France', '78': 'Ile_de_France',
+            '91': 'Ile_de_France', '92': 'Ile_de_France', '93': 'Ile_de_France',
+            '94': 'Ile_de_France', '95': 'Ile_de_France',
+            // Normandie
+            '14': 'Normandie', '27': 'Normandie', '50': 'Normandie',
+            '61': 'Normandie', '76': 'Normandie',
+            // Nouvelle-Aquitaine
+            '16': 'Nouvelle-Aquitaine', '17': 'Nouvelle-Aquitaine', '19': 'Nouvelle-Aquitaine',
+            '23': 'Nouvelle-Aquitaine', '24': 'Nouvelle-Aquitaine', '33': 'Nouvelle-Aquitaine',
+            '40': 'Nouvelle-Aquitaine', '47': 'Nouvelle-Aquitaine', '64': 'Nouvelle-Aquitaine',
+            '79': 'Nouvelle-Aquitaine', '86': 'Nouvelle-Aquitaine', '87': 'Nouvelle-Aquitaine',
+            // Occitanie
+            '09': 'Occitanie', '11': 'Occitanie', '12': 'Occitanie', '30': 'Occitanie',
+            '31': 'Occitanie', '32': 'Occitanie', '34': 'Occitanie', '46': 'Occitanie',
+            '48': 'Occitanie', '65': 'Occitanie', '66': 'Occitanie', '81': 'Occitanie',
+            '82': 'Occitanie',
+            // Pays de la Loire
+            '44': 'Pays_de_la_Loire', '49': 'Pays_de_la_Loire', '53': 'Pays_de_la_Loire',
+            '72': 'Pays_de_la_Loire', '85': 'Pays_de_la_Loire',
+            // Provence-Alpes-Côte d'Azur
+            '04': "Provence-Alpes-Côte_d'Azur", '05': "Provence-Alpes-Côte_d'Azur",
+            '06': "Provence-Alpes-Côte_d'Azur", '13': "Provence-Alpes-Côte_d'Azur",
+            '83': "Provence-Alpes-Côte_d'Azur", '84': "Provence-Alpes-Côte_d'Azur",
+            // Outre-Mer
+            '971': 'Outre-Mer', '972': 'Outre-Mer', '973': 'Outre-Mer',
+            '974': 'Outre-Mer', '976': 'Outre-Mer'
+        };
+
+        // Noms affichables des régions
+        const REGION_LABELS = {
+            'Auvergne-Rhône-Alpes': 'Auvergne-Rhône-Alpes',
+            'Bourgogne-Franche-Comté': 'Bourgogne-Franche-Comté',
+            'Bretagne': 'Bretagne',
+            'Centre-Val de Loire': 'Centre-Val de Loire',
+            'Corse': 'Corse',
+            'Grand_Est': 'Grand Est',
+            'Hauts_de_France': 'Hauts-de-France',
+            'Ile_de_France': 'Île-de-France',
+            'Normandie': 'Normandie',
+            'Nouvelle-Aquitaine': 'Nouvelle-Aquitaine',
+            'Occitanie': 'Occitanie',
+            'Pays_de_la_Loire': 'Pays de la Loire',
+            "Provence-Alpes-Côte_d'Azur": "Provence-Alpes-Côte d'Azur",
+            'Outre-Mer': 'Outre-Mer'
+        };
+
+        // Mapping surface questionnaire → clé fichier pkl
+        const SURFACE_TO_KEY = {
+            'Moins de 30m²': 'inf30m2',
+            '30-50m²': '30-50m2',
+            '50-70m²': '50-70m2',
+            '70-90m²': '70-90m2',
+            '90-120m²': '90-120m2',
+            'Plus de 120m²': 'sup120m2'
+        };
+
+        // Liste de tous les départements français, filtrée aux régions couvertes
+        const ALL_DEPTS = [
+            '01 - Ain', '02 - Aisne', '03 - Allier', '04 - Alpes-de-Haute-Provence',
+            '05 - Hautes-Alpes', '06 - Alpes-Maritimes', '07 - Ardèche', '08 - Ardennes',
+            '09 - Ariège', '10 - Aube', '11 - Aude', '12 - Aveyron',
+            '13 - Bouches-du-Rhône', '14 - Calvados', '15 - Cantal', '16 - Charente',
+            '17 - Charente-Maritime', '18 - Cher', '19 - Corrèze',
+            '2A - Corse-du-Sud', '2B - Haute-Corse',
+            '21 - Côte-d\'Or', '22 - Côtes-d\'Armor', '23 - Creuse',
+            '24 - Dordogne', '25 - Doubs', '26 - Drôme',
+            '27 - Eure', '28 - Eure-et-Loir', '29 - Finistère',
+            '30 - Gard', '31 - Haute-Garonne', '32 - Gers', '33 - Gironde',
+            '34 - Hérault', '35 - Ille-et-Vilaine', '36 - Indre', '37 - Indre-et-Loire',
+            '38 - Isère', '39 - Jura', '40 - Landes',
+            '41 - Loir-et-Cher', '42 - Loire', '43 - Haute-Loire',
+            '44 - Loire-Atlantique', '45 - Loiret', '46 - Lot', '47 - Lot-et-Garonne',
+            '48 - Lozère', '49 - Maine-et-Loire', '50 - Manche',
+            '51 - Marne', '52 - Haute-Marne', '53 - Mayenne',
+            '54 - Meurthe-et-Moselle', '55 - Meuse', '56 - Morbihan', '57 - Moselle',
+            '58 - Nièvre', '59 - Nord', '60 - Oise', '61 - Orne',
+            '62 - Pas-de-Calais', '63 - Puy-de-Dôme', '64 - Pyrénées-Atlantiques',
+            '65 - Hautes-Pyrénées', '66 - Pyrénées-Orientales',
+            '67 - Bas-Rhin', '68 - Haut-Rhin', '69 - Rhône',
+            '70 - Haute-Saône', '71 - Saône-et-Loire', '72 - Sarthe', '73 - Savoie',
+            '74 - Haute-Savoie', '75 - Paris', '76 - Seine-Maritime',
+            '77 - Seine-et-Marne', '78 - Yvelines', '79 - Deux-Sèvres',
+            '80 - Somme', '81 - Tarn', '82 - Tarn-et-Garonne',
+            '83 - Var', '84 - Vaucluse', '85 - Vendée',
+            '86 - Vienne', '87 - Haute-Vienne', '88 - Vosges', '89 - Yonne',
+            '90 - Territoire de Belfort',
+            '91 - Essonne', '92 - Hauts-de-Seine',
+            '93 - Seine-Saint-Denis', '94 - Val-de-Marne', '95 - Val-d\'Oise',
+            '971 - Guadeloupe', '972 - Martinique', '973 - Guyane',
+            '974 - La Réunion', '976 - Mayotte'
+        ];
+
+        // Extraire le code département d'une option (ex: '75 - Paris' → '75')
+        function extractDeptCode(value) {
+            if (!value) return null;
+            const match = value.match(/^(\d{2,3}[A-B]?)\s*-/);
+            return match ? match[1] : null;
+        }
+
+        // Obtenir la région à partir d'une valeur de département
+        function getRegionFromDept(deptValue) {
+            const code = extractDeptCode(deptValue);
+            return code ? DEPT_TO_REGION[code] || null : null;
+        }
+
+        // =============================================
+        // DÉFINITION DES QUESTIONS (22 features du modèle)
+        // =============================================
+        const questions = [
+            {
+                id: 'departement',
+                label: 'Département',
+                text: "Salut, je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Je serai là pour vous accompagner afin de récolter toutes les informations nécessaires pour que vous puissiez faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir où vous habitez. Vous habitez dans le",
+                options: ALL_DEPTS
+            },
+            {
+                id: 'type_batiment',
+                label: 'Type de bâtiment',
+                text: "Super ! Et vous vivez dans quel type de logement ?",
+                options: ['Appartement', 'Maison', 'Immeuble']
+            },
+            {
+                id: 'surface',
+                label: 'Surface habitable',
+                text: "D'accord ! Et quelle est la surface de votre logement ?",
+                options: ['Moins de 30m²', '30-50m²', '50-70m²', '70-90m²', '90-120m²', 'Plus de 120m²']
+            },
+            {
+                id: 'periode_construction',
+                label: 'Période de construction',
+                text: "Savez-vous quand votre logement a été construit ?",
+                options: ['Avant 1948', '1948-1974', '1975-1977', '1978-1982', '1983-1988', '1989-2000', '2001-2005', '2006-2012', '2013-2021', 'Après 2021', 'Je ne sais pas'],
+                help: "Vous pouvez trouver l'année de construction sur votre acte de propriété, votre bail, ou en consultant le cadastre en ligne. Si vous habitez dans un immeuble, vérifiez la plaque à l'entrée ou demandez au syndic !"
+            },
+            {
+                id: 'logement_traversant',
+                label: 'Logement traversant',
+                text: "Est-ce que votre logement est traversant ? (Des fenêtres sur deux façades opposées)",
+                options: ['Oui', 'Non', 'Je ne sais pas'],
+                help: "Un logement traversant permet de créer des courants d'air pour ventiler naturellement. Si vous avez des fenêtres donnant sur la rue ET sur la cour (ou le jardin) en face, c'est traversant !"
+            },
+            {
+                id: 'isolation_toiture',
+                label: 'Isolation de la toiture',
+                text: "Parlons de l'isolation. Votre toiture est-elle isolée ?",
+                options: ['Isolée', 'Non isolée', 'Je ne sais pas'],
+                help: "Si vous habitez au dernier étage ou en maison, l'isolation du toit est cruciale. Si vos combles sont aménagés, ils sont sûrement isolés. Sinon, regardez s'il y a de la laine de verre sous le toit.<br><br> <b>Bonne :</b> 20 à 30 cm d'isolant (ex: laine de verre) dans les combles, ou toiture refaite récemment.<br><br> <b>Insuffisante :</b> Tuile apparente depuis l'intérieur, ou combles aménagés glacials l'hiver et étouffants l'été."
+            },
+            {
+                id: 'qualite_isolation_enveloppe',
+                label: 'Qualité isolation globale',
+                text: "Comment qualifieriez-vous l'isolation générale de votre logement ?",
+                options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
+                help: "Si vous avez froid en hiver malgré le chauffage, l'isolation est probablement insuffisante. Un logement récent (après 2005) a généralement une bonne ou très bonne isolation.<br><br> <b>Bonne :</b> Logement construit après 2005 (normes RT2005 ou plus), ou rénovation thermique complète récente.<br><br> <b>Insuffisante :</b> Logement ancien (avant 1974) non rénové, les courants d'air sont réguliers et la sensation de froid reste présente malgré le chauffage allumé."
+            },
+            {
+                id: 'qualite_isolation_murs',
+                label: 'Isolation des murs',
+                text: "Et l'isolation de vos murs, elle est comment ?",
+                options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
+                help: "Si vos murs sont froids au toucher en hiver, l'isolation est probablement insuffisante. Un doublage intérieur (placo + isolant) ou une isolation par l'extérieur sont signes d'une bonne isolation.<br><br> <b>Bonne :</b> Épaisse couche d'isolant sous le placo (le mur sonne très creux en tapant), ou isolation épaisse rapportée par l'extérieur.<br><br> <b>Insuffisante :</b> Murs donnant sur l'extérieur froids au toucher (pierre, brique pleine, béton brut), aucune contre-cloison."
+            },
+            {
+                id: 'qualite_isolation_menuiseries',
+                label: 'Qualité des fenêtres',
+                text: "Parlons de vos fenêtres. Comment est leur qualité d'isolation ?",
+                options: ['Très bonne (triple vitrage)', 'Bonne (double vitrage récent)', 'Moyenne (double vitrage ancien)', 'Insuffisante (simple vitrage)', 'Je ne sais pas'],
+                help: "Simple vitrage = une seule vitre, froid au toucher et condensation fréquente. Double vitrage = deux vitres avec un espace entre les deux. Triple vitrage = trois vitres, très isolant.<br><br> <b>Bonne :</b> Double vitrage récent (montures PVC ou Alu avec rupture de pont thermique) ou triple vitrage.<br><br> <b>Insuffisante :</b> Simple vitrage (une seule vitre, souvent avec condensation l'hiver), ou fenêtres très anciennes laissant sentir l'air."
+            },
+            {
+                id: 'qualite_isolation_plancher_bas',
+                label: 'Isolation du plancher',
+                text: "Et le sol de votre logement (le plancher bas), comment est son isolation ?",
+                options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
+                help: "Si vous habitez au rez-de-chaussée au-dessus d'une cave, d'un garage ou d'un vide sanitaire et que le sol est dur et froid en hiver, l'isolation est souvent insuffisante. Si vous êtes en appartement entouré d'autres logements chauffés, l'isolation du sol est naturellement bonne.<br><br> <b>Bonne :</b> Appartement avec d'autres logements chauffés en dessous, ou maison récente (après 2012) construite avec une dalle isolée.<br><br> <b>Insuffisante :</b> Rez-de-chaussée au-dessus d'une vieille cave, d'un garage non chauffé ou de la terre (sol souvent très froid)."
+            },
+            {
+                id: 'type_emetteur_chauffage',
+                label: 'Émetteur de chauffage',
+                text: "Quel type d'émetteur de chauffage avez-vous ?",
+                options: ['Radiateur électrique', 'Convecteur électrique', 'Radiateur à eau (chauffage central)', 'Plancher chauffant', 'Poêle (bois/fioul)', 'Soufflage air chaud / Climatisation', 'Je ne sais pas'],
+                help: "Radiateur électrique : fixé au mur ou branché sur une prise. Radiateur à eau : relié à des tuyaux d'eau chaude. Plancher chauffant : le sol lui-même chauffe. Un poêle est un appareil visible dans la pièce."
+            },
+            {
+                id: 'type_installation_ecs',
+                label: 'Production eau chaude',
+                text: "Comment est produite votre eau chaude sanitaire ?",
+                options: ['Individuel (chauffe-eau personnel)', 'Collectif (chaufferie immeuble)', 'Mixte', 'Je ne sais pas'],
+                help: "Si vous avez un ballon d'eau chaude ou un chauffe-eau dans votre appartement, c'est individuel. Si c'est l'immeuble qui fournit l'eau chaude via une chaufferie commune, c'est collectif."
+            },
+            {
+                id: 'type_generateur_ecs',
+                label: 'Type de chauffe-eau',
+                text: "Quel type de chauffe-eau ou de production d'eau chaude avez-vous ?",
+                options: ['Ballon électrique', 'Chauffe-eau gaz', 'Chaudière gaz', 'Chaudière fioul', 'Chauffe-eau thermodynamique', 'Pompe à chaleur', 'Réseau de chaleur', 'Je ne sais pas'],
+                help: "Un ballon électrique est un gros cylindre souvent dans un placard. Un chauffe-eau gaz est connecté au gaz de ville. Un chauffe-eau thermodynamique ressemble à un ballon avec une unité extérieure."
+            },
+            {
+                id: 'presence_brasseur_air',
+                label: 'Ventilateur de plafond',
+                text: "Avez-vous des ventilateurs de plafond (brasseurs d'air) ?",
+                options: ['Oui', 'Non', 'Je ne sais pas']
+            },
+            {
+                id: 'protection_solaire',
+                label: 'Protection solaire',
+                text: "Avez-vous des protections solaires extérieures (volets, stores, pergola...) ?",
+                options: ['Oui', 'Non', 'Je ne sais pas'],
+                help: "Les volets, stores extérieurs, brise-soleil ou pergolas protègent du soleil en été et réduisent les besoins de climatisation."
+            },
+            {
+                id: 'classe_altitude',
+                label: 'Classe d\'altitude',
+                text: "À quelle altitude se situe votre logement ?",
+                options: ['Inférieur à 400m', '400-800m', '800-1200m', 'Supérieur à 1200m', 'Je ne sais pas'],
+                help: "Vous pouvez vérifier l'altitude sur Google Maps ou un site de météo local. La plupart des logements en France sont sous 400m."
+            },
+            {
+                id: 'hauteur_sous_plafond',
+                label: 'Hauteur sous plafond',
+                text: "Quelle est la hauteur approximative de vos plafonds ?",
+                options: ['Moins de 2,2m', '2,2-2,4m', '2,4-2,6m', '2,6-3m', 'Plus de 3m', 'Je ne sais pas'],
+                help: "Mesure de la distance entre le sol et le plafond. La norme actuelle est 2,5m. Les anciens logements ont souvent 2,8m ou plus."
+            },
+            {
+                id: 'temperature_chauffe',
+                label: 'Température de chauffe',
+                text: "À quelle température chauffez-vous votre logement en hiver (en °C) ?",
+                type: 'number',
+                min: 10,
+                max: 30,
+                step: 0.5,
+                placeholder: 'ex: 19',
+                help: "Indiquez la température moyenne de chauffage dans votre logement (par exemple 19°C, 20°C, 21,5°C…).La référence utilisée est 19°C."
+
+            },
+            {
+                id: 'nb_occupants',
+                label: 'Nombre d\'occupants',
+                text: "Combien de personnes vivent dans votre logement ?",
+                type: 'number',
+                min: 1,
+                max: 15,
+                step: 0.1,
+                placeholder: 'ex: 2.5',
+                help: "Vous pouvez mettre des décimales pour les personnes à temps partiel (ex: 2.5 pour un couple avec un enfant le week-end)."
+            },
+            {
+                id: 'heures_presence',
+                label: 'Présence par jour',
+                text: "Combien d'heures par jour passez-vous dans le logement en moyenne ?",
+                type: 'number',
+                min: 0,
+                max: 24,
+                step: 0.5,
+                placeholder: 'ex: 14',
+                help: "Pensez au temps passé à dormir + le temps la journée ou le soir. Si vous travaillez à l'extérieur toute la journée, c'est souvent entre 10h et 14h."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let responses = {};
+
+        // Fonction pour afficher une question
+        function displayQuestion(index) {
+            const question = questions[index];
+            const chatContent = document.getElementById('chatContent');
+
+            // Créer le contenu HTML
+            let html = `<p class="text-sm mb-4">${question.text}`;
+
+            // Ajouter le champ de saisie (input avec autocomplétion pour département, select classique pour les autres)
+            if (question.type === 'number') {
+                const escapedValue = (responses[question.id] || '');
+                html += `
+                <span class="relative inline-flex items-center ml-2">
+                    <input 
+                        type="number" 
+                        id="questionSelect" 
+                        placeholder="${question.placeholder || ''}"
+                        min="${question.min}"
+                        max="${question.max}"
+                        step="${question.step}"
+                        class="bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-3 focus:outline-none focus:ring-2 focus:ring-primary w-32 align-middle"
+                        value="${escapedValue}"
+                    />
+                </span>
+            `;
+            } else if (index === 0) {
+                // Pour le département, utiliser un input avec datalist pour l'autocomplétion
+                const escapedValue = (responses[question.id] || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                html += `
+                <span class="relative inline-flex items-center ml-2">
+                    <input 
+                        type="text" 
+                        id="questionSelect" 
+                        list="departementList"
+                        placeholder="Chercher..."
+                        class="bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-3 focus:outline-none focus:ring-2 focus:ring-primary w-48 align-middle"
+                        value="${escapedValue}"
+                    />
+                    <datalist id="departementList">
+            `;
+                question.options.forEach(option => {
+                    const escapedOption = option.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                    html += `<option value="${escapedOption}">${option}</option>`;
+                });
+                html += `
+                    </datalist>
+                </span>
+            `;
+            } else {
+                // Pour les autres questions, menu déroulant classique
+                html += `
+                <span class="relative inline-flex items-center ml-2">
+                    <select id="questionSelect" 
+                        class="appearance-none bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer align-middle">
+                        <option value="">--</option>
+            `;
+                question.options.forEach(option => {
+                    const selected = responses[question.id] === option ? 'selected' : '';
+                    html += `<option value="${option}" ${selected}>${option}</option>`;
+                });
+                html += `
+                    </select>
+                    <span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-primary pointer-events-none">expand_more</span>
+                </span>
+            `;
+            }
+
+            // Ajouter le bouton d'aide si la question a une propriété help
+            if (question.help) {
+                html += `
+                    <button class="help-button" onclick="toggleHelp()" aria-label="Aide">?</button>
+                `;
+            }
+
+            html += `</p>`;
+
+            // Dernière question : message de conclusion
+            if (index === questions.length - 1) {
+                html += `<div class="mt-4 p-3 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800 rounded-xl text-emerald-700 dark:text-emerald-400 font-medium text-center animate-fade-up">🎉 Parfait, nous avons tout ce qu'il faut pour votre estimation !</div>`;
+            }
+
+            // Afficher le badge de région détecté après la question département (sur la question surface)
+            if (index === 1 && responses['departement']) {
+                const region = getRegionFromDept(responses['departement']);
+                if (region) {
+                    const regionLabel = REGION_LABELS[region] || region;
+                    html += `<div class="mt-2 mb-2"><span class="inline-flex items-center gap-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs font-semibold px-3 py-1 rounded-full">📍 Région détectée : ${regionLabel}</span></div>`;
+                }
+            }
+
+            // Ajouter le panneau d'aide extensible si la question a une propriété help
+            if (question.help) {
+                html += `
+                    <div id="helpPanel" class="help-panel">
+                        <div class="help-content">
+                            <div class="help-avatar">
+                                <img src="Images/Image_6.png" alt="Watty">
+                            </div>
+                            <div class="help-text">
+                                ${question.help}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += `<div class="absolute -bottom-2 left-0 w-4 h-4 bg-gray-100 dark:bg-slate-600" style="clip-path: polygon(0 0, 100% 100%, 100% 0);"></div>`;
+
+            // Ajouter avec animation
+            chatContent.classList.add('fade-out');
+            setTimeout(() => {
+                chatContent.innerHTML = html;
+                chatContent.classList.remove('fade-out');
+                chatContent.classList.add('fade-in');
+
+                // Ajouter l'événement de changement au select ou input
+                const inputElement = document.getElementById('questionSelect');
+                inputElement.addEventListener('change', handleSelectChange);
+                inputElement.addEventListener('input', handleSelectChange); // Pour l'input text
+
+                // Vérifier si une réponse existe déjà
+                if (responses[question.id]) {
+                    document.getElementById('nextButton').disabled = false;
+                }
+            }, 300);
+
+            // Mettre à jour la progression
+            updateProgress();
+
+            // Afficher/masquer le bouton Précédent
+            const prevButton = document.getElementById('prevButton');
+            if (index > 0) {
+                prevButton.classList.remove('hidden');
+            } else {
+                prevButton.classList.add('hidden');
+            }
+        }
+
+        // Fonction pour afficher/masquer le panneau d'aide
+        function toggleHelp() {
+            const helpPanel = document.getElementById('helpPanel');
+            if (helpPanel) {
+                helpPanel.classList.toggle('expanded');
+            }
+        }
+
+        // Gérer le changement de sélection
+        function handleSelectChange(e) {
+            const question = questions[currentQuestion];
+            const value = e.target.value;
+
+            if (value) {
+                // Pour le département, vérifier que la valeur existe dans la liste
+                if (question.id === 'departement') {
+                    if (question.options.includes(value)) {
+                        responses[question.id] = value;
+                        document.getElementById('nextButton').disabled = false;
+                    } else {
+                        // Valeur partielle ou invalide, désactiver Suivant
+                        delete responses[question.id];
+                        document.getElementById('nextButton').disabled = true;
+                    }
+                } else {
+                    responses[question.id] = value;
+                    document.getElementById('nextButton').disabled = false;
+                }
+            } else {
+                delete responses[question.id];
+                document.getElementById('nextButton').disabled = true;
+            }
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+        }
+
+        // Revenir à la question précédente
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                // Réactiver le bouton suivant si une réponse existe déjà
+                const question = questions[currentQuestion];
+                document.getElementById('nextButton').disabled = !responses[question.id];
+                displayQuestion(currentQuestion);
+            }
+        }
+
+        // Passer à la question suivante
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                document.getElementById('nextButton').disabled = true;
+                displayQuestion(currentQuestion);
+            } else {
+                // Sauvegarder les réponses et rediriger
+                saveAndRedirect();
+            }
+        }
+
+        // Sauvegarder les données et rediriger
+        function saveAndRedirect() {
+            // Créer un objet avec labels et valeurs
+            const dataToSave = questions.map(q => ({
+                label: q.label,
+                value: responses[q.id] || 'Non renseigné'
+            }));
+
+            // Ajouter la région détectée
+            const region = getRegionFromDept(responses['departement']);
+            if (region) {
+                dataToSave.push({
+                    label: 'Région',
+                    value: REGION_LABELS[region] || region
+                });
+                // Sauvegarder aussi la clé technique de la région
+                localStorage.setItem('dpe_region', region);
+            }
+
+            // Sauvegarder la catégorie de surface technique
+            const surfaceKey = SURFACE_TO_KEY[responses['surface']] || null;
+            if (surfaceKey) {
+                localStorage.setItem('dpe_surface_category', surfaceKey);
+            }
+
+            localStorage.setItem('dpe_responses', JSON.stringify(dataToSave));
+            window.location.href = 'recapitulatif.html';
+        }
+
+        // Événement du bouton Suivant
+        document.getElementById('nextButton').addEventListener('click', nextQuestion);
+
+        // Initialiser la première question
+        displayQuestion(0);
+    </script>
+
+</body>
+
+</html>
