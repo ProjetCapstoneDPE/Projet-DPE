@@ -241,14 +241,14 @@
         </div>
     </header>
     <div class="p-4 sm:p-6 flex-grow flex flex-col">
-        <main class="py-8 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
+        <main class="py-8 flex flex-col items-center justify-center max-w-6xl mx-auto w-full">
             <h1 class="text-xl sm:text-2xl font-extrabold text-center mb-8 animate-fade-up">
                 <span class="gradient-text">Récoltons les informations nécessaires</span>
                 <span class="block text-gray-600 text-base font-medium mt-1">pour améliorer votre DPE !</span>
             </h1>
 
             <!-- Indicateur de progression -->
-            <div class="w-full max-w-md mb-4">
+            <div class="w-full max-w-4xl mb-4">
                 <div class="flex items-center justify-between text-sm text-primary font-semibold mb-2">
                     <span id="progressText">Question 1/10</span>
                     <span id="progressPercent">10%</span>
@@ -261,13 +261,13 @@
             </div>
 
             <div
-                class="w-full mx-auto relative chat-bubble-container rounded-3xl shadow-2xl p-6 animate-fade-up delay-200">
+                class="w-full mx-auto relative chat-bubble-container rounded-3xl shadow-2xl p-6 sm:p-8 animate-fade-up delay-200">
                 <div
                     class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-indigo-200 shadow-lg">
                     <img alt="Watty the robot mascot" class="w-12 h-12" src="Images/Image_6.png" />
                 </div>
                 <div class="mt-8">
-                    <div id="chatContent" class="relative bg-indigo-50/50 p-4 rounded-xl chat-bubble mx-auto max-w-2xl">
+                    <div id="chatContent" class="relative bg-indigo-50/50 p-6 rounded-xl chat-bubble mx-auto max-w-5xl">
                         <!-- Le contenu du chat sera inséré ici par JavaScript -->
                     </div>
                 </div>
@@ -286,11 +286,96 @@
                     </button>
                 </div>
             </div>
+        <!-- ===== BONS GESTES CTA SECTION ===== -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 w-full">
+            <div class="max-w-4xl mx-auto animate-fade-up delay-300">
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl shadow-2xl p-8 sm:p-12 text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+                    <div class="relative z-10">
+                        <div class="inline-flex p-3 bg-white/20 rounded-2xl mb-6 backdrop-blur-sm">
+                            <span class="material-icons text-white text-3xl">eco</span>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-white mb-4">
+                            Envie de réduire vos factures dès aujourd'hui ?
+                        </h2>
+                        <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+                            Découvrez tous les éco-gestes du quotidien, simples à mettre en place et efficaces pour faire des économies d'énergie sans gros travaux.
+                        </p>
+                        <button onclick="window.location.href='bons-gestes.html'"
+                            class="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                            Découvrir les bons gestes
+                            <span class="material-icons">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
         </main>
         <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
             <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
             <div class="logo-slider">
                 <div class="logo-track">
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
+                    <img alt="Logo HEC Paris"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_2.png" />
+                    <img alt="Logo Open Data University"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_4.png" />
+                    <img alt="Logo Des P'tites Economies"
+                        class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_5.png" />
+                    <img alt="Logo Enedis"
+                        class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                        src="Images/Image_1.png" />
                     <img alt="Logo HEC Paris"
                         class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
                         src="Images/Image_2.png" />
@@ -473,122 +558,122 @@
             {
                 id: 'departement',
                 label: 'Département',
-                text: "Salut, moi je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Ce sera moi qui t'accompagne pour récolter toutes les informations nécessaires pour que tu puisses faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir où est-ce que tu habites. Tu habites dans le",
+                text: "Salut, je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Je serai là pour vous accompagner afin de récolter toutes les informations nécessaires pour que vous puissiez faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir où vous habitez. Vous habitez dans le",
                 options: ALL_DEPTS
             },
             {
                 id: 'type_batiment',
                 label: 'Type de bâtiment',
-                text: "Super ! Et tu vis dans quel type de logement ?",
+                text: "Super ! Et vous vivez dans quel type de logement ?",
                 options: ['Appartement', 'Maison', 'Immeuble']
             },
             {
                 id: 'surface',
                 label: 'Surface habitable',
-                text: "D'accord ! Et quelle est la surface de ton logement ?",
+                text: "D'accord ! Et quelle est la surface de votre logement ?",
                 options: ['Moins de 30m²', '30-50m²', '50-70m²', '70-90m²', '90-120m²', 'Plus de 120m²']
             },
             {
                 id: 'periode_construction',
                 label: 'Période de construction',
-                text: "Sais-tu quand ton logement a été construit ?",
+                text: "Savez-vous quand votre logement a été construit ?",
                 options: ['Avant 1948', '1948-1974', '1975-1977', '1978-1982', '1983-1988', '1989-2000', '2001-2005', '2006-2012', '2013-2021', 'Après 2021', 'Je ne sais pas'],
-                help: "Tu peux trouver l'année de construction sur ton acte de propriété, ton bail, ou en consultant le cadastre en ligne. Si tu habites dans un immeuble, vérifie la plaque à l'entrée ou demande au syndic !"
+                help: "Vous pouvez trouver l'année de construction sur votre acte de propriété, votre bail, ou en consultant le cadastre en ligne. Si vous habitez dans un immeuble, vérifiez la plaque à l'entrée ou demandez au syndic !"
             },
             {
                 id: 'logement_traversant',
                 label: 'Logement traversant',
-                text: "Est-ce que ton logement est traversant ? (Des fenêtres sur deux façades opposées)",
+                text: "Est-ce que votre logement est traversant ? (Des fenêtres sur deux façades opposées)",
                 options: ['Oui', 'Non', 'Je ne sais pas'],
-                help: "Un logement traversant permet de créer des courants d'air pour ventiler naturellement. Si tu as des fenêtres donnant sur la rue ET sur la cour (ou le jardin) en face, c'est traversant !"
+                help: "Un logement traversant permet de créer des courants d'air pour ventiler naturellement. Si vous avez des fenêtres donnant sur la rue ET sur la cour (ou le jardin) en face, c'est traversant !"
             },
             {
                 id: 'isolation_toiture',
                 label: 'Isolation de la toiture',
-                text: "Parlons de l'isolation. Ta toiture est-elle isolée ?",
+                text: "Parlons de l'isolation. Votre toiture est-elle isolée ?",
                 options: ['Isolée', 'Non isolée', 'Je ne sais pas'],
-                help: "Si tu habites au dernier étage ou en maison, l'isolation du toit est cruciale. Si tes combles sont aménagés, ils sont sûrement isolés. Sinon, regarde s'il y a de la laine de verre sous le toit."
+                help: "Si vous habitez au dernier étage ou en maison, l'isolation du toit est cruciale. Si vos combles sont aménagés, ils sont sûrement isolés. Sinon, regardez s'il y a de la laine de verre sous le toit.<br><br> <b>Bonne :</b> 20 à 30 cm d'isolant (ex: laine de verre) dans les combles, ou toiture refaite récemment.<br><br> <b>Insuffisante :</b> Tuile apparente depuis l'intérieur, ou combles aménagés glacials l'hiver et étouffants l'été."
             },
             {
                 id: 'qualite_isolation_enveloppe',
                 label: 'Qualité isolation globale',
-                text: "Comment qualifierais-tu l'isolation générale de ton logement ?",
+                text: "Comment qualifieriez-vous l'isolation générale de votre logement ?",
                 options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
-                help: "Si tu as froid en hiver malgré le chauffage, l'isolation est probablement insuffisante. Un logement récent (après 2005) a généralement une bonne ou très bonne isolation."
+                help: "Si vous avez froid en hiver malgré le chauffage, l'isolation est probablement insuffisante. Un logement récent (après 2005) a généralement une bonne ou très bonne isolation.<br><br> <b>Bonne :</b> Logement construit après 2005 (normes RT2005 ou plus), ou rénovation thermique complète récente.<br><br> <b>Insuffisante :</b> Logement ancien (avant 1974) non rénové, les courants d'air sont réguliers et la sensation de froid reste présente malgré le chauffage allumé."
             },
             {
                 id: 'qualite_isolation_murs',
                 label: 'Isolation des murs',
-                text: "Et l'isolation de tes murs, elle est comment ?",
+                text: "Et l'isolation de vos murs, elle est comment ?",
                 options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
-                help: "Si tes murs sont froids au toucher en hiver, l'isolation est probablement insuffisante. Un doublage intérieur (placo + isolant) ou une isolation par l'extérieur sont signes d'une bonne isolation."
+                help: "Si vos murs sont froids au toucher en hiver, l'isolation est probablement insuffisante. Un doublage intérieur (placo + isolant) ou une isolation par l'extérieur sont signes d'une bonne isolation.<br><br> <b>Bonne :</b> Épaisse couche d'isolant sous le placo (le mur sonne très creux en tapant), ou isolation épaisse rapportée par l'extérieur.<br><br> <b>Insuffisante :</b> Murs donnant sur l'extérieur froids au toucher (pierre, brique pleine, béton brut), aucune contre-cloison."
             },
             {
                 id: 'qualite_isolation_menuiseries',
                 label: 'Qualité des fenêtres',
-                text: "Parlons de tes fenêtres. Comment est leur qualité d'isolation ?",
+                text: "Parlons de vos fenêtres. Comment est leur qualité d'isolation ?",
                 options: ['Très bonne (triple vitrage)', 'Bonne (double vitrage récent)', 'Moyenne (double vitrage ancien)', 'Insuffisante (simple vitrage)', 'Je ne sais pas'],
-                help: "Simple vitrage = une seule vitre, froid au toucher et condensation fréquente. Double vitrage = deux vitres avec un espace entre les deux. Triple vitrage = trois vitres, très isolant."
+                help: "Simple vitrage = une seule vitre, froid au toucher et condensation fréquente. Double vitrage = deux vitres avec un espace entre les deux. Triple vitrage = trois vitres, très isolant.<br><br> <b>Bonne :</b> Double vitrage récent (montures PVC ou Alu avec rupture de pont thermique) ou triple vitrage.<br><br> <b>Insuffisante :</b> Simple vitrage (une seule vitre, souvent avec condensation l'hiver), ou fenêtres très anciennes laissant sentir l'air."
             },
             {
                 id: 'qualite_isolation_plancher_bas',
                 label: 'Isolation du plancher',
-                text: "Et le sol / plancher bas, il est isolé ?",
+                text: "Et le sol de votre logement (le plancher bas), comment est son isolation ?",
                 options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
-                help: "Si tu as un vide sanitaire ou une cave sous ton logement, et que le sol est froid, le plancher n'est probablement pas bien isolé."
+                help: "Si vous habitez au rez-de-chaussée au-dessus d'une cave, d'un garage ou d'un vide sanitaire et que le sol est dur et froid en hiver, l'isolation est souvent insuffisante. Si vous êtes en appartement entouré d'autres logements chauffés, l'isolation du sol est naturellement bonne.<br><br> <b>Bonne :</b> Appartement avec d'autres logements chauffés en dessous, ou maison récente (après 2012) construite avec une dalle isolée.<br><br> <b>Insuffisante :</b> Rez-de-chaussée au-dessus d'une vieille cave, d'un garage non chauffé ou de la terre (sol souvent très froid)."
             },
             {
                 id: 'type_emetteur_chauffage',
                 label: 'Émetteur de chauffage',
-                text: "Quel type d'émetteur de chauffage as-tu ?",
+                text: "Quel type d'émetteur de chauffage avez-vous ?",
                 options: ['Radiateur électrique', 'Convecteur électrique', 'Radiateur à eau (chauffage central)', 'Plancher chauffant', 'Poêle (bois/fioul)', 'Soufflage air chaud / Climatisation', 'Je ne sais pas'],
-                help: "Radiateur électrique : fixé au mur, branché sur une prise ou fil. Radiateur à eau : relié à des tuyaux d'eau chaude. Plancher chauffant : le sol lui-même chauffe. Un poêle est un appareil visible dans la pièce."
+                help: "Radiateur électrique : fixé au mur ou branché sur une prise. Radiateur à eau : relié à des tuyaux d'eau chaude. Plancher chauffant : le sol lui-même chauffe. Un poêle est un appareil visible dans la pièce."
             },
             {
                 id: 'type_installation_ecs',
                 label: 'Production eau chaude',
-                text: "Comment est produite ton eau chaude sanitaire ?",
+                text: "Comment est produite votre eau chaude sanitaire ?",
                 options: ['Individuel (chauffe-eau personnel)', 'Collectif (chaufferie immeuble)', 'Mixte', 'Je ne sais pas'],
-                help: "Si tu as un ballon d'eau chaude ou un chauffe-eau dans ton appartement, c'est individuel. Si c'est l'immeuble qui fournit l'eau chaude via une chaufferie commune, c'est collectif."
+                help: "Si vous avez un ballon d'eau chaude ou un chauffe-eau dans votre appartement, c'est individuel. Si c'est l'immeuble qui fournit l'eau chaude via une chaufferie commune, c'est collectif."
             },
             {
                 id: 'type_generateur_ecs',
                 label: 'Type de chauffe-eau',
-                text: "Quel type de chauffe-eau ou de production d'eau chaude as-tu ?",
+                text: "Quel type de chauffe-eau ou de production d'eau chaude avez-vous ?",
                 options: ['Ballon électrique', 'Chauffe-eau gaz', 'Chaudière gaz', 'Chaudière fioul', 'Chauffe-eau thermodynamique', 'Pompe à chaleur', 'Réseau de chaleur', 'Je ne sais pas'],
                 help: "Un ballon électrique est un gros cylindre souvent dans un placard. Un chauffe-eau gaz est connecté au gaz de ville. Un chauffe-eau thermodynamique ressemble à un ballon avec une unité extérieure."
             },
             {
                 id: 'presence_brasseur_air',
                 label: 'Ventilateur de plafond',
-                text: "As-tu des ventilateurs de plafond (brasseurs d'air) ?",
+                text: "Avez-vous des ventilateurs de plafond (brasseurs d'air) ?",
                 options: ['Oui', 'Non', 'Je ne sais pas']
             },
             {
                 id: 'protection_solaire',
                 label: 'Protection solaire',
-                text: "As-tu des protections solaires extérieures (volets, stores, pergola...) ?",
+                text: "Avez-vous des protections solaires extérieures (volets, stores, pergola...) ?",
                 options: ['Oui', 'Non', 'Je ne sais pas'],
                 help: "Les volets, stores extérieurs, brise-soleil ou pergolas protègent du soleil en été et réduisent les besoins de climatisation."
             },
             {
                 id: 'classe_altitude',
                 label: 'Classe d\'altitude',
-                text: "À quelle altitude se situe ton logement ?",
+                text: "À quelle altitude se situe votre logement ?",
                 options: ['Inférieur à 400m', '400-800m', '800-1200m', 'Supérieur à 1200m', 'Je ne sais pas'],
-                help: "Tu peux vérifier l'altitude sur Google Maps ou un site de météo local. La plupart des logements en France sont sous 400m."
+                help: "Vous pouvez vérifier l'altitude sur Google Maps ou un site de météo local. La plupart des logements en France sont sous 400m."
             },
             {
                 id: 'hauteur_sous_plafond',
                 label: 'Hauteur sous plafond',
-                text: "Quelle est la hauteur approximative de tes plafonds ?",
+                text: "Quelle est la hauteur approximative de vos plafonds ?",
                 options: ['Moins de 2,2m', '2,2-2,4m', '2,4-2,6m', '2,6-3m', 'Plus de 3m', 'Je ne sais pas'],
                 help: "Mesure de la distance entre le sol et le plafond. La norme actuelle est 2,5m. Les anciens logements ont souvent 2,8m ou plus."
             },
             {
                 id: 'temperature_chauffe',
                 label: 'Température de chauffe',
-                text: "À quelle température chauffes-tu ton logement en hiver (en °C) ?",
+                text: "À quelle température chauffez-vous votre logement en hiver (en °C) ?",
                 type: 'number',
                 min: 10,
                 max: 30,
@@ -600,24 +685,24 @@
             {
                 id: 'nb_occupants',
                 label: 'Nombre d\'occupants',
-                text: "Combien de personnes vivent dans ton logement ?",
+                text: "Combien de personnes vivent dans votre logement ?",
                 type: 'number',
                 min: 1,
                 max: 15,
                 step: 0.1,
                 placeholder: 'ex: 2.5',
-                help: "Tu peux mettre des décimales pour les personnes à temps partiel (ex: 2.5 pour un couple avec un enfant le week-end)."
+                help: "Vous pouvez mettre des décimales pour les personnes à temps partiel (ex: 2.5 pour un couple avec un enfant le week-end)."
             },
             {
                 id: 'heures_presence',
                 label: 'Présence par jour',
-                text: "Combien d'heures par jour es-tu présent dans le logement en moyenne ?",
+                text: "Combien d'heures par jour passez-vous dans le logement en moyenne ?",
                 type: 'number',
                 min: 0,
                 max: 24,
                 step: 0.5,
                 placeholder: 'ex: 14',
-                help: "Pense au temps passé à dormir + le temps la journée ou le soir. Si tu travailles à l'extérieur toute la journée, c'est souvent entre 10h et 14h."
+                help: "Pensez au temps passé à dormir + le temps la journée ou le soir. Si vous travaillez à l'extérieur toute la journée, c'est souvent entre 10h et 14h."
             }
         ];
 
@@ -691,13 +776,6 @@
             `;
             }
 
-            // Dernière question : message de conclusion
-            if (index === questions.length - 1) {
-                html += ` c'est ça ? Parfait, on a tout ce qu'il faut pour ton estimation !`;
-            } else {
-                html += ` c'est ça ?`;
-            }
-
             // Ajouter le bouton d'aide si la question a une propriété help
             if (question.help) {
                 html += `
@@ -706,6 +784,11 @@
             }
 
             html += `</p>`;
+
+            // Dernière question : message de conclusion
+            if (index === questions.length - 1) {
+                html += `<div class="mt-4 p-3 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800 rounded-xl text-emerald-700 dark:text-emerald-400 font-medium text-center animate-fade-up">🎉 Parfait, nous avons tout ce qu'il faut pour votre estimation !</div>`;
+            }
 
             // Afficher le badge de région détecté après la question département (sur la question surface)
             if (index === 1 && responses['departement']) {

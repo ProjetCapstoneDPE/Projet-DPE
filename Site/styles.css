@@ -12,6 +12,10 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-family);
     background-color: var(--background-color);
@@ -69,7 +73,8 @@ img.reference-mockup {
 .logo-track {
     display: inline-flex;
     align-items: center;
-    animation: scroll 40s linear infinite;
+    /* Translate 1 set of 4 logos (out of 8 sets total) in 25s for a smooth seamless loop */
+    animation: scroll 25s linear infinite;
     will-change: transform;
 }
 
@@ -80,6 +85,7 @@ img.reference-mockup {
     }
 
     100% {
-        transform: translateX(-50%);
+        /* -12.5% correspond à exactement 1 set de 4 logos sur les 8 présents (1/8) */
+        transform: translateX(-12.5%);
     }
 }
