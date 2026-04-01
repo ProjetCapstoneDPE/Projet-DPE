@@ -213,6 +213,12 @@
             animation-delay: .2s;
         }
     </style>
+    <script>
+        // Redirection vers la version mobile si l'écran est petit (téléphone/tablette)
+        if (window.innerWidth <= 900) {
+            window.location.href = 'estimation-mobile.html';
+        }
+    </script>
 </head>
 
 <body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 font-display text-gray-800 min-h-screen">
@@ -246,6 +252,23 @@
                 <span class="gradient-text">Récoltons les informations nécessaires</span>
                 <span class="block text-gray-600 text-base font-medium mt-1">pour améliorer votre DPE !</span>
             </h1>
+
+            <!-- Message Info DPE Électrique -->
+            <div
+                class="w-full max-w-4xl mb-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl shadow-sm animate-fade-up delay-100">
+                <div class="flex items-start gap-3">
+                    <span class="material-icons text-amber-600 mt-0.5" style="font-size: 20px;">info</span>
+                    <div>
+                        <h3 class="text-sm font-bold text-amber-800">À propos de cette estimation</h3>
+                        <p class="text-sm text-amber-700 mt-1 leading-relaxed">
+                            Ce simulateur est conçu pour estimer la consommation <strong>électrique</strong>. Si vous
+                            utilisez principalement une autre source d'énergie (gaz, fioul, bois), la classe DPE et
+                            l'estimation de consommation obtenues pourraient différer de la réalité, nos modèles se
+                            concentrant sur l'empreinte électrique.
+                        </p>
+                    </div>
+                </div>
+            </div>
 
             <!-- Indicateur de progression -->
             <div class="w-full max-w-4xl mb-4">
@@ -286,31 +309,37 @@
                     </button>
                 </div>
             </div>
-        <!-- ===== BONS GESTES CTA SECTION ===== -->
-        <section class="py-16 w-full mt-4">
-            <div class="w-full animate-fade-up delay-300">
-                <div class="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl shadow-2xl p-8 sm:p-12 text-center relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
-                    <div class="relative z-10">
-                        <div class="inline-flex p-3 bg-white/20 rounded-2xl mb-6 backdrop-blur-sm">
-                            <span class="material-icons text-white text-3xl">eco</span>
+            <!-- ===== BONS GESTES CTA SECTION ===== -->
+            <section class="py-16 w-full mt-4">
+                <div class="w-full animate-fade-up delay-300">
+                    <div
+                        class="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl shadow-2xl p-8 sm:p-12 text-center relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2">
                         </div>
-                        <h2 class="text-3xl font-extrabold text-white mb-4">
-                            Envie de réduire vos factures dès aujourd'hui ?
-                        </h2>
-                        <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-                            Découvrez tous les éco-gestes du quotidien, simples à mettre en place et efficaces pour faire des économies d'énergie sans gros travaux.
-                        </p>
-                        <button onclick="window.location.href='bons-gestes.html'"
-                            class="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
-                            Découvrir les bons gestes
-                            <span class="material-icons">arrow_forward</span>
-                        </button>
+                        <div
+                            class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="inline-flex p-3 bg-white/20 rounded-2xl mb-6 backdrop-blur-sm">
+                                <span class="material-icons text-white text-3xl">eco</span>
+                            </div>
+                            <h2 class="text-3xl font-extrabold text-white mb-4">
+                                Envie de réduire vos factures dès aujourd'hui ?
+                            </h2>
+                            <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+                                Découvrez tous les éco-gestes du quotidien, simples à mettre en place et efficaces pour
+                                faire des économies d'énergie sans gros travaux.
+                            </p>
+                            <button onclick="window.location.href='bons-gestes.html'"
+                                class="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                                Découvrir les bons gestes
+                                <span class="material-icons">arrow_forward</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
         </main>
         <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
             <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
@@ -558,14 +587,14 @@
             {
                 id: 'departement',
                 label: 'Département',
-                text: "Salut, je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Je serai là pour vous accompagner afin de récolter toutes les informations nécessaires pour que vous puissiez faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir où vous habitez. Vous habitez dans le",
+                text: "Salut, je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Je serai là pour vous accompagner afin de récolter toutes les informations nécessaires pour que vous puissiez faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir dans quel département vous habitez. Vous habitez dans le",
                 options: ALL_DEPTS
             },
             {
                 id: 'type_batiment',
                 label: 'Type de bâtiment',
                 text: "Super ! Et vous vivez dans quel type de logement ?",
-                options: ['Appartement', 'Maison', 'Immeuble']
+                options: ['Appartement', 'Maison']
             },
             {
                 id: 'surface',
@@ -585,6 +614,7 @@
                 label: 'Logement traversant',
                 text: "Est-ce que votre logement est traversant ? (Des fenêtres sur deux façades opposées)",
                 options: ['Oui', 'Non', 'Je ne sais pas'],
+                condition: (r) => r['type_batiment'] === 'Appartement',
                 help: "Un logement traversant permet de créer des courants d'air pour ventiler naturellement. Si vous avez des fenêtres donnant sur la rue ET sur la cour (ou le jardin) en face, c'est traversant !"
             },
             {
@@ -592,6 +622,7 @@
                 label: 'Isolation de la toiture',
                 text: "Parlons de l'isolation. Votre toiture est-elle isolée ?",
                 options: ['Isolée', 'Non isolée', 'Je ne sais pas'],
+                condition: (r) => r['type_batiment'] === 'Maison',
                 help: "Si vous habitez au dernier étage ou en maison, l'isolation du toit est cruciale. Si vos combles sont aménagés, ils sont sûrement isolés. Sinon, regardez s'il y a de la laine de verre sous le toit.<br><br> <b>Bonne :</b> 20 à 30 cm d'isolant (ex: laine de verre) dans les combles, ou toiture refaite récemment.<br><br> <b>Insuffisante :</b> Tuile apparente depuis l'intérieur, ou combles aménagés glacials l'hiver et étouffants l'été."
             },
             {
@@ -604,7 +635,7 @@
             {
                 id: 'qualite_isolation_murs',
                 label: 'Isolation des murs',
-                text: "Et l'isolation de vos murs, elle est comment ?",
+                text: "Comment caractériseriez-vous l'isolation de vos murs ?",
                 options: ['Très bonne', 'Bonne', 'Moyenne', 'Insuffisante', 'Je ne sais pas'],
                 help: "Si vos murs sont froids au toucher en hiver, l'isolation est probablement insuffisante. Un doublage intérieur (placo + isolant) ou une isolation par l'extérieur sont signes d'une bonne isolation.<br><br> <b>Bonne :</b> Épaisse couche d'isolant sous le placo (le mur sonne très creux en tapant), ou isolation épaisse rapportée par l'extérieur.<br><br> <b>Insuffisante :</b> Murs donnant sur l'extérieur froids au toucher (pierre, brique pleine, béton brut), aucune contre-cloison."
             },
@@ -634,6 +665,7 @@
                 label: 'Production eau chaude',
                 text: "Comment est produite votre eau chaude sanitaire ?",
                 options: ['Individuel (chauffe-eau personnel)', 'Collectif (chaufferie immeuble)', 'Mixte', 'Je ne sais pas'],
+                dynamicOptions: (r) => r['type_batiment'] === 'Maison' ? ['Individuel (chauffe-eau personnel)', 'Je ne sais pas'] : null,
                 help: "Si vous avez un ballon d'eau chaude ou un chauffe-eau dans votre appartement, c'est individuel. Si c'est l'immeuble qui fournit l'eau chaude via une chaufferie commune, c'est collectif."
             },
             {
@@ -679,7 +711,7 @@
                 max: 30,
                 step: 0.5,
                 placeholder: 'ex: 19',
-                help: "Indiquez la température moyenne de chauffage dans votre logement (par exemple 19°C, 20°C, 21,5°C…).La référence utilisée est 19°C."
+                help: "Indiquez la température moyenne de chauffage dans votre logement (par exemple 19°C, 20°C, 21,5°C…). La référence utilisée est 19°C."
 
             },
             {
@@ -759,13 +791,14 @@
             `;
             } else {
                 // Pour les autres questions, menu déroulant classique
+                const currentOptions = question.dynamicOptions ? (question.dynamicOptions(responses) || question.options) : question.options;
                 html += `
                 <span class="relative inline-flex items-center ml-2">
                     <select id="questionSelect" 
                         class="appearance-none bg-blue-100 dark:bg-slate-700 border-2 border-primary text-primary font-semibold text-sm rounded-lg py-1 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer align-middle">
                         <option value="">--</option>
             `;
-                question.options.forEach(option => {
+                currentOptions.forEach(option => {
                     const selected = responses[question.id] === option ? 'selected' : '';
                     html += `<option value="${option}" ${selected}>${option}</option>`;
                 });
@@ -883,33 +916,46 @@
 
         // Mettre à jour la barre de progression
         function updateProgress() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            const visibleQuestions = questions.filter(q => !q.condition || q.condition(responses));
+            const currentVisibleIndex = visibleQuestions.indexOf(questions[currentQuestion]);
+            const progress = ((currentVisibleIndex + 1) / visibleQuestions.length) * 100;
+
             document.getElementById('progressBar').style.width = `${progress}%`;
-            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('progressText').textContent = `Question ${currentVisibleIndex + 1}/${visibleQuestions.length}`;
             document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
         }
 
         // Revenir à la question précédente
         function previousQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                // Réactiver le bouton suivant si une réponse existe déjà
-                const question = questions[currentQuestion];
-                document.getElementById('nextButton').disabled = !responses[question.id];
-                displayQuestion(currentQuestion);
+            let prevIdx = currentQuestion - 1;
+            while (prevIdx >= 0) {
+                const q = questions[prevIdx];
+                if (!q.condition || q.condition(responses)) {
+                    currentQuestion = prevIdx;
+                    document.getElementById('nextButton').disabled = !responses[q.id];
+                    displayQuestion(currentQuestion);
+                    return;
+                }
+                prevIdx--;
             }
         }
 
         // Passer à la question suivante
         function nextQuestion() {
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                document.getElementById('nextButton').disabled = true;
-                displayQuestion(currentQuestion);
-            } else {
-                // Sauvegarder les réponses et rediriger
-                saveAndRedirect();
+            let nextIdx = currentQuestion + 1;
+            while (nextIdx < questions.length) {
+                const q = questions[nextIdx];
+                if (!q.condition || q.condition(responses)) {
+                    currentQuestion = nextIdx;
+                    // Vérifier si la nouvelle question a déjà une réponse
+                    document.getElementById('nextButton').disabled = !responses[q.id];
+                    displayQuestion(currentQuestion);
+                    return;
+                }
+                nextIdx++;
             }
+            // Si aucune question suivante disponible, sauvegarder et rediriger
+            saveAndRedirect();
         }
 
         // Sauvegarder les données et rediriger

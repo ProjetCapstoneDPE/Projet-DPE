@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Récapitulatif | Des P'tites Économies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="xgboost-predict.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#4F46E5' }, fontFamily: { display: ['Inter', 'sans-serif'] } } } };
+        if (window.innerWidth > 900) window.location.href = 'recapitulatif.html';
+    </script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .gradient-text { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .glass-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.60); }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { opacity: 0; animation: fade-up .5s ease-out forwards; }
+        .fade-in-card { animation: fade-up 0.4s ease-out forwards; opacity: 0; }
+        /* Loading Screen */
+        .loading-screen { display: none; position: fixed; top:0;left:0;right:0;bottom:0; background: linear-gradient(135deg, #4F46E5, #7C3AED); z-index:9999; align-items:center; justify-content:center; }
+        .loading-screen.active { display: flex; }
+        @keyframes bounce-slow { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .animate-bounce { animation: bounce-slow 1.5s ease-in-out infinite; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 min-h-[100dvh] text-gray-800 pb-6">
+
+    <!-- Header -->
+    <div class="px-5 pt-10 pb-2 text-center animate-fade-up">
+        <div class="mb-4 flex justify-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                <img src="Images/Image_6.png" alt="Watty" class="w-10 h-10">
+            </div>
+        </div>
+        <h1 class="text-xl font-extrabold mb-1"><span class="gradient-text">Récapitulatif</span></h1>
+        <p class="text-sm text-gray-500">Vérifiez vos informations avant le calcul</p>
+    </div>
+
+    <!-- Watty message -->
+    <div class="mx-4 my-4 bg-indigo-50 border border-indigo-100 rounded-2xl p-4 animate-fade-up">
+        <p class="text-sm font-semibold text-gray-800 mb-1">Super ! J'ai bien enregistré toutes vos informations 🎉</p>
+        <p class="text-xs text-gray-500">Avec ces données, je vais calculer votre estimation DPE électrique et vous proposer des recommandations pour faire <span class="font-bold text-primary">Des P'tites Économies</span> !</p>
+    </div>
+
+    <!-- Criteria List -->
+    <div class="px-4 mb-4">
+        <div id="criteriaContainer" class="space-y-2"></div>
+    </div>
+
+    <!-- Launch Button -->
+    <div class="px-4 mb-6 animate-fade-up">
+        <button id="launchButton" onclick="startAnalysis()"
+            class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 active:scale-95 transition-transform flex items-center justify-center gap-2 text-base">
+            <span class="material-icons">bolt</span>
+            Lancer l'estimation DPE
+        </button>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="text-center px-8">
+            <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white/30 animate-bounce">
+                <img src="Images/Image_6.png" alt="Watty" class="w-16 h-16">
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Analyse en cours...</h2>
+            <p id="loadingText" class="text-white/80 mb-6 text-sm">Calcul de votre DPE</p>
+            <div class="w-full bg-white/20 rounded-full h-3 mb-3 overflow-hidden">
+                <div id="progressBar" class="h-full rounded-full bg-gradient-to-r from-green-400 via-purple-400 to-pink-400" style="width:0%;transition:width 0.3s;background-size:200%;animation:shimmer 2s infinite"></div>
+            </div>
+            <p id="percentage" class="text-white font-bold text-3xl">0%</p>
+        </div>
+    </div>
+
+    <script>
+        const criteriaIcons = {
+            'Département': '📍', 'Région': '🗺️', 'Type de bâtiment': '🏢', 'Surface habitable': '📐',
+            'Période de construction': '🏗️', 'Logement traversant': '🏠', 'Isolation de la toiture': '🏚️',
+            'Qualité isolation globale': '🧱', 'Isolation des murs': '🧱', 'Qualité des fenêtres': '🪟',
+            'Isolation du plancher': '🧱', 'Émetteur de chauffage': '🔥', 'Production eau chaude': '💧',
+            'Type de chauffe-eau': '💧', 'Ventilateur de plafond': '💨', 'Protection solaire': '☀️'
+        };
+
+        function loadCriteria() {
+            const savedData = localStorage.getItem('dpe_responses');
+            const container = document.getElementById('criteriaContainer');
+            if (!savedData) {
+                container.innerHTML = `<div class="text-center py-8 text-gray-500 text-sm">Aucune donnée trouvée. <a href="estimation-mobile.html" class="text-primary font-bold underline">Retour à l'estimation</a></div>`;
+                return;
+            }
+            const criteria = JSON.parse(savedData);
+            criteria.forEach((item, i) => {
+                const icon = criteriaIcons[item.label] || '📌';
+                const card = document.createElement('div');
+                card.className = 'fade-in-card';
+                card.style.animationDelay = `${i * 0.04}s`;
+                card.innerHTML = `<div class="glass-card rounded-xl p-3 flex items-center gap-3"><div class="text-xl flex-shrink-0">${icon}</div><div class="flex-1 min-w-0"><p class="text-[10px] font-bold text-indigo-600 uppercase tracking-wide">${item.label}</p><p class="text-sm font-semibold text-gray-800 truncate">${item.value}</p></div></div>`;
+                container.appendChild(card);
+            });
+        }
+
+        async function startAnalysis() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressBar = document.getElementById('progressBar');
+            const percentage = document.getElementById('percentage');
+            const loadingText = document.getElementById('loadingText');
+            loadingScreen.classList.add('active');
+
+            const messages = ['Calcul de votre DPE', 'Analyse des données', 'Génération des recommandations', 'Finalisation...'];
+            let progress = 0;
+            const duration = 2500, interval = 30;
+            const increment = 100 / (duration / interval);
+            let msgIdx = 0;
+
+            const savedData = localStorage.getItem('dpe_responses');
+            let apiPromise = null;
+            if (savedData) {
+                const arr = JSON.parse(savedData);
+                apiPromise = predictClientSide(arr)
+                    .then(data => { localStorage.setItem('dpe_result', JSON.stringify(data)); return data; })
+                    .catch(() => { localStorage.removeItem('dpe_result'); });
+            }
+
+            const pInterval = setInterval(() => {
+                progress += increment;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(pInterval);
+                    setTimeout(async () => {
+                        if (apiPromise) try { await apiPromise; } catch(e) {}
+                        window.location.href = 'resultats.html';
+                    }, 200);
+                }
+                progressBar.style.width = progress + '%';
+                percentage.textContent = Math.round(progress) + '%';
+            }, interval);
+
+            setInterval(() => {
+                msgIdx++;
+                if (msgIdx < messages.length) loadingText.textContent = messages[msgIdx];
+            }, duration / messages.length);
+        }
+
+        window.addEventListener('DOMContentLoaded', loadCriteria);
+    </script>
+</body>
+</html>
