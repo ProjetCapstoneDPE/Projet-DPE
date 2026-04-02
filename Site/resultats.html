@@ -1371,6 +1371,15 @@
         }
 
         async function runSimulation(event) {
+            // Recharger les réponses depuis le localStorage si currentResponses est vide
+            // (peut arriver si updateResults n'a pas encore appelé initSimulation)
+            if (!currentResponses || currentResponses.length === 0) {
+                const saved = localStorage.getItem('dpe_responses');
+                if (saved) {
+                    try { currentResponses = JSON.parse(saved); } catch(e) { currentResponses = []; }
+                }
+            }
+
             const updateResponse = (label, id) => {
                 const el = document.getElementById(id);
                 if (el) {
@@ -1385,10 +1394,10 @@
             updateResponse('Qualité des fenêtres', 'simQualiteFenetres');
             updateResponse('Émetteur de chauffage', 'simChauffage');
 
-            const btn = event.currentTarget;
-            const originalText = btn.textContent;
-            btn.textContent = 'Calcul en cours...';
-            btn.disabled = true;
+            // event.currentTarget est null pour les handlers inline, on utilise event.target
+            const btn = (event && (event.currentTarget || event.target)) || document.querySelector('[onclick*="runSimulation"]');
+            const originalText = btn ? btn.textContent : '';
+            if (btn) { btn.textContent = 'Calcul en cours...'; btn.disabled = true; }
 
             try {
                 const result = await predictClientSide(currentResponses);
@@ -1410,10 +1419,10 @@
                 console.error("Simulation failed", e);
                 alert("Erreur lors de la simulation. Veuillez réessayer.");
             } finally {
-                btn.textContent = originalText;
-                btn.disabled = false;
+                if (btn) { btn.textContent = originalText; btn.disabled = false; }
             }
         }
+
 
         // ==========================================
         // RECOMMANDATIONS DYNAMIQUES
