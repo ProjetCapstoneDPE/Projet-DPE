@@ -352,9 +352,11 @@
                     surface = sm[surfResp.value] || 70;
                 }
 
-                const totalConsoEF = result.prediction;
-                let surfaceUsed = surface;
-                if (result.features_used && result.features_used.surface_habitable_logement) surfaceUsed = result.features_used.surface_habitable_logement;
+                const totalConsoEF = Number(result.prediction) || 0;
+                let surfaceUsed = Number(surface) || 70;
+                if (result.features_used && result.features_used.surface_habitable_logement) {
+                    surfaceUsed = Number(result.features_used.surface_habitable_logement) || surfaceUsed;
+                }
 
                 const kwhEP_m2 = totalConsoEF / surfaceUsed;
                 const heroGrade = getDpeGrade(kwhEP_m2);
@@ -362,6 +364,8 @@
                 // DPE badge
                 document.getElementById('currentGrade').textContent = heroGrade.grade;
                 document.getElementById('currentGrade').className = `text-6xl font-black mb-2 ${dpeGradeColors[heroGrade.grade]||'text-gray-500'}`;
+                
+                // On utilise text-indigo-600 au lieu de gradient-text pour les chiffres pour éviter les bugs d'affichage mobile
                 document.getElementById('currentValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
                 document.getElementById('currentValueInterval').textContent = formatInterval(kwhEP_m2);
                 document.getElementById('modelName').textContent = result.model_used || 'XGBoost';
@@ -370,14 +374,19 @@
                 renderScale(kwhEP_m2);
 
                 // Conso & cost
-                const consoRealEP = result.predictionReal || totalConsoEF;
+                const consoRealEP = Number(result.predictionReal) || totalConsoEF;
                 const consoRealEF = consoRealEP / 2.3;
+                
                 document.getElementById('consoTheo').textContent = Math.round(totalConsoEF).toLocaleString('fr-FR');
+                document.getElementById('consoTheo').className = "text-lg font-black text-indigo-600"; // Sécurité
                 document.getElementById('consoTheoInterval').textContent = formatInterval(totalConsoEF);
+                
                 document.getElementById('consoReal').textContent = Math.round(consoRealEF).toLocaleString('fr-FR');
                 document.getElementById('consoRealInterval').textContent = formatInterval(consoRealEF);
-                document.getElementById('costReal').textContent = Math.round(consoRealEF * 0.2516).toLocaleString('fr-FR') + ' €';
-                document.getElementById('costRealInterval').textContent = formatInterval(consoRealEF * 0.2516, true);
+                
+                const cost = consoRealEF * 0.2516;
+                document.getElementById('costReal').textContent = Math.round(cost).toLocaleString('fr-FR') + ' €';
+                document.getElementById('costRealInterval').textContent = formatInterval(cost, true);
 
                 // CO2
                 document.getElementById('co2Value').textContent = Math.round(kwhEP_m2 * 0.15);
