@@ -396,11 +396,20 @@
             qText.innerHTML = q.text;
 
             // Header/Progress Update
+            // Pour le TOTAL : simuler "Appartement" si type_batiment pas encore répondu
+            // afin que le dénominateur reste stable (ne passe pas de 18 à 19).
+            const responsesForCount = Object.assign({}, responses);
+            if (!responsesForCount['type_batiment']) responsesForCount['type_batiment'] = 'Appartement';
+            const visibleForTotal = questions.filter(qu => !qu.condition || qu.condition(responsesForCount));
+
+            // Pour le numéro COURANT : réponses réelles
             const visibleQuestions = questions.filter(qu => !qu.condition || qu.condition(responses));
             const currentVisibleIndex = visibleQuestions.indexOf(q);
-            const progress = ((currentVisibleIndex + 1) / visibleQuestions.length) * 100;
+            const total = visibleForTotal.length;
+
+            const progress = ((currentVisibleIndex + 1) / total) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
-            document.getElementById('progressText').textContent = `Question ${currentVisibleIndex + 1}/${visibleQuestions.length}`;
+            document.getElementById('progressText').textContent = `Question ${currentVisibleIndex + 1}/${total}`;
 
             // Avertissement visible que sur Q1
             if (index === 0) introAlert.classList.remove('hidden');

@@ -916,14 +916,26 @@
 
         // Mettre à jour la barre de progression
         function updateProgress() {
-            const visibleQuestions = questions.filter(q => !q.condition || q.condition(responses));
-            const currentVisibleIndex = visibleQuestions.indexOf(questions[currentQuestion]);
-            const progress = ((currentVisibleIndex + 1) / visibleQuestions.length) * 100;
+            // Pour le calcul du TOTAL, on simule le chemin le plus long (Appartement)
+            // si type_batiment n'est pas encore répondu, pour éviter que le total
+            // saute de 18 à 19 lorsqu'on répond à la question type_batiment.
+            const responsesForCount = Object.assign({}, responses);
+            if (!responsesForCount['type_batiment']) {
+                responsesForCount['type_batiment'] = 'Appartement';
+            }
+            const visibleForTotal = questions.filter(q => !q.condition || q.condition(responsesForCount));
+            const total = visibleForTotal.length;
 
+            // Pour le numéro COURANT, on utilise les réponses réelles
+            const visibleReal = questions.filter(q => !q.condition || q.condition(responses));
+            const currentVisibleIndex = visibleReal.indexOf(questions[currentQuestion]);
+
+            const progress = ((currentVisibleIndex + 1) / total) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
-            document.getElementById('progressText').textContent = `Question ${currentVisibleIndex + 1}/${visibleQuestions.length}`;
+            document.getElementById('progressText').textContent = `Question ${currentVisibleIndex + 1}/${total}`;
             document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
         }
+
 
         // Revenir à la question précédente
         function previousQuestion() {
