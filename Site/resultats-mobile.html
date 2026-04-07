@@ -377,9 +377,14 @@
                 // Surface
                 let surface = 70;
                 const surfResp = responses.find(r => r.label === 'Surface habitable');
-                if (surfResp) {
-                    const sm = {'Moins de 30m²':20,'30-50m²':40,'50-70m²':60,'70-90m²':80,'90-120m²':105,'Plus de 120m²':140};
-                    surface = sm[surfResp.value] || 70;
+                if (surfResp && surfResp.value) {
+                    const parsed = parseFloat(surfResp.value);
+                    if (!isNaN(parsed)) {
+                        surface = parsed;
+                    } else {
+                        const sm = {'Moins de 30m²':20,'30-50m²':40,'50-70m²':60,'70-90m²':80,'90-120m²':105,'Plus de 120m²':140};
+                        surface = sm[surfResp.value] || 70;
+                    }
                 }
 
                 const totalConsoEF = Number(result.prediction) || 0;

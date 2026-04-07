@@ -678,33 +678,39 @@
 
                             <!-- Fenêtres -->
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Qualité des fenêtres</label>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Qualité des
+                                    fenêtres</label>
                                 <select id="simQualiteFenetres"
                                     class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                                     <option value="Très bonne (triple vitrage)">Très bonne (triple vitrage)</option>
                                     <option value="Bonne (double vitrage récent)">Bonne (double vitrage récent)</option>
-                                    <option value="Moyenne (double vitrage ancien)">Moyenne (double vitrage ancien)</option>
+                                    <option value="Moyenne (double vitrage ancien)">Moyenne (double vitrage ancien)
+                                    </option>
                                     <option value="Insuffisante (simple vitrage)">Insuffisante (simple vitrage)</option>
                                 </select>
                             </div>
 
                             <!-- Chauffage -->
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Émetteur de chauffage</label>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Émetteur de
+                                    chauffage</label>
                                 <select id="simChauffage"
                                     class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                                     <option value="Radiateur électrique">Radiateur électrique</option>
                                     <option value="Convecteur électrique">Convecteur électrique</option>
-                                    <option value="Radiateur à eau (chauffage central)">Radiateur à eau (chauffage central)</option>
+                                    <option value="Radiateur à eau (chauffage central)">Radiateur à eau (chauffage
+                                        central)</option>
                                     <option value="Plancher chauffant">Plancher chauffant</option>
                                     <option value="Poêle (bois/fioul)">Poêle (bois/fioul)</option>
-                                    <option value="Soufflage air chaud / Climatisation">Soufflage air chaud / Climatisation</option>
+                                    <option value="Soufflage air chaud / Climatisation">Soufflage air chaud /
+                                        Climatisation</option>
                                 </select>
                             </div>
 
-                             <!-- Isolation Plancher -->
-                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Isolation du plancher</label>
+                            <!-- Isolation Plancher -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Isolation du
+                                    plancher</label>
                                 <select id="simPlancher"
                                     class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                                     <option value="Très bonne">Très bonne</option>
@@ -716,7 +722,8 @@
 
                             <!-- Chauffe-eau -->
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Type de chauffe-eau</label>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Type de
+                                    chauffe-eau</label>
                                 <select id="simECS"
                                     class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                                     <option value="Ballon électrique">Ballon électrique</option>
@@ -741,7 +748,8 @@
 
                             <!-- Brasseur d'air -->
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1">Ventilateur de plafond</label>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">Ventilateur de
+                                    plafond</label>
                                 <select id="simBrasseur"
                                     class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                                     <option value="Oui">Oui</option>
@@ -791,7 +799,8 @@
 
                 <!-- ===== COLONNE LATÉRALE (4/12) ===== -->
                 <div class="lg:col-span-4">
-                    <div class="sticky top-20 space-y-6 max-h-[calc(100vh-5.5rem)] overflow-y-auto pb-4 scrollbar-thin scrollbar-thumb-indigo-200 scrollbar-track-transparent">
+                    <div
+                        class="sticky top-20 space-y-6 max-h-[calc(100vh-5.5rem)] overflow-y-auto pb-4 scrollbar-thin scrollbar-thumb-indigo-200 scrollbar-track-transparent">
 
                         <!-- Watty bubble -->
                         <div
@@ -1129,11 +1138,17 @@
                 let surface = 70;
                 const surfResp = responses.find(r => r.label === 'Surface habitable');
                 if (surfResp && surfResp.value) {
-                    const surfaceMap = {
-                        'Moins de 30m²': 20, '30-50m²': 40, '50-70m²': 60,
-                        '70-90m²': 80, '90-120m²': 105, 'Plus de 120m²': 140
-                    };
-                    surface = surfaceMap[surfResp.value] || 70;
+                    const parsed = parseFloat(surfResp.value);
+                    if (!isNaN(parsed)) {
+                        surface = parsed;
+                    } else {
+                        // Rétrocompatibilité anciens caches
+                        const surfaceMap = {
+                            'Moins de 30m²': 20, '30-50m²': 40, '50-70m²': 60,
+                            '70-90m²': 80, '90-120m²': 105, 'Plus de 120m²': 140
+                        };
+                        surface = surfaceMap[surfResp.value] || 70;
+                    }
                 }
 
                 const totalConsoEF = result.prediction;
@@ -1223,7 +1238,31 @@
                 // ==========================================
                 const consoTheoEP = result.prediction;
                 const consoRealEP = result.predictionReal || consoTheoEP;
-                const consoRealEF = consoRealEP / 2.3; // Conversion Énergie Primaire -> Énergie Finale
+
+                // Détection intelligente de l'énergie pour conversion EP -> EF et coût
+                let convFactor = 2.3; // Par défaut électricité (DPE Neuf/RE2020)
+                let energyPrice = 0.2516; // Prix moyen électricité 2024
+                let energyLabel = "électricité";
+
+                const responsesRaw = localStorage.getItem('dpe_responses');
+                if (responsesRaw) {
+                    const responses = JSON.parse(responsesRaw);
+                    const fossilKeywords = ['gaz', 'fioul', 'bois', 'charbon', 'poêle'];
+                    const ecsResp = responses.find(r => r.label.includes('eau') || r.label.includes('Générateur'));
+                    const heatResp = responses.find(r => r.label.includes('chauffage') || r.label.includes('Émetteur'));
+
+                    const isFossil = (ecsResp && fossilKeywords.some(k => ecsResp.value.toLowerCase().includes(k))) ||
+                        (heatResp && fossilKeywords.some(k => heatResp.value.toLowerCase().includes(k)));
+
+                    if (isFossil) {
+                        convFactor = 1.0;
+                        energyLabel = "gaz/bois/fioul";
+                        // On prend une moyenne pondérée ou gaz (0.12€)
+                        energyPrice = 0.12;
+                    }
+                }
+
+                const consoRealEF = consoRealEP / convFactor;
 
                 const consoTheoEl = document.getElementById('consoTheoBlock');
                 const consoRealEl = document.getElementById('consoRealBlock');
@@ -1236,8 +1275,11 @@
                     consoRealEl.textContent = Math.round(consoRealEF).toLocaleString('fr-FR');
                     document.getElementById('consoRealInterval').textContent = formatInterval(consoRealEF);
 
-                    costRealEl.textContent = Math.round(consoRealEF * 0.2516).toLocaleString('fr-FR') + ' €';
-                    document.getElementById('costRealInterval').textContent = formatInterval(consoRealEF * 0.2516, true);
+                    costRealEl.textContent = Math.round(consoRealEF * energyPrice).toLocaleString('fr-FR') + ' €';
+                    document.getElementById('costRealInterval').textContent = formatInterval(consoRealEF * energyPrice, true);
+
+                    // Optionnel: On pourrait afficher le type d'énergie détecté
+                    console.log(`Détection énergie: ${energyLabel}, Facteur conversion: ${convFactor}`);
                 }
 
                 // ==========================================
@@ -1435,7 +1477,7 @@
             if (!currentResponses || currentResponses.length === 0) {
                 const saved = localStorage.getItem('dpe_responses');
                 if (saved) {
-                    try { currentResponses = JSON.parse(saved); } catch(e) { currentResponses = []; }
+                    try { currentResponses = JSON.parse(saved); } catch (e) { currentResponses = []; }
                 }
             }
 

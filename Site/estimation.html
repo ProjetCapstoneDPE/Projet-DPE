@@ -521,15 +521,24 @@
             'Outre-Mer': 'Outre-Mer'
         };
 
-        // Mapping surface questionnaire → clé fichier pkl
-        const SURFACE_TO_KEY = {
-            'Moins de 30m²': 'inf30m2',
-            '30-50m²': '30-50m2',
-            '50-70m²': '50-70m2',
-            '70-90m²': '70-90m2',
-            '90-120m²': '90-120m2',
-            'Plus de 120m²': 'sup120m2'
-        };
+        // Helper remplacé localement (la vraie source de vérité métier reste dans xgboost-predict.js)
+        function getSurfaceKey(surface) {
+            if (typeof surface === 'string') {
+                const legacy = {
+                    'Moins de 30m²': 'inf30m2', '30-50m²': '30-50m2', '50-70m²': '50-70m2',
+                    '70-90m²': '70-90m2', '90-120m²': '90-120m2', 'Plus de 120m²': 'sup120m2'
+                };
+                if (legacy[surface]) return legacy[surface];
+                surface = parseFloat(surface);
+            }
+            if (isNaN(surface)) return '70-90m2';
+            if (surface < 30) return 'inf30m2';
+            if (surface <= 50) return '30-50m2';
+            if (surface <= 70) return '50-70m2';
+            if (surface <= 90) return '70-90m2';
+            if (surface <= 120) return '90-120m2';
+            return 'sup120m2';
+        }
 
         // Liste de tous les départements français, filtrée aux régions couvertes
         const ALL_DEPTS = [
@@ -587,7 +596,7 @@
             {
                 id: 'departement',
                 label: 'Département',
-                text: "Salut, je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Je serai là pour vous accompagner afin de récolter toutes les informations nécessaires pour que vous puissiez faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir dans quel département vous habitez. Vous habitez dans le",
+                text: "Salut, je m'appelle <span class='font-bold text-gray-900 dark:text-gray-100'>Watty</span> ! Je serai là pour vous accompagner afin de récolter toutes les informations nécessaires pour que vous puissiez faire <span class='font-bold text-primary'>Des P'tites Économies</span>.<br><br>Commençons par voir dans quel département vous habitez. Vous habitez dans le(s)",
                 options: ALL_DEPTS
             },
             {
@@ -599,8 +608,13 @@
             {
                 id: 'surface',
                 label: 'Surface habitable',
-                text: "D'accord ! Et quelle est la surface de votre logement ?",
-                options: ['Moins de 30m²', '30-50m²', '50-70m²', '70-90m²', '90-120m²', 'Plus de 120m²']
+                text: "D'accord ! Et quelle est la surface exacte de votre logement (en m²) ?",
+                type: 'number',
+                min: 9,
+                max: 500,
+                step: 1,
+                placeholder: 'ex: 75',
+                help: "Veuillez entrer la surface exacte (Loi Carrez de préférence) de votre logement. Minimum 9m²."
             },
             {
                 id: 'periode_construction',
@@ -990,7 +1004,7 @@
             }
 
             // Sauvegarder la catégorie de surface technique
-            const surfaceKey = SURFACE_TO_KEY[responses['surface']] || null;
+            const surfaceKey = getSurfaceKey(responses['surface']);
             if (surfaceKey) {
                 localStorage.setItem('dpe_surface_category', surfaceKey);
             }

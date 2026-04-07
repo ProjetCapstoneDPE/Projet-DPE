@@ -327,9 +327,23 @@
             'Auvergne-Rhône-Alpes': 'Auvergne-Rhône-Alpes', 'Bourgogne-Franche-Comté': 'Bourgogne-Franche-Comté', 'Bretagne': 'Bretagne', 'Centre-Val de Loire': 'Centre-Val de Loire', 'Corse': 'Corse', 'Grand_Est': 'Grand Est', 'Hauts_de_France': 'Hauts-de-France', 'Ile_de_France': 'Île-de-France', 'Normandie': 'Normandie', 'Nouvelle-Aquitaine': 'Nouvelle-Aquitaine', 'Occitanie': 'Occitanie', 'Pays_de_la_Loire': 'Pays de la Loire', "Provence-Alpes-Côte_d'Azur": "Provence-Alpes-Côte d'Azur", 'Outre-Mer': 'Outre-Mer'
         };
 
-        const SURFACE_TO_KEY = {
-            'Moins de 30m²': 'inf30m2', '30-50m²': '30-50m2', '50-70m²': '50-70m2', '70-90m²': '70-90m2', '90-120m²': '90-120m2', 'Plus de 120m²': 'sup120m2'
-        };
+        function getSurfaceKey(surface) {
+            if (typeof surface === 'string') {
+                const legacy = {
+                    'Moins de 30m²': 'inf30m2', '30-50m²': '30-50m2', '50-70m²': '50-70m2', 
+                    '70-90m²': '70-90m2', '90-120m²': '90-120m2', 'Plus de 120m²': 'sup120m2'
+                };
+                if (legacy[surface]) return legacy[surface];
+                surface = parseFloat(surface);
+            }
+            if (isNaN(surface)) return '70-90m2';
+            if (surface < 30) return 'inf30m2';
+            if (surface <= 50) return '30-50m2';
+            if (surface <= 70) return '50-70m2';
+            if (surface <= 90) return '70-90m2';
+            if (surface <= 120) return '90-120m2';
+            return 'sup120m2';
+        }
 
         const ALL_DEPTS = [
             '01 - Ain', '02 - Aisne', '03 - Allier', '04 - Alpes-de-Haute-Provence', '05 - Hautes-Alpes', '06 - Alpes-Maritimes', '07 - Ardèche', '08 - Ardennes', '09 - Ariège', '10 - Aube', '11 - Aude', '12 - Aveyron', '13 - Bouches-du-Rhône', '14 - Calvados', '15 - Cantal', '16 - Charente', '17 - Charente-Maritime', '18 - Cher', '19 - Corrèze', '2A - Corse-du-Sud', '2B - Haute-Corse', '21 - Côte-d\'Or', '22 - Côtes-d\'Armor', '23 - Creuse', '24 - Dordogne', '25 - Doubs', '26 - Drôme', '27 - Eure', '28 - Eure-et-Loir', '29 - Finistère', '30 - Gard', '31 - Haute-Garonne', '32 - Gers', '33 - Gironde', '34 - Hérault', '35 - Ille-et-Vilaine', '36 - Indre', '37 - Indre-et-Loire', '38 - Isère', '39 - Jura', '40 - Landes', '41 - Loir-et-Cher', '42 - Loire', '43 - Haute-Loire', '44 - Loire-Atlantique', '45 - Loiret', '46 - Lot', '47 - Lot-et-Garonne', '48 - Lozère', '49 - Maine-et-Loire', '50 - Manche', '51 - Marne', '52 - Haute-Marne', '53 - Mayenne', '54 - Meurthe-et-Moselle', '55 - Meuse', '56 - Morbihan', '57 - Moselle', '58 - Nièvre', '59 - Nord', '60 - Oise', '61 - Orne', '62 - Pas-de-Calais', '63 - Puy-de-Dôme', '64 - Pyrénées-Atlantiques', '65 - Hautes-Pyrénées', '66 - Pyrénées-Orientales', '67 - Bas-Rhin', '68 - Haut-Rhin', '69 - Rhône', '70 - Haute-Saône', '71 - Saône-et-Loire', '72 - Sarthe', '73 - Savoie', '74 - Haute-Savoie', '75 - Paris', '76 - Seine-Maritime', '77 - Seine-et-Marne', '78 - Yvelines', '79 - Deux-Sèvres', '80 - Somme', '81 - Tarn', '82 - Tarn-et-Garonne', '83 - Var', '84 - Vaucluse', '85 - Vendée', '86 - Vienne', '87 - Haute-Vienne', '88 - Vosges', '89 - Yonne', '90 - Territoire de Belfort', '91 - Essonne', '92 - Hauts-de-Seine', '93 - Seine-Saint-Denis', '94 - Val-de-Marne', '95 - Val-d\'Oise', '971 - Guadeloupe', '972 - Martinique', '973 - Guyane', '974 - La Réunion', '976 - Mayotte'
@@ -341,7 +355,7 @@
         const questions = [
             { id: 'departement', label: 'Département', type: 'autocomplete', text: "Salut, je suis Watty ! Prêt à calculer votre DPE ? Commençons par votre département :", options: ALL_DEPTS },
             { id: 'type_batiment', label: 'Type de bâtiment', text: "Super ! Vous vivez dans quel type de logement ?", options: ['Appartement', 'Maison'] },
-            { id: 'surface', label: 'Surface habitable', text: "D'accord ! Quelle est la surface de votre logement ?", options: ['Moins de 30m²', '30-50m²', '50-70m²', '70-90m²', '90-120m²', 'Plus de 120m²'] },
+            { id: 'surface', label: 'Surface habitable', text: "D'accord ! Et quelle est la surface exacte de votre logement (en m²) ?", type: 'number', min: 9, max: 500, step: 1, placeholder: 'ex: 75', help: "Veuillez entrer la surface exacte (Loi Carrez de préférence) de votre logement." },
             { id: 'periode_construction', label: 'Période de construction', text: "Savez-vous quand votre logement a été construit ?", options: ['Avant 1948', '1948-1974', '1975-1977', '1978-1982', '1983-1988', '1989-2000', '2001-2005', '2006-2012', '2013-2021', 'Après 2021', 'Je ne sais pas'], help: "L'année se trouve sur votre acte de propriété, bail ou le cadastre en ligne." },
             { id: 'logement_traversant', label: 'Logement traversant', text: "Est-ce que votre appartement est traversant ?", options: ['Oui', 'Non', 'Je ne sais pas'], condition: (r) => r['type_batiment'] === 'Appartement', help: "Fenêtres sur deux façades opposées donnant sur l'extérieur." },
             { id: 'isolation_toiture', label: 'Isolation de la toiture', text: "Votre toiture est-elle isolée ?", options: ['Isolée', 'Non isolée', 'Je ne sais pas'], condition: (r) => r['type_batiment'] === 'Maison', help: "Si combles aménagés, souvent isolés. Bonne = 20-30cm d'isolant." },
@@ -591,7 +605,7 @@
                 localStorage.setItem('dpe_region', region);
             }
 
-            const surfaceKey = SURFACE_TO_KEY[responses['surface']] || null;
+            const surfaceKey = getSurfaceKey(responses['surface']);
             if (surfaceKey) localStorage.setItem('dpe_surface_category', surfaceKey);
 
             localStorage.setItem('dpe_responses', JSON.stringify(dataToSave));
