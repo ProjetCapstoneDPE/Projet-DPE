@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Les bons gestes | Des P'tites Économies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#4F46E5' }, fontFamily: { display: ['Inter', 'sans-serif'] } } } };
+        if (window.innerWidth > 900) window.location.href = 'bons-gestes.html';
+    </script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .gradient-text { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .glass-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.60); }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { opacity: 0; animation: fade-up .5s ease-out forwards; }
+        .chat-msg { animation: fade-up 0.35s ease-out forwards; opacity: 0; }
+        @keyframes typingDot { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+        .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#818cf8; margin:0 2px; animation: typingDot 1.2s infinite; }
+        .dot:nth-child(2) { animation-delay: .2s; } .dot:nth-child(3) { animation-delay: .4s; }
+        select { -webkit-appearance: none; appearance: none; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 min-h-[100dvh] text-gray-800 pb-24">
+
+    <!-- Page Header -->
+    <div class="px-5 pt-10 pb-4 text-center animate-fade-up">
+        <h1 class="text-2xl font-extrabold mb-1"><span class="gradient-text">Les bons gestes</span></h1>
+        <p class="text-sm text-gray-500">Tous les conseils de Watty pour votre foyer</p>
+    </div>
+
+    <!-- Mobile Category Navigation -->
+    <div class="px-4 mb-8 overflow-x-auto whitespace-nowrap flex gap-2 pb-2 scrollbar-hide animate-fade-up delay-100">
+        <a href="#equipements" class="px-4 py-2 bg-white/80 border border-indigo-100 rounded-full text-xs font-bold text-indigo-600 shadow-sm active:scale-95 transition-transform">⚡ Équipements</a>
+        <a href="#chauffage" class="px-4 py-2 bg-white/80 border border-indigo-100 rounded-full text-xs font-bold text-indigo-600 shadow-sm active:scale-95 transition-transform">🌡️ Chauffage</a>
+        <a href="#dpe" class="px-4 py-2 bg-white/80 border border-indigo-100 rounded-full text-xs font-bold text-indigo-600 shadow-sm active:scale-95 transition-transform">🏡 DPE</a>
+        <a href="#climat" class="px-4 py-2 bg-white/80 border border-indigo-100 rounded-full text-xs font-bold text-indigo-600 shadow-sm active:scale-95 transition-transform">🌍 Climat</a>
+        <a href="#numerique" class="px-4 py-2 bg-white/80 border border-indigo-100 rounded-full text-xs font-bold text-indigo-600 shadow-sm active:scale-95 transition-transform">💻 Numérique</a>
+    </div>
+
+    <!-- Mobile Articles -->
+    <div class="px-4 space-y-10">
+        
+        <!-- SECTION: ÉQUIPEMENTS -->
+        <section id="equipements" class="animate-fade-up delay-200">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-icons text-amber-500">bolt</span>
+                <h2 class="text-lg font-extrabold text-gray-800">Équipements</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="glass-card rounded-2xl p-4 shadow-sm border-l-4 border-amber-400 text-sm">
+                    <h3 class="font-bold text-gray-800 mb-2">Réduire ma facture électrique</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Lavez à <strong>30°C</strong> au lieu de 60°C, utilisez des ampoules <strong>LED</strong> et éteignez systématiquement les lumières.
+                    </p>
+                </div>
+                <div class="glass-card rounded-2xl p-4 shadow-sm border-l-4 border-indigo-400 text-sm">
+                    <h3 class="font-bold text-gray-800 mb-2">Chasse aux veilles</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Utilisez des <strong>multiprises à interrupteur</strong>. Éteindre box et consoles peut économiser jusqu'à <strong>100€/an</strong>.
+                    </p>
+                </div>
+                <div class="glass-card rounded-2xl p-4 shadow-sm border-l-4 border-blue-400 text-sm">
+                    <h3 class="font-bold text-gray-800 mb-2">Le froid optimal</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Frigo à <strong>+4°C</strong> et congélateur à <strong>-18°C</strong>. Dégivrez régulièrement (3mm de givre = +30% de conso).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: CHAUFFAGE -->
+        <section id="chauffage" class="animate-fade-up">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-icons text-indigo-500">thermostat</span>
+                <h2 class="text-lg font-extrabold text-gray-800">Chauffage</h2>
+            </div>
+            <div class="glass-card rounded-2xl p-5 shadow-sm space-y-4">
+                <div class="flex items-start gap-3">
+                    <span class="material-icons text-indigo-500 text-sm mt-0.5">adjust</span>
+                    <p class="text-sm text-gray-600"><strong>19°C</strong> dans les pièces de vie, <strong>17°C</strong> dans les chambres.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="material-icons text-indigo-500 text-sm mt-0.5">adjust</span>
+                    <p class="text-sm text-gray-600">Fermez les volets la nuit pour garder <strong>60%</strong> de la chaleur par les fenêtres.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="material-icons text-indigo-500 text-sm mt-0.5">adjust</span>
+                    <p class="text-sm text-gray-600">Dégagez vos radiateurs et aérez 10 min par jour.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: DPE -->
+        <section id="dpe" class="animate-fade-up">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-icons text-emerald-500">speed</span>
+                <h2 class="text-lg font-extrabold text-gray-800">Pourquoi le DPE ?</h2>
+            </div>
+            <div class="glass-card rounded-2xl p-5 bg-gradient-to-br from-emerald-50 to-teal-50 shadow-sm">
+                <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                    Passer d'une classe G à C peut diviser votre facture par <strong>4</strong> et augmenter la valeur de votre bien de <strong>5 à 10%</strong>.
+                </p>
+                <button onclick="window.location.href='estimation-mobile.html'" class="w-full py-3 bg-emerald-500 text-white font-bold rounded-xl text-xs active:scale-95 transition-transform">
+                    Estimez votre logement
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION: CLIMAT -->
+        <section id="climat" class="animate-fade-up">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-icons text-blue-500">public</span>
+                <h2 class="text-lg font-extrabold text-gray-800">Climat</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-card rounded-2xl p-4 shadow-sm text-center">
+                    <h3 class="text-xs font-bold text-gray-800 mb-1">Nucléaire</h3>
+                    <p class="text-[10px] text-gray-500">Énergie bas carbone indispensable.</p>
+                </div>
+                <div class="glass-card rounded-2xl p-4 shadow-sm text-center">
+                    <h3 class="text-xs font-bold text-gray-800 mb-1">Impact</h3>
+                    <p class="text-[10px] text-gray-500">9,9 t de CO₂/an par Français.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: NUMÉRIQUE -->
+        <section id="numerique" class="animate-fade-up">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-icons text-purple-500">computer</span>
+                <h2 class="text-lg font-extrabold text-gray-800">Digital</h2>
+            </div>
+            <div class="glass-card rounded-2xl p-5 shadow-sm border-t-4 border-purple-500">
+                <p class="text-xs text-gray-600 italic text-center">
+                    "Garder son smartphone 4 ans au lieu de 2 est 100 fois plus efficace que de vider sa boîte mail !"
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Ressources officielles -->
+    <section class="px-4 py-6">
+        <h2 class="text-base font-bold mb-3 text-center"><span class="gradient-text">Ressources officielles</span></h2>
+        <div class="space-y-3">
+            <a href="https://www.service-public.gouv.fr/particuliers/vosdroits/F16096" target="_blank" rel="noopener"
+               class="glass-card flex items-center gap-3 p-4 rounded-2xl shadow-sm active:scale-95 transition-transform">
+                <span class="material-icons text-indigo-600 text-2xl">description</span>
+                <div><p class="text-sm font-semibold text-gray-700">Guide performance énergétique</p><p class="text-xs text-gray-400">Service-Public.fr</p></div>
+                <span class="material-icons text-gray-300 ml-auto">arrow_forward_ios</span>
+            </a>
+            <a href="https://www.ecologie.gouv.fr/politiques-publiques/diagnostic-performance-energetique-dpe" target="_blank" rel="noopener"
+               class="glass-card flex items-center gap-3 p-4 rounded-2xl shadow-sm active:scale-95 transition-transform">
+                <span class="material-icons text-emerald-600 text-2xl">eco</span>
+                <div><p class="text-sm font-semibold text-gray-700">Politiques publiques DPE</p><p class="text-xs text-gray-400">Ministère Transition Écologique</p></div>
+                <span class="material-icons text-gray-300 ml-auto">arrow_forward_ios</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- BOTTOM NAV -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 flex justify-around items-center py-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <a href="index-mobile.html" class="flex flex-col items-center gap-0.5 text-gray-400">
+            <span class="material-icons text-2xl">home</span>
+            <span class="text-[10px] font-semibold">Accueil</span>
+        </a>
+        <a href="estimation-mobile.html" class="flex flex-col items-center gap-0.5 text-gray-400">
+            <span class="material-icons text-2xl">calculate</span>
+            <span class="text-[10px] font-semibold">Estimer</span>
+        </a>
+        <a href="bons-gestes-mobile.html" class="flex flex-col items-center gap-0.5 text-primary">
+            <span class="material-icons text-2xl">eco</span>
+            <span class="text-[10px] font-bold">Gestes</span>
+        </a>
+        <a href="a-propos-mobile.html" class="flex flex-col items-center gap-0.5 text-gray-400">
+            <span class="material-icons text-2xl">info</span>
+            <span class="text-[10px] font-semibold">À propos</span>
+        </a>
+    </nav>
+
+    <script>
+        // Version mobile statique pour une meilleure performance
+    </script>
+</body>
+</html>

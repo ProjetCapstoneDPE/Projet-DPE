@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vos résultats DPE | Des P'tites Économies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="xgboost-predict.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#4F46E5' }, fontFamily: { display: ['Inter', 'sans-serif'] } } } };
+        if (window.innerWidth > 900) window.location.href = 'resultats.html';
+    </script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .gradient-text { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .glass-card { background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.60); }
+        .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 30%, #6366f1 60%, #818cf8 100%); }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { animation: fade-up .6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-100 { animation-delay: .1s; } .delay-200 { animation-delay: .2s; } .delay-300 { animation-delay: .3s; }
+        @keyframes pulse-glow { 0%,100%{box-shadow: 0 0 15px rgba(79, 70, 229, 0.3)} 50%{box-shadow: 0 0 30px rgba(79, 70, 229, 0.6)} }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .progress-ring-circle { transition: stroke-dashoffset 1.5s cubic-bezier(.34, 1.56, .64, 1); transform: rotate(-90deg); transform-origin: 50% 50%; }
+        select { -webkit-appearance: none; appearance: none; }
+
+        /* Bottom Sheet */
+        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; padding: 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 100; max-height: 85vh; overflow-y: auto; }
+        .bottom-sheet.active { transform: translateY(0); }
+        .bottom-sheet-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 99; }
+        .bottom-sheet-overlay.active { opacity: 1; pointer-events: all; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 min-h-[100dvh] text-gray-800 pb-24">
+
+    <!-- ===== RÉSULTATS ===== -->
+    <div id="resultsContainer" class="px-4 pt-8">
+        <!-- Header Watty -->
+        <div class="text-center mb-6 animate-fade-up">
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                    <img src="Images/Image_6.png" alt="Watty" class="w-10 h-10">
+                </div>
+            </div>
+            <h1 class="text-xl font-extrabold mb-1"><span class="gradient-text">Vos résultats DPE</span></h1>
+            <p class="text-xs text-gray-500">Estimation basée sur vos réponses · Modèle <span id="modelName" class="font-bold">XGBoost</span></p>
+        </div>
+
+        <!-- DPE Badge principal -->
+        <div class="glass-card rounded-3xl p-6 mb-4 text-center shadow-2xl animate-fade-up border-2 border-indigo-100">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Votre classe DPE estimée</p>
+            <div id="currentGrade" class="text-6xl font-black text-indigo-600 mb-2">?</div>
+            <p id="currentValue" class="text-base font-bold text-gray-800 mb-1">-- kWh/m²/an</p>
+            <p id="currentValueInterval" class="text-xs text-gray-500"></p>
+        </div>
+
+        <!-- Échelle DPE visuelle -->
+        <div class="glass-card rounded-2xl p-4 mb-4 shadow-sm animate-fade-up delay-100">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Échelle DPE</p>
+            <div id="dpeScale" class="space-y-1.5"></div>
+        </div>
+
+        <!-- Consommation & Coût -->
+        <div class="glass-card rounded-2xl p-4 mb-4 shadow-sm animate-fade-up delay-100">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Estimation de la facture</p>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="text-center p-3 bg-indigo-50 rounded-xl">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold">Théorique (DPE)</p>
+                    <p id="consoTheo" class="text-lg font-black gradient-text">--</p>
+                    <p id="consoTheoInterval" class="text-[10px] text-gray-400"></p>
+                    <p class="text-[10px] text-gray-400">kWh EP/an</p>
+                </div>
+                <div class="text-center p-3 bg-purple-50 rounded-xl">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold">Usage réel est.</p>
+                    <p id="consoReal" class="text-lg font-black text-purple-600">--</p>
+                    <p id="consoRealInterval" class="text-[10px] text-gray-400"></p>
+                    <p class="text-[10px] text-gray-400">kWh EF/an</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl">
+                <span class="material-icons text-amber-600">euro</span>
+                <div class="flex-1">
+                    <p class="text-[10px] font-bold text-gray-500 uppercase">Coût annuel estimé</p>
+                    <p id="costReal" class="text-lg font-extrabold text-amber-600">-- €</p>
+                    <p id="costRealInterval" class="text-[10px] text-gray-400"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CO₂ impact -->
+        <div class="glass-card rounded-2xl p-4 mb-4 shadow-sm animate-fade-up delay-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center"><span class="material-icons text-emerald-600">eco</span></div>
+                <div>
+                    <p class="text-xs font-bold text-gray-500">CO₂ émis estimé</p>
+                    <p class="text-sm"><span id="co2Value" class="font-extrabold text-emerald-600">--</span> kg CO₂/m²/an</p>
+                    <p id="flightEquivalent" class="text-[10px] text-gray-400 italic"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Points critiques -->
+        <div id="criticalPointsSection" class="glass-card rounded-2xl p-4 mb-4 shadow-sm animate-fade-up delay-200" style="display:none;">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="material-icons text-amber-500">warning</span>
+                <div>
+                    <p class="text-sm font-bold text-gray-800">Points critiques</p>
+                    <p class="text-[10px] text-gray-500">Variables en dessous de la classe <span id="targetClassBadge" class="font-bold text-emerald-600">-</span></p>
+                </div>
+            </div>
+            <div id="criticalPointsList" class="space-y-2"></div>
+        </div>
+
+        <!-- Potentiel d'amélioration -->
+        <div class="glass-card rounded-2xl p-4 mb-4 shadow-sm border-2 border-emerald-200/60 animate-fade-up delay-200">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-icons text-emerald-500">trending_up</span>
+                <p class="text-sm font-bold text-gray-800">Potentiel d'amélioration</p>
+            </div>
+            <div class="flex items-center justify-around">
+                <div class="text-center">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Potentiel</p>
+                    <p id="potentialGrade" class="text-4xl font-black text-emerald-500">—</p>
+                    <p id="potentialValue" class="text-xs text-gray-500">-- kWh/m²/an</p>
+                </div>
+                <div class="relative">
+                    <svg class="w-24 h-24" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                        <circle id="savingsRing" class="progress-ring-circle" cx="60" cy="60" r="52" fill="none" stroke="url(#greenGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+                        <defs><linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <p id="economyPercent" class="text-xl font-extrabold text-emerald-600">—</p>
+                        <p class="text-[9px] text-gray-400">d'économie</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3 p-3 hero-gradient rounded-xl">
+                <p class="text-xs text-white/70">Économie potentielle</p>
+                <p id="savingsAmount" class="text-lg font-extrabold text-amber-300">— € par an</p>
+                <p id="savingsInterval" class="text-[10px] text-white/50"></p>
+            </div>
+        </div>
+
+        <!-- Simulateur de travaux -->
+        <div class="glass-card rounded-2xl p-4 mb-4 shadow-sm border-2 border-indigo-200/60 animate-fade-up delay-300">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-icons text-indigo-500">tune</span>
+                <div>
+                    <p class="text-sm font-bold text-gray-800">Simulateur de travaux</p>
+                    <p class="text-[10px] text-gray-500">Modifiez et recalculez</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 gap-3 mb-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Isolation des murs</label>
+                    <div class="relative"><select id="simIsolationMurs" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Très bonne">Très bonne</option><option value="Bonne">Bonne</option><option value="Moyenne">Moyenne</option><option value="Insuffisante">Insuffisante</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Isolation toiture</label>
+                    <div class="relative"><select id="simIsolationToiture" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Isolée">Isolée</option><option value="Non isolée">Non isolée</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Qualité des fenêtres</label>
+                    <div class="relative"><select id="simQualiteFenetres" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Très bonne (triple vitrage)">Très bonne (triple vitrage)</option><option value="Bonne (double vitrage récent)">Bonne (double vitrage récent)</option><option value="Moyenne (double vitrage ancien)">Moyenne (double vitrage ancien)</option><option value="Insuffisante (simple vitrage)">Insuffisante (simple vitrage)</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Émetteur de chauffage</label>
+                    <div class="relative"><select id="simChauffage" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Radiateur électrique">Radiateur électrique</option><option value="Convecteur électrique">Convecteur électrique</option><option value="Radiateur à eau (chauffage central)">Radiateur à eau</option><option value="Plancher chauffant">Plancher chauffant</option><option value="Poêle (bois/fioul)">Poêle</option><option value="Soufflage air chaud / Climatisation">Climatisation</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Isolation du plancher</label>
+                    <div class="relative"><select id="simPlancher" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Très bonne">Très bonne</option><option value="Bonne">Bonne</option><option value="Moyenne">Moyenne</option><option value="Insuffisante">Insuffisante</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Type de chauffe-eau</label>
+                    <div class="relative"><select id="simECS" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Ballon électrique">Ballon électrique</option><option value="Chauffe-eau thermodynamique">Chauffe-eau thermodynamique</option><option value="Chauffe-eau gaz">Chauffe-eau gaz</option><option value="Chaudière gaz">Chaudière gaz</option><option value="Chaudière fioul">Chaudière fioul</option><option value="Pompe à chaleur">Pompe à chaleur</option><option value="Réseau de chaleur">Réseau de chaleur</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Protection solaire</label>
+                    <div class="relative"><select id="simSoleil" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Oui">Oui</option><option value="Non">Non</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Ventilateur de plafond</label>
+                    <div class="relative"><select id="simBrasseur" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Oui">Oui</option><option value="Non">Non</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Isolation globale</label>
+                    <div class="relative"><select id="simEnveloppe" class="w-full bg-white border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-indigo-400 outline-none pr-8">
+                        <option value="Très bonne">Très bonne</option><option value="Bonne">Bonne</option><option value="Moyenne">Moyenne</option><option value="Insuffisante">Insuffisante</option>
+                    </select><span class="material-icons absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-lg">expand_more</span></div>
+                </div>
+            </div>
+            <button onclick="runSimulation(event)" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-lg shadow-indigo-200">
+                <span class="material-icons text-base">refresh</span> Recalculer mon estimation
+            </button>
+        </div>
+
+        <!-- Recommandations -->
+        <div class="mb-4 animate-fade-up delay-300">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="material-icons text-amber-500">lightbulb</span>
+                <p class="text-base font-extrabold"><span class="gradient-text">Recommandations</span></p>
+            </div>
+            <div id="recoContainer" class="space-y-3"></div>
+        </div>
+
+        <!-- Critères saisis (collapsible) -->
+        <details class="glass-card rounded-2xl shadow-sm mb-4 animate-fade-up delay-300">
+            <summary class="p-4 flex items-center gap-2 cursor-pointer select-none">
+                <span class="material-icons text-indigo-500 text-lg">tune</span>
+                <span class="text-sm font-bold text-gray-700">Vos réponses au questionnaire</span>
+                <span class="material-icons text-gray-400 ml-auto text-lg">expand_more</span>
+            </summary>
+            <div id="featuresGrid" class="px-4 pb-4 grid grid-cols-1 gap-2"></div>
+        </details>
+
+        <!-- Boutons d'action -->
+        <div class="space-y-3 animate-fade-up delay-300">
+            <button onclick="window.location.href='estimation-mobile.html'" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <span class="material-icons text-base">refresh</span> Refaire l'estimation
+            </button>
+            <button onclick="window.location.href='bons-gestes-mobile.html'" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-2xl shadow-lg shadow-emerald-200 active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <span class="material-icons text-base">eco</span> Voir les bons gestes
+            </button>
+        </div>
+    </div>
+
+    <!-- No Data fallback -->
+    <div id="noDataContainer" class="hidden px-4 pt-16 text-center">
+        <div class="w-20 h-20 bg-orange-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons text-orange-500 text-4xl">warning</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-800 mb-2">Aucune donnée trouvée</h1>
+        <p class="text-sm text-gray-500 mb-6">Veuillez remplir le questionnaire pour obtenir vos résultats.</p>
+        <button onclick="window.location.href='estimation-mobile.html'" class="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl active:scale-95 transition-transform">Démarrer le questionnaire</button>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 flex justify-around items-center py-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] mt-4">
+        <a href="index-mobile.html" class="flex flex-col items-center gap-0.5 text-gray-400"><span class="material-icons text-2xl">home</span><span class="text-[10px] font-semibold">Accueil</span></a>
+        <a href="estimation-mobile.html" class="flex flex-col items-center gap-0.5 text-gray-400"><span class="material-icons text-2xl">calculate</span><span class="text-[10px] font-semibold">Estimer</span></a>
+        <a href="bons-gestes-mobile.html" class="flex flex-col items-center gap-0.5 text-gray-400"><span class="material-icons text-2xl">eco</span><span class="text-[10px] font-semibold">Gestes</span></a>
+        <a href="a-propos-mobile.html" class="flex flex-col items-center gap-0.5 text-gray-400"><span class="material-icons text-2xl">info</span><span class="text-[10px] font-semibold">À propos</span></a>
+    </nav>
+
+    <script>
+        // ============================================
+        // CONFIG
+        // ============================================
+        const dpeScaleRef = [
+            { grade: 'A', max: 50, color: '#16a34a' },
+            { grade: 'B', max: 90, color: '#4ade80' },
+            { grade: 'C', max: 150, color: '#facc15' },
+            { grade: 'D', max: 230, color: '#fb923c' },
+            { grade: 'E', max: 330, color: '#f97316' },
+            { grade: 'F', max: 450, color: '#ef4444' },
+            { grade: 'G', max: 9999, color: '#b91c1c' }
+        ];
+        const dpeGradeColors = { A:'text-green-600', B:'text-green-400', C:'text-yellow-500', D:'text-orange-400', E:'text-orange-600', F:'text-red-500', G:'text-red-700' };
+
+        function getDpeGrade(v) { for (let l of dpeScaleRef) if (v <= l.max) return l; return dpeScaleRef[6]; }
+
+        const formatInterval = (v, isEuro=false) => {
+            const mn = Math.max(0, Math.round(v*0.85)), mx = Math.round(v*1.15), s = isEuro?' €':'';
+            return `(Entre ${mn.toLocaleString('fr-FR')} et ${mx.toLocaleString('fr-FR')}${s})`;
+        };
+
+        // ============================================
+        // DPE SCALE RENDER
+        // ============================================
+        function renderScale(currentValue) {
+            const container = document.getElementById('dpeScale');
+            const currentGrade = getDpeGrade(currentValue);
+            const widths = [35,42,49,56,63,70,78];
+            let html='', prevMax=0;
+            dpeScaleRef.forEach((level,i) => {
+                const isCurrent = level.grade === currentGrade.grade;
+                const rangeText = level.grade==='G'?'> 450': level.grade==='A'?'≤ 50':`${prevMax+1}–${level.max}`;
+                html += `<div class="flex items-center gap-2 mb-0.5">
+                    <div class="flex items-center" style="width:${widths[i]}%">
+                        <div class="flex items-center justify-between h-[28px] w-full rounded-l-md ${isCurrent?'shadow-md ring-2 ring-offset-1 ring-gray-800/20':''}" style="background:${level.color};${isCurrent?'opacity:1;transform:scaleY(1.1)':'opacity:0.8'}">
+                            <span class="text-white font-extrabold text-sm px-2">${level.grade}</span>
+                            ${isCurrent?`<span class="text-white font-bold text-[10px] pr-1">${Math.round(currentValue)}</span>`:''}
+                        </div>
+                        <div class="w-0 h-0 border-y-[14px] border-y-transparent border-l-[10px]" style="border-left-color:${level.color};${isCurrent?'transform:scaleY(1.1)':'opacity:0.8'};margin-left:-1px"></div>
+                    </div>
+                    <span class="text-[10px] ${isCurrent?'text-gray-800 font-extrabold':'text-gray-400'}">${rangeText}</span>
+                    ${isCurrent?'<span class="text-[9px] font-bold bg-gray-800 text-white px-2 py-0.5 rounded-full">Vous</span>':''}
+                </div>`;
+                prevMax = level.max;
+            });
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        // RECO TEMPLATES (same as desktop)
+        // ============================================
+        const RECO_TEMPLATES = {
+            qualite_isolation_enveloppe: { title:"Isolation de l'enveloppe", icon:'thermostat', desc:"Refaire l'isolation globale réduirait significativement vos déperditions.", colors:{bg:'from-red-500 to-rose-500',border:'border-red-500'}, priority:'Priorité haute', priorityColor:'bg-red-50 text-red-600 border-red-200' },
+            qualite_isolation_murs: { title:'Isolation des murs', icon:'apartment', desc:"Les murs sont responsables d'une part importante des pertes thermiques.", colors:{bg:'from-red-500 to-rose-500',border:'border-red-500'}, priority:'Priorité haute', priorityColor:'bg-red-50 text-red-600 border-red-200' },
+            qualite_isolation_menuiseries: { title:'Remplacement des fenêtres', icon:'window', desc:'Installer du double ou triple vitrage réduirait les pertes par les fenêtres.', colors:{bg:'from-amber-500 to-orange-500',border:'border-amber-500'}, priority:'Priorité moyenne', priorityColor:'bg-amber-50 text-amber-700 border-amber-200' },
+            qualite_isolation_plancher_bas: { title:'Isolation du plancher bas', icon:'layers', desc:'Isoler le plancher bas peut réduire les pertes par le sol de 7 à 10%.', colors:{bg:'from-amber-500 to-orange-500',border:'border-amber-500'}, priority:'Priorité moyenne', priorityColor:'bg-amber-50 text-amber-700 border-amber-200' },
+            isolation_toiture_clean: { title:'Isolation de la toiture', icon:'roofing', desc:"La toiture est la 1ère source de déperdition (jusqu'à 30%).", colors:{bg:'from-red-500 to-rose-500',border:'border-red-500'}, priority:'Priorité haute', priorityColor:'bg-red-50 text-red-600 border-red-200' },
+            type_emetteur_installation_chauffage_n1: { title:'Système de chauffage', icon:'local_fire_department', desc:'Moderniser votre chauffage (PAC, condensation) améliorerait le rendement.', colors:{bg:'from-blue-500 to-indigo-500',border:'border-blue-500'}, priority:'Priorité moyenne', priorityColor:'bg-blue-50 text-blue-600 border-blue-200' },
+            type_generateur_n1_ecs_n1: { title:"Production d'eau chaude", icon:'water_drop', desc:'Un chauffe-eau thermodynamique serait plus efficace.', colors:{bg:'from-cyan-500 to-blue-500',border:'border-cyan-500'}, priority:'Priorité basse', priorityColor:'bg-cyan-50 text-cyan-700 border-cyan-200' },
+            protection_solaire_exterieure: { title:'Protection solaire', icon:'wb_sunny', desc:"Volets ou stores extérieurs réduiraient les surchauffes estivales.", colors:{bg:'from-yellow-500 to-amber-500',border:'border-yellow-500'}, priority:'Priorité basse', priorityColor:'bg-yellow-50 text-yellow-700 border-yellow-200' },
+        };
+
+        function renderRecommendations(criticalPoints, currentConso, newConso) {
+            const container = document.getElementById('recoContainer');
+            const relevantCPs = criticalPoints.filter(cp => RECO_TEMPLATES[cp.key]).slice(0, 4);
+            let html = '';
+            if (relevantCPs.length === 0) {
+                html = `<div class="glass-card rounded-2xl p-4 text-center border-l-4 border-indigo-500"><p class="text-sm font-bold text-gray-700">En corrigeant les ${criticalPoints.length} points critiques, vous pourriez atteindre la classe supérieure.</p></div>`;
+            } else {
+                relevantCPs.forEach((cp, i) => {
+                    const tpl = RECO_TEMPLATES[cp.key];
+                    const cv = typeof cp.currentValue === 'number' ? Math.round(cp.currentValue*100)/100 : cp.currentValue;
+                    const tv = typeof cp.targetValue === 'number' ? Math.round(cp.targetValue*100)/100 : cp.targetValue;
+                    html += `<div class="glass-card rounded-2xl p-4 border-l-4 ${tpl.colors.border}">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-br ${tpl.colors.bg} rounded-xl flex items-center justify-center shadow-md flex-shrink-0"><span class="material-icons text-white" style="font-size:20px">${tpl.icon}</span></div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-1"><h3 class="text-xs font-bold text-gray-800">${tpl.title}</h3><span class="${tpl.priorityColor} px-2 py-0.5 rounded-full text-[9px] font-bold border">${tpl.priority}</span></div>
+                                <p class="text-[11px] text-gray-500 mb-2">${tpl.desc}</p>
+                                <div class="flex items-center gap-1.5 text-[10px]">
+                                    <span class="bg-red-50 text-red-600 px-2 py-0.5 rounded-full font-semibold border border-red-200">${cv}${cp.unit?' '+cp.unit:''}</span>
+                                    <span class="material-icons text-gray-400" style="font-size:12px">arrow_forward</span>
+                                    <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-semibold border border-emerald-200">${tv}${cp.unit?' '+cp.unit:''}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            }
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        // MAIN: UPDATE RESULTS
+        // ============================================
+        let currentResponses = [];
+
+        async function updateResults() {
+            const resultStr = localStorage.getItem('dpe_result');
+            const responsesStr = localStorage.getItem('dpe_responses');
+
+            if (!resultStr) {
+                document.getElementById('resultsContainer').classList.add('hidden');
+                document.getElementById('noDataContainer').classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const result = JSON.parse(resultStr);
+                const responses = responsesStr ? JSON.parse(responsesStr) : [];
+                currentResponses = responses;
+
+                // Surface
+                let surface = 70;
+                const surfResp = responses.find(r => r.label === 'Surface habitable');
+                if (surfResp && surfResp.value) {
+                    const parsed = parseFloat(surfResp.value);
+                    if (!isNaN(parsed)) {
+                        surface = parsed;
+                    } else {
+                        const sm = {'Moins de 30m²':20,'30-50m²':40,'50-70m²':60,'70-90m²':80,'90-120m²':105,'Plus de 120m²':140};
+                        surface = sm[surfResp.value] || 70;
+                    }
+                }
+
+                const totalConsoEF = Number(result.prediction) || 0;
+                let surfaceUsed = Number(surface) || 70;
+                if (result.features_used && result.features_used.surface_habitable_logement) {
+                    surfaceUsed = Number(result.features_used.surface_habitable_logement) || surfaceUsed;
+                }
+
+                const kwhEP_m2 = totalConsoEF / surfaceUsed;
+                const heroGrade = getDpeGrade(kwhEP_m2);
+
+                // DPE badge
+                document.getElementById('currentGrade').textContent = heroGrade.grade;
+                document.getElementById('currentGrade').className = `text-6xl font-black mb-2 ${dpeGradeColors[heroGrade.grade]||'text-gray-500'}`;
+                
+                // On utilise text-indigo-600 au lieu de gradient-text pour les chiffres pour éviter les bugs d'affichage mobile
+                document.getElementById('currentValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+                document.getElementById('currentValueInterval').textContent = formatInterval(kwhEP_m2);
+                document.getElementById('modelName').textContent = result.model_used || 'XGBoost';
+
+                // DPE Scale
+                renderScale(kwhEP_m2);
+
+                // Conso & cost
+                const consoRealEP = Number(result.predictionReal) || totalConsoEF;
+                const consoRealEF = consoRealEP / 2.3;
+                
+                const formatNum = (v) => (!isNaN(v) && v > 0) ? Math.round(v).toLocaleString('fr-FR') : "--";
+
+                document.getElementById('consoTheo').textContent = formatNum(totalConsoEF);
+                document.getElementById('consoTheo').className = "text-lg font-black text-indigo-600"; // Sécurité
+                document.getElementById('consoTheoInterval').textContent = (!isNaN(totalConsoEF) && totalConsoEF > 0) ? formatInterval(totalConsoEF) : "";
+                
+                document.getElementById('consoReal').textContent = formatNum(consoRealEF);
+                document.getElementById('consoRealInterval').textContent = (!isNaN(consoRealEF) && consoRealEF > 0) ? formatInterval(consoRealEF) : "";
+                
+                const cost = consoRealEF * 0.2516;
+                document.getElementById('costReal').textContent = formatNum(cost) + ' €';
+                document.getElementById('costRealInterval').textContent = (!isNaN(cost) && cost > 0) ? formatInterval(cost, true) : "";
+
+                // CO2
+                document.getElementById('co2Value').textContent = Math.round(kwhEP_m2 * 0.15);
+                const totalCo2 = kwhEP_m2 * 0.15 * surfaceUsed;
+                const flights = (totalCo2 / 1000).toFixed(1).replace('.', ',');
+                document.getElementById('flightEquivalent').innerHTML = `≈ ${flights} vol${totalCo2/1000>=2?'s':''} Paris–New York/an`;
+
+                // Features grid
+                if (responses.length > 0) {
+                    const icons = {'Département':'📍','Région':'🗺️','Type de bâtiment':'🏢','Surface habitable':'📐','Période de construction':'🏗️','Logement traversant':'🏠','Isolation de la toiture':'🏚️','Qualité isolation globale':'🧱','Isolation des murs':'🧱','Qualité des fenêtres':'🪟','Isolation du plancher':'🧱','Émetteur de chauffage':'🔥','Production eau chaude':'💧','Type de chauffe-eau':'💧','Ventilateur de plafond':'💨','Protection solaire':'☀️','Température de chauffe':'🌡️',"Nombre d'occupants":'👥','Présence par jour':'⏱️',"Classe d'altitude":'⛰️','Hauteur sous plafond':'📏'};
+                    let fh = '';
+                    responses.forEach(item => {
+                        fh += `<div class="flex items-center gap-2 p-2.5 bg-gray-50 rounded-xl text-sm border border-gray-100">
+                            <span class="text-base flex-shrink-0">${icons[item.label]||'📌'}</span>
+                            <span class="font-medium text-gray-600 flex-1 text-[11px] truncate">${item.label}</span>
+                            <span class="text-indigo-600 font-bold text-[11px] bg-indigo-50 px-2 py-0.5 rounded-lg whitespace-nowrap overflow-hidden text-ellipsis max-w-[110px]">${item.value}</span>
+                        </div>`;
+                    });
+                    document.getElementById('featuresGrid').innerHTML = fh;
+                }
+
+                // Critical points & re-prediction
+                const currentGradeStr = heroGrade.grade;
+                if (result.features_used && currentGradeStr !== 'A') {
+                    let { targetGrade, criticalPoints } = identifyCriticalPoints(result.features_used, currentGradeStr);
+                    const modifiableKeys = ['qualite_isolation_enveloppe','qualite_isolation_murs','qualite_isolation_menuiseries','qualite_isolation_plancher_bas','isolation_toiture_clean','type_emetteur_installation_chauffage_n1','type_generateur_n1_ecs_n1','presence_brasseur_air','protection_solaire_exterieure'];
+                    criticalPoints = criticalPoints.filter(cp => modifiableKeys.includes(cp.key));
+
+                    if (criticalPoints.length > 0) {
+                        document.getElementById('criticalPointsSection').style.display = 'block';
+                        document.getElementById('targetClassBadge').textContent = targetGrade;
+                        let cpHtml = '';
+                        criticalPoints.forEach(cp => {
+                            const cv = typeof cp.currentValue==='number'?Math.round(cp.currentValue*100)/100+(cp.unit?' '+cp.unit:''):cp.currentValue;
+                            const tv = typeof cp.targetValue==='number'?Math.round(cp.targetValue*100)/100+(cp.unit?' '+cp.unit:''):cp.targetValue;
+                            cpHtml += `<div class="flex items-center gap-2 p-2.5 bg-gradient-to-r from-red-50/80 to-amber-50/80 rounded-xl border border-red-200/50">
+                                <span class="text-lg">${cp.icon}</span>
+                                <div class="flex-1 min-w-0"><p class="text-[11px] font-bold text-gray-700">${cp.label}</p>
+                                    <div class="flex items-center gap-1.5 mt-0.5"><span class="text-[10px] font-semibold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full">${cv}</span><span class="material-icons text-gray-400" style="font-size:12px">arrow_forward</span><span class="text-[10px] font-semibold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-full">${tv}</span></div>
+                                </div>
+                            </div>`;
+                        });
+                        document.getElementById('criticalPointsList').innerHTML = cpHtml;
+
+                        const improvedFeatures = buildImprovedFeatures(result.features_used, criticalPoints, targetGrade);
+                        let newPrediction = totalConsoEF * 0.7;
+                        try {
+                            const modelUrl = `models_json/${result.model_used}.json`;
+                            const predictor = new XGBoostPredictor();
+                            await predictor.loadModel(modelUrl);
+                            newPrediction = predictor.predict(improvedFeatures);
+                        } catch(e) { console.warn('[Re-prédiction] Fallback:', e.message); }
+
+                        const newKwhM2 = newPrediction / surfaceUsed;
+                        const potGrade = getDpeGrade(newKwhM2);
+                        const econPct = Math.round(((kwhEP_m2 - newKwhM2) / kwhEP_m2) * 100);
+
+                        document.getElementById('potentialGrade').textContent = potGrade.grade;
+                        document.getElementById('potentialGrade').className = `text-4xl font-black ${dpeGradeColors[potGrade.grade]||'text-emerald-500'}`;
+                        document.getElementById('potentialValue').textContent = `${Math.round(newKwhM2)} kWh/m²/an`;
+                        document.getElementById('economyPercent').textContent = `~${Math.max(0, econPct)}%`;
+
+                        const ringFrac = Math.max(0, Math.min(1, econPct / 100));
+                        setTimeout(() => { const r = document.getElementById('savingsRing'); if(r) r.style.strokeDashoffset = 326.73*(1-ringFrac); }, 500);
+
+                        const savedEP = totalConsoEF - newPrediction;
+                        const savedEuros = Math.max(0, savedEP / 2.3) * 0.2516;
+                        document.getElementById('savingsAmount').textContent = `${Math.round(savedEuros)} € par an`;
+                        document.getElementById('savingsInterval').textContent = formatInterval(savedEuros, true);
+
+                        renderRecommendations(criticalPoints, totalConsoEF, newPrediction);
+                    } else {
+                        document.getElementById('potentialGrade').textContent = currentGradeStr;
+                        document.getElementById('potentialValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+                        document.getElementById('economyPercent').textContent = '0%';
+                        document.getElementById('savingsAmount').textContent = '0 € par an';
+                    }
+                } else if (currentGradeStr === 'A') {
+                    document.getElementById('potentialGrade').textContent = 'A';
+                    document.getElementById('potentialGrade').className = 'text-4xl font-black text-green-600';
+                    document.getElementById('potentialValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+                    document.getElementById('economyPercent').textContent = '✓';
+                    document.getElementById('savingsAmount').textContent = 'Déjà optimal !';
+                    document.getElementById('recoContainer').innerHTML = `<div class="glass-card rounded-2xl p-4 text-center border-l-4 border-green-500"><p class="text-sm font-bold text-green-600">🎉 Classe A ! Votre logement est au top.</p></div>`;
+                }
+
+                // Init simulator
+                initSimulation(responses);
+            } catch(e) { console.error("Error displaying results", e); }
+        }
+
+        // ============================================
+        // SIMULATOR
+        // ============================================
+        function initSimulation(responses) {
+            currentResponses = responses;
+            const getVal = l => { const i = responses.find(r => r.label === l); return i ? i.value : ''; };
+            const setVal = (id, val) => { const el = document.getElementById(id); if(el&&val) { for(let i=0;i<el.options.length;i++) if(el.options[i].value===val||val.includes(el.options[i].value)){el.selectedIndex=i;break;} } };
+            setVal('simIsolationMurs', getVal('Isolation des murs'));
+            setVal('simIsolationToiture', getVal('Isolation de la toiture'));
+            setVal('simQualiteFenetres', getVal('Qualité des fenêtres'));
+            setVal('simChauffage', getVal('Émetteur de chauffage'));
+            setVal('simPlancher', getVal('Isolation du plancher'));
+            setVal('simECS', getVal('Type de chauffe-eau'));
+            setVal('simSoleil', getVal('Protection solaire'));
+            setVal('simBrasseur', getVal('Ventilateur de plafond'));
+            setVal('simEnveloppe', getVal('Qualité isolation globale'));
+        }
+
+        async function runSimulation(event) {
+            if (!currentResponses || currentResponses.length === 0) {
+                const saved = localStorage.getItem('dpe_responses');
+                if (saved) try { currentResponses = JSON.parse(saved); } catch(e) { currentResponses = []; }
+            }
+            const upd = (label, id) => { const el = document.getElementById(id); if(el) { const idx = currentResponses.findIndex(r=>r.label===label); if(idx!==-1) currentResponses[idx].value=el.value; else currentResponses.push({label,value:el.value}); } };
+            upd('Isolation des murs','simIsolationMurs');
+            upd('Isolation de la toiture','simIsolationToiture');
+            upd('Qualité des fenêtres','simQualiteFenetres');
+            upd('Émetteur de chauffage','simChauffage');
+            upd('Isolation du plancher','simPlancher');
+            upd('Type de chauffe-eau','simECS');
+            upd('Protection solaire','simSoleil');
+            upd('Ventilateur de plafond','simBrasseur');
+            upd('Qualité isolation globale','simEnveloppe');
+
+            const btn = (event && (event.currentTarget||event.target)) || document.querySelector('[onclick*="runSimulation"]');
+            const origText = btn ? btn.innerHTML : '';
+            if(btn){btn.innerHTML='<span class="material-icons text-base animate-spin">refresh</span> Calcul en cours...';btn.disabled=true;}
+
+            try {
+                const result = await predictClientSide(currentResponses);
+                localStorage.setItem('dpe_result', JSON.stringify({ prediction:result.prediction, predictionReal:result.predictionReal, confidence_score:result.confidence_score, features_used:result.features_used, model_used:result.model_used, region:result.region }));
+                localStorage.setItem('dpe_responses', JSON.stringify(currentResponses));
+                window.scrollTo({top:0,behavior:'smooth'});
+                await updateResults();
+            } catch(e) { console.error("Simulation failed",e); alert("Erreur lors de la simulation."); }
+            finally { if(btn){btn.innerHTML=origText;btn.disabled=false;} }
+        }
+
+        window.addEventListener('DOMContentLoaded', updateResults);
+    </script>
+</body>
+</html>

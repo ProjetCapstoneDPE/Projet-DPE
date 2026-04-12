@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Conseils énergie et bons gestes | Des P'tites Économies</title>
+    <meta name="description"
+        content="Posez vos questions à Watty, notre assistant énergie. Obtenez des conseils pratiques pour réduire votre consommation et améliorer votre DPE au quotidien." />
+    <link rel="icon" type="image/png" href="Images/Image_2.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>if (window.innerWidth <= 900) window.location.href = 'bons-gestes-mobile.html';</script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4F46E5",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fade-up .7s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
+        }
+
+        .delay-300 {
+            animation-delay: .3s;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.60);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #7C3AED;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none !important;
+        }
+
+        select::-ms-expand {
+            display: none;
+        }
+
+        .card-lift {
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .card-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(79, 70, 229, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/30 min-h-screen text-gray-800">
+
+    <!-- ===== HEADER ===== -->
+    <header
+        class="flex justify-between items-center py-3 px-4 sm:px-6 sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm">
+        <div class="flex items-center gap-3">
+            <a href="index.html"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                <span class="material-icons text-primary" style="font-size:18px">home</span>
+                <span>Accueil</span>
+            </a>
+            <a href="estimation.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Estimez
+            </a>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="bons-gestes.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Les bons gestes !
+            </a>
+            <a href="a-propos.html"
+                class="px-4 py-2 text-sm font-semibold text-primary border-2 border-primary/30 rounded-full hover:bg-primary/10 hover:border-primary transition-all bg-white/50">
+                Qui sommes-nous ?
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto p-4 max-w-4xl">
+        <main class="py-8">
+            <!-- Page Title -->
+            <h1 class="text-4xl font-extrabold mb-2 text-center animate-fade-up">
+                <span class="gradient-text">Les bons gestes pour votre logement</span>
+            </h1>
+            <p class="text-center text-gray-500 mb-8 animate-fade-up delay-100">
+                Découvrez tous les conseils de Watty pour réduire votre facture et agir pour le climat
+            </p>
+
+            <!-- Category Navigation (Anchor links) -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12 animate-fade-up delay-200">
+                <a href="#equipements" class="px-4 py-2 bg-white/50 border border-indigo-100 rounded-full text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">⚡ Équipements</a>
+                <a href="#chauffage" class="px-4 py-2 bg-white/50 border border-indigo-100 rounded-full text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">🌡️ Chauffage & Isolation</a>
+                <a href="#dpe" class="px-4 py-2 bg-white/50 border border-indigo-100 rounded-full text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">🏡 Pourquoi le DPE ?</a>
+                <a href="#climat" class="px-4 py-2 bg-white/50 border border-indigo-100 rounded-full text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">🌍 Climat & Énergie</a>
+                <a href="#numerique" class="px-4 py-2 bg-white/50 border border-indigo-100 rounded-full text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">💻 Numérique</a>
+            </div>
+
+            <!-- Articles Sections -->
+            <div class="space-y-16">
+                
+                <!-- SECTION: ÉQUIPEMENTS -->
+                <section id="equipements" class="animate-fade-up delay-300">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="material-icons text-white text-2xl">bolt</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Équipements & Économies au quotidien</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- GESTES SIMPLES -->
+                        <div class="glass-card rounded-3xl p-6 card-lift">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="material-icons text-amber-500">lightbulb</span>
+                                <h3 class="font-bold text-lg text-gray-800">Réduire ma facture électrique</h3>
+                            </div>
+                            <div class="text-sm text-gray-600 leading-relaxed space-y-3">
+                                <p>Saviez-vous qu'en réduisant la température de seulement <strong>1°C</strong>, vous économisez environ <strong>7 à 8% d'énergie</strong> ?</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Lavez à 30°C au lieu de 60°C : vous consommez 3 fois moins.</li>
+                                    <li>Utilisez des ampoules LED pour réduire la conso d'éclairage de 80%.</li>
+                                    <li>Éteignez systématiquement les lumières en quittant une pièce.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- VEILLES -->
+                        <div class="glass-card rounded-3xl p-6 card-lift">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="material-icons text-indigo-500">power_off</span>
+                                <h3 class="font-bold text-lg text-gray-800">La traque aux veilles</h3>
+                            </div>
+                            <div class="text-sm text-gray-600 leading-relaxed space-y-3">
+                                <p>Un foyer possède de 15 à 50 équipements en veille ! Cela représente <strong>10% de votre facture annuelle</strong>.</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Les box internet et décodeurs TV consomment jusqu'à 200 kWh/an.</li>
+                                    <li>Utilisez des multiprises avec interrupteur pour tout couper.</li>
+                                    <li>Rentabilisez une multiprise (10€) en deux ou trois mois !</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- FRIGO -->
+                        <div class="glass-card rounded-3xl p-6 card-lift">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="material-icons text-blue-500">ac_unit</span>
+                                <h3 class="font-bold text-lg text-gray-800">Le froid bien maîtrisé</h3>
+                            </div>
+                            <div class="text-sm text-gray-600 leading-relaxed space-y-3">
+                                <p>Chaque degré de froid supplémentaire augmente la consommation de l'appareil de <strong>5%</strong> !</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Températures idéales : <strong>+4°C</strong> (frigo) et <strong>-18°C</strong> (congélo).</li>
+                                    <li>Dégivrez régulièrement : 3mm de givre = +30% de consommation.</li>
+                                    <li>Laissez refroidir les plats avant de les mettre au frigo.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- LED -->
+                        <div class="glass-card rounded-3xl p-6 card-lift">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="material-icons text-yellow-500">tips_and_updates</span>
+                                <h3 class="font-bold text-lg text-gray-800">L'avantage des LED</h3>
+                            </div>
+                            <div class="text-sm text-gray-600 leading-relaxed space-y-3">
+                                <p>Une ampoule LED de 9 Watts éclaire autant qu'une vieille ampoule de 60 Watts.</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>85% d'économies d'énergie par rapport à l'incandescence.</li>
+                                    <li>Durée de vie : jusqu'à 40 000 heures (vs 1 000 pour les anciennes).</li>
+                                    <li>Investissement remboursé en quelques mois seulement.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: CHAUFFAGE -->
+                <section id="chauffage" class="animate-fade-up">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="material-icons text-white text-2xl">thermostat</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Chauffage & Isolation</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- TEMPÉRATURE -->
+                        <div class="glass-card rounded-3xl p-6 card-lift border-l-4 border-indigo-500">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="material-icons text-indigo-500">home</span>
+                                <h3 class="font-bold text-lg text-gray-800">Les bonnes températures</h3>
+                            </div>
+                            <div class="text-sm text-gray-600 leading-relaxed space-y-3">
+                                <p>La température est la clé pour allier confort et économies (jusqu'à 15% de gains).</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Pièces de vie : <strong>19°C</strong>.</li>
+                                    <li>Chambres : <strong>17°C</strong>.</li>
+                                    <li>Salle de bain : <strong>22°C</strong> (en usage ponctuel seulement).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- PERTES -->
+                        <div class="glass-card rounded-3xl p-6 card-lift border-l-4 border-purple-500">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="material-icons text-purple-500">door_front</span>
+                                <h3 class="font-bold text-lg text-gray-800">Limiter les fuites de chaleur</h3>
+                            </div>
+                            <div class="text-sm text-gray-600 leading-relaxed space-y-3">
+                                <p>Les fuites d'air parasites peuvent représenter jusqu'à <strong>15%</strong> de vos pertes de chaleur.</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Fermez vos volets la nuit : -60% de déperditions par les fenêtres !</li>
+                                    <li>Installez des rideaux thermiques ou des boudins de portes.</li>
+                                    <li>Ne placez pas d'obstacles (meubles, rideaux) devant les radiateurs.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: DPE -->
+                <section id="dpe" class="animate-fade-up">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="material-icons text-white text-2xl">speed</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Pourquoi un bon DPE est-il crucial ?</h2>
+                    </div>
+                    
+                    <div class="glass-card rounded-3xl p-8 card-lift bg-gradient-to-br from-emerald-50/50 to-teal-50/50">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div class="space-y-4">
+                                <h3 class="text-xl font-bold text-gray-800">Valorisation et Économies</h3>
+                                <p class="text-gray-600 leading-relaxed">Passer d'une "passoire thermique" (F ou G) à une classe C ou D permet de diviser la facture par 3 ou 4. Pour une maison moyenne, c'est <strong>1000€ à 1500€ d'économies par an</strong> !</p>
+                                <div class="flex flex-col gap-2">
+                                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                                        <span class="material-icons text-emerald-500 text-sm">check_circle</span>
+                                        Un logement A ou B se vend <strong>5 à 10% plus cher</strong>.
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                                        <span class="material-icons text-emerald-500 text-sm">check_circle</span>
+                                        Les classes G sont progressivement interdites à la location.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-center">
+                                <div class="w-48 h-48 bg-white/50 rounded-full flex items-center justify-center border-4 border-emerald-100 shadow-inner">
+                                    <img src="Images/Image_6.png" alt="Watty" class="w-32 h-32 object-contain animate-float" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: CLIMAT -->
+                <section id="climat" class="animate-fade-up">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="material-icons text-white text-2xl">public</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Climat, Énergie & Compréhension</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- NUCLÉAIRE -->
+                        <div class="glass-card rounded-3xl p-6 card-lift">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="material-icons text-blue-500 text-sm">science</span>
+                                Le Nucléaire
+                            </h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">
+                                C'est une énergie "bas carbone" (12g CO₂/kWh), cruciale pour la neutralité carbone en 2050, malgré les débats sur la gestion des déchets.
+                            </p>
+                        </div>
+                        
+                        <!-- EMPREINTE -->
+                        <div class="glass-card rounded-3xl p-6 card-lift">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="material-icons text-green-500 text-sm">calculate</span>
+                                Empreinte Carbone
+                            </h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">
+                                Moyenne française : <strong>9,9 tonnes/an</strong>. Objectif 2050 : <strong>2 tonnes</strong>. Il faut diviser notre impact par 5 !
+                            </p>
+                        </div>
+
+                        <!-- ÉVÉNEMENTS EXTRÊMES -->
+                        <div class="glass-card rounded-3xl p-6 card-lift">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="material-icons text-orange-500 text-sm">warning</span>
+                                Climat & Météo
+                            </h3>
+                            <p class="text-xs text-gray-500 leading-relaxed">
+                                Pour chaque degré de réchauffement (+1°C), l'atmosphère retient 7% d'humidité en plus, amplifiant tempêtes et canicules.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: NUMÉRIQUE -->
+                <section id="numerique" class="animate-fade-up">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="material-icons text-white text-2xl">computer</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">L'impact du numérique</h2>
+                    </div>
+                    
+                    <div class="glass-card rounded-3xl p-8 border-t-4 border-indigo-600">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-2 font-bold text-gray-800">
+                                    <span class="material-icons text-red-500">movie</span>
+                                    Streaming Vidéo
+                                </div>
+                                <p class="text-sm text-gray-600">1h de streaming = 60g de CO₂. Mais l'impact vient surtout des milliards d'utilisateurs simultanés.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-2 font-bold text-gray-800">
+                                    <span class="material-icons text-blue-500">email</span>
+                                    E-mails
+                                </div>
+                                <p class="text-sm text-gray-600">Un mail sans pièce jointe = 4g CO₂. Avec une grosse pièce jointe = 50g CO₂.</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 p-4 bg-indigo-50 rounded-xl text-center">
+                            <p class="text-sm font-bold text-indigo-700">📌 Le conseil Watty :</p>
+                            <p class="text-sm text-gray-600 italic">"Garder votre smartphone 4 ans au lieu de 2 est 100 fois plus efficace que de vider votre boîte mail !"</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Footer CTA -->
+            <div class="mt-16 text-center animate-fade-up">
+                <div class="inline-block p-1 bg-white/20 backdrop-blur-sm rounded-3xl shadow-xl">
+                    <button class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold px-12 py-5 rounded-2xl hover:scale-105 transition-all text-xl" onclick="window.location.href='estimation.html'">
+                        Simuler mon DPE
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section Ressources officielles -->
+            <div class="mt-12 animate-fade-up delay-300">
+                <h2 class="text-2xl font-bold mb-6 text-center">
+                    <span class="gradient-text">Ressources officielles</span>
+                </h2>
+                <div class="glass-card rounded-2xl shadow-lg p-6">
+                    <p class="text-gray-500 mb-4 text-center">
+                        Pour aller plus loin, consultez les guides officiels du gouvernement :
+                    </p>
+                    <div class="space-y-3">
+                        <a href="https://www.service-public.gouv.fr/particuliers/vosdroits/F16096" target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center gap-3 p-4 bg-indigo-50/80 rounded-xl hover:shadow-md transition-all group card-lift">
+                            <span
+                                class="material-icons text-indigo-600 text-3xl group-hover:scale-110 transition-transform">description</span>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">
+                                    Guide de la performance énergétique
+                                </h3>
+                                <p class="text-sm text-gray-500">Service-Public.fr - Informations sur le DPE</p>
+                            </div>
+                            <span
+                                class="material-icons text-gray-400 group-hover:text-indigo-600 transition-colors">arrow_forward</span>
+                        </a>
+
+                        <a href="https://www.ecologie.gouv.fr/politiques-publiques/diagnostic-performance-energetique-dpe"
+                            target="_blank" rel="noopener noreferrer"
+                            class="flex items-center gap-3 p-4 bg-emerald-50/80 rounded-xl hover:shadow-md transition-all group card-lift">
+                            <span
+                                class="material-icons text-emerald-600 text-3xl group-hover:scale-110 transition-transform">eco</span>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-700 group-hover:text-emerald-600 transition-colors">
+                                    Politiques publiques sur le DPE
+                                </h3>
+                                <p class="text-sm text-gray-500">Ministère de la Transition Écologique</p>
+                            </div>
+                            <span
+                                class="material-icons text-gray-400 group-hover:text-emerald-600 transition-colors">arrow_forward</span>
+                        </a>
+
+                        <a href="https://www.service-public.gouv.fr/particuliers/actualites/A17975" target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center gap-3 p-4 bg-purple-50/80 rounded-xl hover:shadow-md transition-all group card-lift">
+                            <span
+                                class="material-icons text-purple-600 text-3xl group-hover:scale-110 transition-transform">lightbulb</span>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">
+                                    Actualités et conseils pratiques
+                                </h3>
+                                <p class="text-sm text-gray-500">Service-Public.fr - Les bons gestes au quotidien</p>
+                            </div>
+                            <span
+                                class="material-icons text-gray-400 group-hover:text-purple-600 transition-colors">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="mt-12 text-center text-gray-400 text-sm overflow-hidden pb-6">
+        <p class="mb-4">Créé par l'équipe Des P'tites Economies</p>
+        <div class="logo-slider">
+            <div class="logo-track">
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_2.png" />
+                <img alt="Logo Open Data University"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_4.png" />
+                <img alt="Logo Des P'tites Economies"
+                    class="h-16 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_5.png" />
+                <img alt="Logo Enedis" class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+                    src="Images/Image_1.png" />
+                <img alt="Logo HEC Paris"
+                    class="h-14 mx-8 object-contain opacity-60 hover:opacity-100 transition-opacity"
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // La page est désormais statique pour une consultation plus fluide.
+    </script>
+
+</body>
+
+</html>

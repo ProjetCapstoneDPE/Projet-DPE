@@ -1,0 +1,67 @@
+name: Mise à jour mensuelle des modèles DPE
+
+on:
+  schedule:
+    # Déclenchement le 1er jour de chaque mois à 03h00 du matin
+    - cron: '0 3 1 * *'
+  
+  # Permet de lancer l'action manuellement depuis l'interface GitHub
+  workflow_dispatch: 
+
+jobs:
+  entrainer-et-publier:
+    runs-on: ubuntu-latest
+    
+    # Permission requise pour que le robot puisse sauvegarder les nouveaux modèles
+    permissions:
+      contents: write 
+
+    steps:
+      - name: 📥 Récupération du code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Installation de Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 📦 Installation des dépendances
+        run: |
+          python -m pip install --upgrade pip
+          # On installe nbconvert et ipykernel pour exécuter le Notebook sans interface
+          pip install nbconvert ipykernel
+          
+          # On installe tes dépendances (Assure-toi que requirements.txt est bien dans ce dossier)
+          pip install -r Projet-DPE/Analyse/requirements.txt
+
+      - name: 🚀 Entraînement des modèles (Exécution du Notebook)
+        run: |
+          # On se déplace dans le bon dossier
+          cd Projet-DPE/Analyse
+          
+          # On exécute le Notebook de bout en bout. 
+          # L'option --inplace permet de sauvegarder les résultats directement dans le fichier
+          jupyter nbconvert --to notebook --execute creation_modele_region_surface.ipynb --inplace
+
+      # ---------------------------------------------------------
+      # ⚠️ ESPACE RÉSERVÉ POUR LA CONVERSION EN JS
+      # ---------------------------------------------------------
+      # - name: ⚙️ Conversion des modèles .pkl en JavaScript
+      #   run: |
+      #     cd Projet-DPE/Analyse
+      #     python nom_de_ton_script_de_conversion.py
+      # ---------------------------------------------------------
+
+      - name: 💾 Sauvegarde et Commit des nouveaux modèles
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # On ajoute tous les nouveaux fichiers générés (.pkl, .js, .ipynb modifié)
+          git add .
+          
+          # S'il y a des changements, on les valide
+          git commit -m "🤖 Mise à jour mensuelle des modèles DPE et génération du JS" || echo "Aucun changement à commiter"
+          
+          # On pousse les nouveautés sur ton dépôt
+          git push
