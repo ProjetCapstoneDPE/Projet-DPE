@@ -1358,19 +1358,16 @@
                         // 4) Re-prédire avec le modèle XGBoost
                         let newPrediction = consoTheoEP * 0.7; // fallback
                         try {
-                            const modelUrl = `models_json/${result.model_used}_dpe.json`;
+                            // model_used = "Region/surfaceKey", on parse pour reconstruire l'URL
+                            const [modelRegion, modelSurfKey] = result.model_used.split('/');
+                            const modelFilePrefix = result.model_file_prefix || modelRegion;
+                            const modelUrl = `models_json/${modelRegion}/pipeline_${modelFilePrefix}_${modelSurfKey}_dpe.json`;
                             const predictor = new XGBoostPredictor();
                             await predictor.loadModel(modelUrl);
                             newPrediction = predictor.predict(improvedFeatures);
                             console.log(`[Re-prédiction] Nouvelle conso: ${newPrediction.toFixed(1)} kWh/an`);
                         } catch (e) {
                             console.warn('[Re-prédiction] Erreur chargement modèle, utilisation fallback:', e.message);
-                            try {
-                                const fallbackUrl = `models_json/${result.model_used}.json`;
-                                const predictorFallback = new XGBoostPredictor();
-                                await predictorFallback.loadModel(fallbackUrl);
-                                newPrediction = predictorFallback.predict(improvedFeatures);
-                            } catch (err) {}
                         }
 
                         const newKwhM2 = newPrediction / surfaceUsed;
@@ -1531,6 +1528,7 @@
                     confidence_score: result.confidence_score,
                     features_used: result.features_used,
                     model_used: result.model_used,
+                    model_file_prefix: result.model_file_prefix,
                     region: result.region
                 }));
                 localStorage.setItem('dpe_responses', JSON.stringify(currentResponses));
