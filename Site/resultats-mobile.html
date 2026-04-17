@@ -17,6 +17,8 @@
         .gradient-text { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .glass-card { background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.60); }
         .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 30%, #6366f1 60%, #818cf8 100%); }
+        .shimmer-text { background: linear-gradient(90deg, #fff 0%, #cbd5e1 50%, #fff 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; }
+        @keyframes shimmer { to { background-position: 200% center; } }
         @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-up { animation: fade-up .6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .delay-100 { animation-delay: .1s; } .delay-200 { animation-delay: .2s; } .delay-300 { animation-delay: .3s; }
@@ -47,12 +49,55 @@
             <p class="text-xs text-gray-500">Estimation basée sur vos réponses · Modèle <span id="modelName" class="font-bold">XGBoost</span></p>
         </div>
 
-        <!-- DPE Badge principal -->
-        <div class="glass-card rounded-3xl p-6 mb-4 text-center shadow-2xl animate-fade-up border-2 border-indigo-100">
-            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Votre classe DPE estimée</p>
-            <div id="currentGrade" class="text-6xl font-black text-indigo-600 mb-2">?</div>
-            <p id="currentValue" class="text-base font-bold text-gray-800 mb-1">-- kWh/m²/an</p>
-            <p id="currentValueInterval" class="text-xs text-gray-500"></p>
+        <!-- New Hero Section (Desktop style) -->
+        <div class="hero-gradient rounded-[2.5rem] p-6 mb-6 shadow-2xl relative overflow-hidden animate-fade-up border-b-4 border-black/10">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+            
+            <div class="relative z-10 text-center">
+                <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 mb-4 border border-white/20 text-[10px] font-medium text-white">
+                    <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                    Modèle : <span id="modelName">XGBoost</span>
+                </div>
+
+                <div class="text-[10px] font-semibold text-white/60 uppercase tracking-widest mb-1">Conso. Théorique Annuelle</div>
+                <div id="annualConsumption" class="text-4xl font-extrabold shimmer-text leading-tight mb-0.5">— <span class="text-xl">kWh EP/an</span></div>
+                <div id="annualConsumptionInterval" class="text-[10px] font-medium text-white/70 mb-5"></div>
+
+                <!-- Stat pills row -->
+                <div class="flex flex-wrap justify-center gap-2 mb-4">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-white/15 min-w-[70px]">
+                        <div class="text-[8px] uppercase text-white/50">Surface</div>
+                        <div id="surfaceUsed" class="text-xs font-bold text-white">— m²</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-white/15 min-w-[90px]">
+                        <div class="text-[8px] uppercase text-white/50">Élec. Finale</div>
+                        <div id="elecFinalConso" class="text-xs font-bold text-blue-200">— kWh EF/an</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center gap-1 text-[10px] text-white/60">
+                    <div class="flex items-center gap-1">
+                        <span class="material-icons" style="font-size:12px">eco</span>
+                        CO₂ : <span id="co2ValueHero" class="font-bold text-white/80">—</span> kg/m²/an
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DPE Scale -->
+        <div class="glass-card rounded-2xl p-5 mb-6 shadow-xl animate-fade-up delay-100 border-2 border-indigo-50/50">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons text-indigo-500" style="font-size:18px">speed</span>
+                    <span class="text-sm font-bold text-gray-800">Échelle DPE</span>
+                </div>
+                <div class="text-right">
+                    <div id="currentGrade" class="text-4xl font-black text-orange-500 leading-none">—</div>
+                    <div id="currentValue" class="text-[10px] font-bold text-gray-500 mt-0.5">— kWh/m²/an</div>
+                </div>
+            </div>
+            <div id="dpeScale" class="space-y-1.5 mb-2"></div>
+            <div id="currentValueInterval" class="text-[10px] text-gray-400 text-center italic"></div>
         </div>
 
         <!-- Échelle DPE visuelle -->
@@ -374,6 +419,30 @@
                 const responses = responsesStr ? JSON.parse(responsesStr) : [];
                 currentResponses = responses;
 
+                // 1) DÉTERMINATION DE L'ÉNERGIE ET DU FACTEUR (Calculé tôt pour la consistance)
+                let convFactor = 2.3; 
+                let energyPrice = 0.2516; 
+                let energyLabel = "électricité";
+
+                if (responses.length > 0) {
+                    const fossilKeywords = ['gaz', 'fioul', 'bois', 'charbon', 'poêle'];
+                    const ecsResp = responses.find(r => r.label.includes('eau') || r.label.includes('Générateur'));
+                    const heatResp = responses.find(r => r.label.includes('chauffage') || r.label.includes('Émetteur'));
+
+                    const isFossil = (ecsResp && ecsResp.value && typeof ecsResp.value === 'string' && fossilKeywords.some(k => ecsResp.value.toLowerCase().includes(k))) ||
+                        (heatResp && heatResp.value && typeof heatResp.value === 'string' && fossilKeywords.some(k => heatResp.value.toLowerCase().includes(k)));
+
+                    if (isFossil) {
+                        convFactor = 1.0;
+                        energyLabel = "gaz/bois/fioul";
+                        energyPrice = 0.12; 
+                    }
+                }
+
+                // 2) VALEURS DE BASE
+                const consoTheoEP = result.prediction;
+                const consoTheoEF = consoTheoEP / convFactor; // COHÉRENCE PHYSIQUE GARANTIE
+
                 // Surface
                 let surface = 70;
                 const surfResp = responses.find(r => r.label === 'Surface habitable');
@@ -387,70 +456,54 @@
                     }
                 }
 
-                const consoTheoEP = Number(result.prediction) || 0;
-                let surfaceUsed = Number(surface) || 70;
+                let surfaceUsed = surface;
                 if (result.features_used && result.features_used.surface_habitable_logement) {
-                    surfaceUsed = Number(result.features_used.surface_habitable_logement) || surfaceUsed;
+                    surfaceUsed = Number(result.features_used.surface_habitable_logement) || surface;
                 }
 
                 const kwhEP_m2 = consoTheoEP / surfaceUsed;
                 const heroGrade = getDpeGrade(kwhEP_m2);
 
-                // DPE badge
-                document.getElementById('currentGrade').textContent = heroGrade.grade;
-                document.getElementById('currentGrade').className = `text-6xl font-black mb-2 ${dpeGradeColors[heroGrade.grade]||'text-gray-500'}`;
+                // 3) AFFICHAGE HERO (Nouveau design)
+                const consoFormatted = Math.round(consoTheoEP).toLocaleString('fr-FR');
+                document.getElementById('annualConsumption').innerHTML =
+                    `${consoFormatted} <span class="text-xl">kWh EP/an</span>`;
+                document.getElementById('annualConsumptionInterval').textContent = formatInterval(consoTheoEP);
                 
-                document.getElementById('currentValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
-                document.getElementById('currentValueInterval').textContent = formatInterval(kwhEP_m2);
+                document.getElementById('elecFinalConso').textContent = `${Math.round(consoTheoEF).toLocaleString('fr-FR')} kWh EF/an`;
+                document.getElementById('surfaceUsed').textContent = `${Math.round(surfaceUsed)} m²`;
+                document.getElementById('co2ValueHero').textContent = Math.round(kwhEP_m2 * 0.15);
                 document.getElementById('modelName').textContent = result.model_used || 'XGBoost';
 
-                // DPE Scale
+                // 4) DPE Scale & Badge
+                document.getElementById('currentGrade').textContent = heroGrade.grade;
+                document.getElementById('currentGrade').className = `text-4xl font-black ${dpeGradeColors[heroGrade.grade]||'text-gray-500'}`;
+                document.getElementById('currentValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
+                document.getElementById('currentValueInterval').textContent = formatInterval(kwhEP_m2);
                 renderScale(kwhEP_m2);
 
-                // Conso & cost & Logic de consistance (Porté de Desktop)
-                let convFactor = 2.3;
-                let energyPrice = 0.2516;
-                let energyLabel = "électricité";
-
-                if (responses.length > 0) {
-                    const fossilKeywords = ['gaz', 'fioul', 'bois', 'charbon', 'poêle'];
-                    const ecsResp = responses.find(r => r.label.includes('eau') || r.label.includes('Générateur'));
-                    const heatResp = responses.find(r => r.label.includes('chauffage') || r.label.includes('Émetteur'));
-                    const isFossil = (ecsResp && ecsResp.value && typeof ecsResp.value === 'string' && fossilKeywords.some(k => ecsResp.value.toLowerCase().includes(k))) ||
-                        (heatResp && heatResp.value && typeof heatResp.value === 'string' && fossilKeywords.some(k => heatResp.value.toLowerCase().includes(k)));
-                    
-                    if (isFossil) { 
-                        convFactor = 1.0; 
-                        energyPrice = 0.12; 
-                        energyLabel = "gaz/bois/fioul";
-                    }
-                }
-
-                // COHÉRENCE PHYSIQUE : EF = EP / convFactor
-                const consoTheoEF = consoTheoEP / convFactor;
-                
+                // 5) ESTIMATION DE LA FACTURE (Calculée sur EF)
                 let consoRealEF;
                 if (result.predictionReal && result.predictionElec && convFactor > 1.0) {
-                    consoRealEF = Number(result.predictionReal);
+                    consoRealEF = Math.min(Number(result.predictionReal) || 0, consoTheoEF * 2); 
                 } else {
                     const behaviorFactor = (result.predictionReal && result.predictionElec) ? (result.predictionReal / result.predictionElec) : 0.8;
-                    consoRealEF = consoTheoEF * behaviorFactor;
+                    consoRealEF = consoTheoEF * Math.min(1.5, behaviorFactor);
                 }
                 
                 const formatNum = (v) => (!isNaN(v) && v > 0) ? Math.round(v).toLocaleString('fr-FR') : "--";
 
                 document.getElementById('consoTheo').textContent = formatNum(consoTheoEF);
-                document.getElementById('consoTheo').className = "text-lg font-black text-indigo-600"; // Sécurité
                 document.getElementById('consoTheoInterval').textContent = (!isNaN(consoTheoEF) && consoTheoEF > 0) ? formatInterval(consoTheoEF) : "";
                 
                 document.getElementById('consoReal').textContent = formatNum(consoRealEF);
                 document.getElementById('consoRealInterval').textContent = (!isNaN(consoRealEF) && consoRealEF > 0) ? formatInterval(consoRealEF) : "";
                 
-                const cost = consoRealEF * 0.2516;
+                const cost = consoRealEF * energyPrice;
                 document.getElementById('costReal').textContent = formatNum(cost) + ' €';
                 document.getElementById('costRealInterval').textContent = (!isNaN(cost) && cost > 0) ? formatInterval(cost, true) : "";
 
-                // CO2
+                // 6) IMPACT CO2
                 document.getElementById('co2Value').textContent = Math.round(kwhEP_m2 * 0.15);
                 const totalCo2 = kwhEP_m2 * 0.15 * surfaceUsed;
                 const flights = (totalCo2 / 1000).toFixed(1).replace('.', ',');
