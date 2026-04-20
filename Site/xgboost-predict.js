@@ -731,7 +731,7 @@ const DPE_CLASS_AVERAGES = {
         qualite_isolation_menuiseries: 'très bonne',
         qualite_isolation_plancher_bas: 'très bonne',
         isolation_toiture_clean: 'Isolé',
-        type_emetteur_installation_chauffage_n1: 'PAC air/air inverter après 2014',
+        type_emetteur_installation_chauffage_n1: 'Plancher chauffant sur réseau individuel eau chaude basse ou moyenne température(inf 65°C)',
         type_generateur_n1_ecs_n1: 'CET sur air extérieur après 2014',
         presence_brasseur_air: 1.0,
         protection_solaire_exterieure: 1.0,
@@ -883,6 +883,34 @@ const CRITICAL_POINT_LABELS = {
     protection_solaire_exterieure: { icon: '☀️', label: 'Protection solaire', unit: '' },
 };
 
+/**
+ * Mappings inverses pour l'affichage lisible des valeurs techniques.
+ */
+const FEATURE_VALUE_LABELS = {
+    // Isolation
+    'très bonne': 'Très bonne',
+    'bonne': 'Bonne',
+    'moyenne': 'Moyenne',
+    'insuffisante': 'Insuffisante',
+    'Isolé': 'Isolé',
+    'Non Isolé': 'Non Isolé',
+    // Chauffage (Mapping inverse partiel pour la lisibilité)
+    'radiateur électrique NFC, NF** et NF***': 'Radiateur électrique (récent)',
+    'Convecteur électrique NFC, NF** et NF***': 'Convecteur électrique (ancien)',
+    'Radiateur bitube avec robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°C)': 'Radiateur à eau / Chaudière',
+    'Plancher chauffant sur réseau individuel eau chaude basse ou moyenne température(inf 65°C)': 'Plancher chauffant',
+    'Poêle bois': 'Poêle à bois',
+    'Soufflage d\'air chaud (air soufflé) avec distribution par réseau aéraulique': 'Climatisation / Soufflage',
+    // ECS
+    'Ballon électrique à accumulation vertical Catégorie C ou 3 étoiles': 'Ballon électrique (récent)',
+    'Chauffe-eau gaz à production instantanée 2001-2015': 'Chauffe-eau gaz',
+    'Chaudière gaz standard 2001-2015': 'Chaudière gaz',
+    'Chaudière fioul standard 1991-2015': 'Chaudière fioul',
+    'CET sur air extérieur après 2014': 'Chauffe-eau thermodynamique',
+    'PAC double service après 2014': 'Pompe à chaleur',
+    'Réseau de chaleur isolé': 'Réseau de chaleur',
+};
+
 const DPE_GRADES_ORDER = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
 /**
@@ -987,3 +1015,8 @@ function buildImprovedFeatures(features, criticalPoints, targetGrade) {
 
     return improved;
 }
+
+// Export publics
+window.identifyCriticalPoints = identifyCriticalPoints;
+window.buildImprovedFeatures = buildImprovedFeatures;
+window.FEATURE_VALUE_LABELS = FEATURE_VALUE_LABELS;

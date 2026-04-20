@@ -221,11 +221,7 @@
             <div id="currentValueInterval" class="text-[10px] text-gray-400 text-center italic"></div>
         </div>
 
-        <!-- Échelle DPE visuelle -->
-        <div class="glass-card rounded-2xl p-4 mb-4 shadow-sm animate-fade-up delay-100">
-            <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Échelle DPE</p>
-            <div id="dpeScale" class="space-y-1.5"></div>
-        </div>
+
 
         <!-- Consommation & Coût -->
         <div class="glass-card rounded-2xl p-4 mb-4 shadow-sm animate-fade-up delay-100">
@@ -608,6 +604,18 @@
             const responsesStr = localStorage.getItem('dpe_responses');
 
             if (!resultStr) {
+                if (responsesStr) {
+                    console.info('[Mobile] Résultat manquant, relance automatique de la prédiction...');
+                    try {
+                        const responses = JSON.parse(responsesStr);
+                        const result = await predictClientSide(responses);
+                        localStorage.setItem('dpe_result', JSON.stringify(result));
+                        await updateResults();
+                        return;
+                    } catch (e) {
+                        console.error('[Mobile] Échec prédiction auto:', e);
+                    }
+                }
                 document.getElementById('resultsContainer').classList.add('hidden');
                 document.getElementById('noDataContainer').classList.remove('hidden');
                 return;
@@ -628,8 +636,8 @@
                     const ecsResp = responses.find(r => r.label.includes('eau') || r.label.includes('Générateur'));
                     const heatResp = responses.find(r => r.label.includes('chauffage') || r.label.includes('Émetteur'));
 
-                    const isFossil = (ecsResp && ecsResp.value && typeof ecsResp.value === 'string' && fossilKeywords.some(k => ecsResp.value.toLowerCase().includes(k))) ||
-                        (heatResp && heatResp.value && typeof heatResp.value === 'string' && fossilKeywords.some(k => heatResp.value.toLowerCase().includes(k)));
+                    const isFossil = (ecsResp && ecsResp.value && typeof ecsResp.value === 'string' && (fossilKeywords.some(k => ecsResp.value.toLowerCase().includes(k)) || ecsResp.value.includes('Chaudière'))) ||
+                        (heatResp && heatResp.value && typeof heatResp.value === 'string' && (fossilKeywords.some(k => heatResp.value.toLowerCase().includes(k)) || heatResp.value.includes('eau') || heatResp.value.includes('central')));
 
                     if (isFossil) {
                         convFactor = 1.0;
@@ -722,36 +730,47 @@
                     document.getElementById('featuresGrid').innerHTML = fh;
                 }
 
-                // Critical points & re-prediction
+                // Critical points & re-prediction (aligned with desktop logic)
                 const currentGradeStr = heroGrade.grade;
                 if (result.features_used && currentGradeStr !== 'A') {
-                    let { targetGrade, criticalPoints } = identifyCriticalPoints(result.features_used, currentGradeStr);
+                    // 1) Identifier TOUS les points critiques
+                    let { targetGrade, criticalPoints: allCriticalPoints } = identifyCriticalPoints(result.features_used, currentGradeStr);
+                    
+                    // Filtrage pour l'affichage: on ne montre que les variables modifiables par l'utilisateur
                     const modifiableKeys = ['qualite_isolation_enveloppe', 'qualite_isolation_murs', 'qualite_isolation_menuiseries', 'qualite_isolation_plancher_bas', 'isolation_toiture_clean', 'type_emetteur_installation_chauffage_n1', 'type_generateur_n1_ecs_n1', 'presence_brasseur_air', 'protection_solaire_exterieure'];
-                    criticalPoints = criticalPoints.filter(cp => modifiableKeys.includes(cp.key));
+                    const displayCriticalPoints = allCriticalPoints.filter(cp => modifiableKeys.includes(cp.key));
 
-                    if (criticalPoints.length > 0) {
-                        document.getElementById('criticalPointsSection').style.display = 'block';
-                        document.getElementById('targetClassBadge').textContent = targetGrade;
-                        let cpHtml = '';
-                        criticalPoints.forEach(cp => {
-                            const cv = typeof cp.currentValue === 'number' ? Math.round(cp.currentValue * 100) / 100 + (cp.unit ? ' ' + cp.unit : '') : cp.currentValue;
-                            const tv = typeof cp.targetValue === 'number' ? Math.round(cp.targetValue * 100) / 100 + (cp.unit ? ' ' + cp.unit : '') : cp.targetValue;
-                            cpHtml += `<div class="flex items-center gap-2 p-2.5 bg-gradient-to-r from-red-50/80 to-amber-50/80 rounded-xl border border-red-200/50">
-                                <span class="text-lg">${cp.icon}</span>
-                                <div class="flex-1 min-w-0"><p class="text-[11px] font-bold text-gray-700">${cp.label}</p>
-                                    <div class="flex items-center gap-1.5 mt-0.5"><span class="text-[10px] font-semibold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full">${cv}</span><span class="material-icons text-gray-400" style="font-size:12px">arrow_forward</span><span class="text-[10px] font-semibold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-full">${tv}</span></div>
-                                </div>
-                            </div>`;
-                        });
-                        document.getElementById('criticalPointsList').innerHTML = cpHtml;
+                    console.log(`[Points Critiques] Tous: ${allCriticalPoints.length} | Affichables: ${displayCriticalPoints.length}`);
 
-                        const improvedFeatures = buildImprovedFeatures(result.features_used, criticalPoints, targetGrade);
+                    // 2) S'il y a des points critiques (même non affichables), calculer l'amélioration
+                    if (allCriticalPoints.length > 0) {
+                        // Afficher les points critiques modifiables dans l'UI
+                        if (displayCriticalPoints.length > 0) {
+                            document.getElementById('criticalPointsSection').style.display = 'block';
+                            document.getElementById('targetClassBadge').textContent = targetGrade;
+                            let cpHtml = '';
+                            displayCriticalPoints.forEach(cp => {
+                                const getLabel = (v) => (window.FEATURE_VALUE_LABELS && window.FEATURE_VALUE_LABELS[v]) ? window.FEATURE_VALUE_LABELS[v] : v;
+                                const cv = typeof cp.currentValue === 'number' ? Math.round(cp.currentValue * 100) / 100 + (cp.unit ? ' ' + cp.unit : '') : getLabel(cp.currentValue);
+                                const tv = typeof cp.targetValue === 'number' ? Math.round(cp.targetValue * 100) / 100 + (cp.unit ? ' ' + cp.unit : '') : getLabel(cp.targetValue);
+                                cpHtml += `<div class="flex items-center gap-2 p-2.5 bg-gradient-to-r from-red-50/80 to-amber-50/80 rounded-xl border border-red-200/50">
+                                    <span class="text-lg">${cp.icon}</span>
+                                    <div class="flex-1 min-w-0"><p class="text-[11px] font-bold text-gray-700">${cp.label}</p>
+                                        <div class="flex items-center gap-1.5 mt-0.5"><span class="text-[10px] font-semibold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full truncate max-w-[90px]" title="${cv}">${cv}</span><span class="material-icons text-gray-400" style="font-size:12px">arrow_forward</span><span class="text-[10px] font-semibold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-full truncate max-w-[90px]" title="${tv}">${tv}</span></div>
+                                    </div>
+                                </div>`;
+                            });
+                            document.getElementById('criticalPointsList').innerHTML = cpHtml;
+                        }
+
+                        // 3) Construire les features améliorées avec TOUS les points critiques (pas seulement les affichables)
+                        const improvedFeatures = buildImprovedFeatures(result.features_used, allCriticalPoints, targetGrade);
                         let newPrediction = consoTheoEP * 0.7;
                         try {
+                            // model_used = "Region/surfaceKey" — même format URL que desktop
                             const [modelRegion, modelSurfKey] = result.model_used.split('/');
                             const modelFilePrefix = result.model_file_prefix || modelRegion;
-                            const decodedRegion = decodeURIComponent(modelRegion);
-                            const modelUrl = `models_json/${encodeURIComponent(decodedRegion)}/pipeline_${modelFilePrefix}_${modelSurfKey}_dpe.json`;
+                            const modelUrl = `models_json/${modelRegion}/pipeline_${modelFilePrefix}_${modelSurfKey}_dpe.json`;
                             const predictor = new XGBoostPredictor();
                             await predictor.loadModel(modelUrl);
                             newPrediction = predictor.predict(improvedFeatures);
@@ -759,7 +778,12 @@
                             console.warn('[Re-prédiction] Fallback:', e.message);
                         }
 
-                        const newKwhM2 = newPrediction / surfaceUsed;
+                        // Sécurité: la nouvelle prédiction ne peut pas être artificiellement trop basse
+                        const newKwhM2Raw = newPrediction / surfaceUsed;
+                        const targetGradeIdx = ['A','B','C','D','E','F','G'].indexOf(targetGrade);
+                        const minKwhM2ForTarget = targetGradeIdx > 0 ? dpeScaleRef[targetGradeIdx - 1].max + 1 : 1;
+                        const newKwhM2 = Math.max(newKwhM2Raw, minKwhM2ForTarget * 0.5);
+
                         const potGrade = getDpeGrade(newKwhM2);
                         const econPct = Math.round(((kwhEP_m2 - newKwhM2) / kwhEP_m2) * 100);
 
@@ -771,12 +795,12 @@
                         const ringFrac = Math.max(0, Math.min(1, econPct / 100));
                         setTimeout(() => { const r = document.getElementById('savingsRing'); if (r) r.style.strokeDashoffset = 326.73 * (1 - ringFrac); }, 500);
 
-                        const savedEP = consoTheoEP - newPrediction;
+                        const savedEP = consoTheoEP - (newKwhM2 * surfaceUsed);
                         const savedEuros = Math.max(0, savedEP / convFactor) * energyPrice;
                         document.getElementById('savingsAmount').textContent = `${Math.round(savedEuros)} € par an`;
                         document.getElementById('savingsInterval').textContent = formatInterval(savedEuros, true);
 
-                        renderRecommendations(criticalPoints, consoTheoEP, newPrediction);
+                        renderRecommendations(displayCriticalPoints.length > 0 ? displayCriticalPoints : allCriticalPoints, consoTheoEP, newKwhM2 * surfaceUsed);
                     } else {
                         document.getElementById('potentialGrade').textContent = currentGradeStr;
                         document.getElementById('potentialValue').textContent = `${Math.round(kwhEP_m2)} kWh/m²/an`;
@@ -820,7 +844,14 @@
                 const saved = localStorage.getItem('dpe_responses');
                 if (saved) try { currentResponses = JSON.parse(saved); } catch (e) { currentResponses = []; }
             }
-            const upd = (label, id) => { const el = document.getElementById(id); if (el) { const idx = currentResponses.findIndex(r => r.label === label); if (idx !== -1) currentResponses[idx].value = el.value; else currentResponses.push({ label, value: el.value }); } };
+            const upd = (label, id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const idx = currentResponses.findIndex(r => r.label === label);
+                    if (idx !== -1) currentResponses[idx].value = el.value;
+                    else currentResponses.push({ label, value: el.value, question: label });
+                }
+            };
             upd('Isolation des murs', 'simIsolationMurs');
             upd('Isolation de la toiture', 'simIsolationToiture');
             upd('Qualité des fenêtres', 'simQualiteFenetres');

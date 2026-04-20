@@ -1180,8 +1180,8 @@
                     const ecsResp = responses.find(r => r.label.includes('eau') || r.label.includes('Générateur'));
                     const heatResp = responses.find(r => r.label.includes('chauffage') || r.label.includes('Émetteur'));
 
-                    const isFossil = (ecsResp && ecsResp.value && typeof ecsResp.value === 'string' && fossilKeywords.some(k => ecsResp.value.toLowerCase().includes(k))) ||
-                        (heatResp && heatResp.value && typeof heatResp.value === 'string' && fossilKeywords.some(k => heatResp.value.toLowerCase().includes(k)));
+                    const isFossil = (ecsResp && ecsResp.value && typeof ecsResp.value === 'string' && (fossilKeywords.some(k => ecsResp.value.toLowerCase().includes(k)) || ecsResp.value.includes('Chaudière'))) ||
+                        (heatResp && heatResp.value && typeof heatResp.value === 'string' && (fossilKeywords.some(k => heatResp.value.toLowerCase().includes(k)) || heatResp.value.includes('eau') || heatResp.value.includes('central')));
 
                     if (isFossil) {
                         convFactor = 1.0;
@@ -1325,10 +1325,10 @@
                 const currentGrade = heroGrade.grade;
 
                 if (result.features_used && currentGrade !== 'A') {
-                    // 1) Identifier les points critiques
-                    let { targetGrade, criticalPoints } = identifyCriticalPoints(result.features_used, currentGrade);
+                    // 1) Identifier les points critiques (TOUS)
+                    let { targetGrade, criticalPoints: allCriticalPoints } = identifyCriticalPoints(result.features_used, currentGrade);
 
-                    // Filtrage: on ne garde que les variables modifiables rentrées par l'utilisateur
+                    // Filtrage pour l'affichage: on ne montre que les variables modifiables par l'utilisateur
                     const modifiableKeys = [
                         'qualite_isolation_enveloppe',
                         'qualite_isolation_murs',
@@ -1340,46 +1340,51 @@
                         'presence_brasseur_air',
                         'protection_solaire_exterieure'
                     ];
-                    criticalPoints = criticalPoints.filter(cp => modifiableKeys.includes(cp.key));
+                    const displayCriticalPoints = allCriticalPoints.filter(cp => modifiableKeys.includes(cp.key));
 
                     console.log(`[Points Critiques] Classe actuelle: ${currentGrade} → Cible: ${targetGrade}`);
-                    console.log('[Points Critiques] Trouvés:', criticalPoints);
+                    console.log('[Points Critiques] Tous:', allCriticalPoints.length, '| Affichables:', displayCriticalPoints.length);
 
-                    // 2) Afficher les points critiques
-                    if (criticalPoints.length > 0) {
-                        const cpSection = document.getElementById('criticalPointsSection');
-                        cpSection.style.display = 'block';
-                        document.getElementById('targetClassBadge').textContent = targetGrade;
+                    // 2) S'il y a des points critiques (même non affichables), calculer l'amélioration
+                    if (allCriticalPoints.length > 0) {
+                        // Afficher les points critiques modifiables dans l'UI
+                        if (displayCriticalPoints.length > 0) {
+                            const cpSection = document.getElementById('criticalPointsSection');
+                            cpSection.style.display = 'block';
+                            document.getElementById('targetClassBadge').textContent = targetGrade;
 
-                        const cpList = document.getElementById('criticalPointsList');
-                        let cpHtml = '';
-                        criticalPoints.forEach((cp, i) => {
-                            const currentDisplay = typeof cp.currentValue === 'number'
-                                ? Math.round(cp.currentValue * 100) / 100 + (cp.unit ? ` ${cp.unit}` : '')
-                                : cp.currentValue;
-                            const targetDisplay = typeof cp.targetValue === 'number'
-                                ? Math.round(cp.targetValue * 100) / 100 + (cp.unit ? ` ${cp.unit}` : '')
-                                : cp.targetValue;
+                            const cpList = document.getElementById('criticalPointsList');
+                            let cpHtml = '';
+                            displayCriticalPoints.forEach((cp, i) => {
+                                const getLabel = (v) => (window.FEATURE_VALUE_LABELS && window.FEATURE_VALUE_LABELS[v]) ? window.FEATURE_VALUE_LABELS[v] : v;
+                                
+                                const currentDisplay = typeof cp.currentValue === 'number'
+                                    ? Math.round(cp.currentValue * 100) / 100 + (cp.unit ? ` ${cp.unit}` : '')
+                                    : getLabel(cp.currentValue);
+                                const targetDisplay = typeof cp.targetValue === 'number'
+                                    ? Math.round(cp.targetValue * 100) / 100 + (cp.unit ? ` ${cp.unit}` : '')
+                                    : getLabel(cp.targetValue);
 
-                            cpHtml += `
-                                <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-red-50/80 to-amber-50/80 rounded-xl border border-red-200/50"
-                                     style="animation: fadeInUp .5s ease-out ${i * 0.08}s both;">
-                                    <div class="text-xl flex-shrink-0">${cp.icon}</div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-xs font-bold text-gray-700">${cp.label}</p>
-                                        <div class="flex items-center gap-2 mt-1">
-                                            <span class="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">${currentDisplay}</span>
-                                            <span class="material-icons text-gray-400" style="font-size:14px">arrow_forward</span>
-                                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">${targetDisplay}</span>
+                                cpHtml += `
+                                    <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-red-50/80 to-amber-50/80 rounded-xl border border-red-200/50"
+                                         style="animation: fadeInUp .5s ease-out ${i * 0.08}s both;">
+                                        <div class="text-xl flex-shrink-0">${cp.icon}</div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs font-bold text-gray-700">${cp.label}</p>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <span class="text-[10px] font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded-full truncate max-w-[120px]" title="${currentDisplay}">${currentDisplay}</span>
+                                                <span class="material-icons text-gray-400" style="font-size:14px">arrow_forward</span>
+                                                <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full truncate max-w-[120px]" title="${targetDisplay}">${targetDisplay}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            `;
-                        });
-                        cpList.innerHTML = cpHtml;
+                                `;
+                            });
+                            cpList.innerHTML = cpHtml;
+                        }
 
-                        // 3) Construire les features améliorées
-                        const improvedFeatures = buildImprovedFeatures(result.features_used, criticalPoints, targetGrade);
+                        // 3) Construire les features améliorées avec TOUS les points critiques (pas seulement les affichables)
+                        const improvedFeatures = buildImprovedFeatures(result.features_used, allCriticalPoints, targetGrade);
                         console.log('[Re-prédiction] Features améliorées:', improvedFeatures);
 
                         // 4) Re-prédire avec le modèle XGBoost
@@ -1397,7 +1402,14 @@
                             console.warn('[Re-prédiction] Erreur chargement modèle, utilisation fallback:', e.message);
                         }
 
-                        const newKwhM2 = newPrediction / surfaceUsed;
+                        // Sécurité: la nouvelle prédiction ne peut pas être inférieure à la classe cible minimale
+                        const targetGradeMin = getDpeGrade(0); // Class A lower bound
+                        const newKwhM2Raw = newPrediction / surfaceUsed;
+                        // Cap : au minimum la borne basse de la classe cible (pas artificiellement trop bas)
+                        const targetGradeIdx = ['A','B','C','D','E','F','G'].indexOf(targetGrade);
+                        const minKwhM2ForTarget = targetGradeIdx > 0 ? dpeScaleRef[targetGradeIdx - 1].max + 1 : 1;
+                        const newKwhM2 = Math.max(newKwhM2Raw, minKwhM2ForTarget * 0.5);
+
                         const potentialGradeObj = getDpeGrade(newKwhM2);
                         const economyPct = Math.round(((kwhEP_m2 - newKwhM2) / kwhEP_m2) * 100);
 
@@ -1416,14 +1428,14 @@
                         }, 500);
 
                         // Savings amount (basé sur la vraie différence)
-                        const savedEP = consoTheoEP - newPrediction;
+                        const savedEP = consoTheoEP - (newKwhM2 * surfaceUsed);
                         const savedEF = savedEP / convFactor; // On utilise le facteur dynamique
                         const savedEuros = Math.max(0, savedEF) * energyPrice;
                         document.getElementById('savingsAmount').textContent = `${Math.round(savedEuros)} € par an`;
                         document.getElementById('savingsInterval').textContent = formatInterval(savedEuros, true);
 
-                        // 6) Recommandations dynamiques basées sur les points critiques
-                        renderRecommendations(criticalPoints, consoTheoEP, newPrediction);
+                        // 6) Recommandations dynamiques basées sur les points critiques affichables
+                        renderRecommendations(displayCriticalPoints.length > 0 ? displayCriticalPoints : allCriticalPoints, consoTheoEP, newKwhM2 * surfaceUsed);
 
                     } else {
                         // Pas de points critiques trouvés (rare)
