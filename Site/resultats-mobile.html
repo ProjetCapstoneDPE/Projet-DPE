@@ -747,6 +747,15 @@
 
                 // Critical points & re-prediction (aligned with desktop logic)
                 const currentGradeStr = heroGrade.grade;
+
+                // RESET: toujours cacher et vider les points critiques avant de recalculer
+                document.getElementById('criticalPointsSection').style.display = 'none';
+                document.getElementById('criticalPointsList').innerHTML = '';
+                // RESET: remettre le potentiel d'amélioration à zéro pour éviter les données périmées
+                const savingsRingEl = document.getElementById('savingsRing');
+                if (savingsRingEl) savingsRingEl.style.strokeDashoffset = '326.73';
+                document.getElementById('savingsInterval').textContent = '';
+
                 if (result.features_used && currentGradeStr !== 'A') {
                     // 1) Identifier TOUS les points critiques
                     let { targetGrade, criticalPoints: allCriticalPoints } = identifyCriticalPoints(result.features_used, currentGradeStr);
